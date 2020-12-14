@@ -331,10 +331,10 @@ index 000000000000..47cadfce73cc
 +		>;
 +	};
 diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
-index c977a3ba2f35..b43f8d98f97e 100644
+index d03edf9d3935..fdfdeecc7982 100644
 --- a/Documentation/devicetree/bindings/usb/dwc3.txt
 +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
-@@ -79,6 +79,9 @@ Optional properties:
+@@ -78,6 +78,9 @@ Optional properties:
  			park mode are disabled.
   - snps,dis_metastability_quirk: when set, disable metastability workaround.
  			CAUTION: use only if you are absolutely sure of it.
@@ -410,13 +410,17 @@ index 000000000000..d618867fda69
 +		};
 +	};
 diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index 1f18a9392d15..34b8cae285eb 100644
+index b87b1f773083..2c3c77ab3b22 100644
 --- a/arch/arm64/boot/dts/rockchip/Makefile
 +++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -1,6 +1,13 @@
+@@ -1,10 +1,17 @@
  # SPDX-License-Identifier: GPL-2.0
 +
  dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-evb.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-evb.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-roc-cc.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go2.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-a1.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-evb.dtb
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2-rev00.dtb
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2-rev02.dtb
@@ -427,18 +431,18 @@ index 1f18a9392d15..34b8cae285eb 100644
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-rock64.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-roc-cc.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3368-evb-act8846.dtb
-@@ -24,6 +31,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-leez-p710.dtb
+@@ -28,6 +35,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-leez-p710.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopc-t4.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopi-m4.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopi-neo4.dtb
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopi-r4s.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-orangepi.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-pinebook-pro.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-puma-haikou.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-roc-pc.dtb
-@@ -32,3 +40,8 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock960.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64.dtb
+@@ -40,3 +48,8 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire-excavator.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
 +
 +# Enable symbols to support fdt overlays
 +ifeq ($(CONFIG_OF_OVERLAY),y)
@@ -763,10 +767,10 @@ index 000000000000..a3f5ff4bdc47
 +};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2-common.dtsi b/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2-common.dtsi
 new file mode 100644
-index 000000000000..62f3cd37733a
+index 000000000000..ca6c7280e489
 --- /dev/null
 +++ b/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2-common.dtsi
-@@ -0,0 +1,683 @@
+@@ -0,0 +1,682 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2020 FriendlyElec Computer Tech. Co., Ltd.
@@ -876,7 +880,7 @@ index 000000000000..62f3cd37733a
 +		compatible = "regulator-fixed";
 +		gpio = <&gpio0 30 GPIO_ACTIVE_LOW>;
 +		pinctrl-names = "default";
-+		pinctrl-0 = <&sdmmc0m1_gpio>;
++		pinctrl-0 = <&sdmmc0m1_pin>;
 +		regulator-name = "vcc_sd";
 +		regulator-min-microvolt = <3300000>;
 +		regulator-max-microvolt = <3300000>;
@@ -1016,7 +1020,6 @@ index 000000000000..62f3cd37733a
 +	cap-mmc-highspeed;
 +	max-frequency = <150000000>;
 +	mmc-hs200-1_8v;
-+	no-sd;
 +	non-removable;
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&emmc_clk &emmc_cmd &emmc_bus8>;
@@ -1853,10 +1856,10 @@ index 000000000000..78f6d4cc976d
 +	status = "okay";
 +};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-index 31cc1541f1f5..5793a6c9c3e0 100644
+index bbdb19a3e85d..9c09d90c25bf 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-@@ -247,6 +247,17 @@
+@@ -297,6 +297,17 @@ &pdmm0_sdi2_sleep
  		status = "disabled";
  	};
  
@@ -1874,7 +1877,7 @@ index 31cc1541f1f5..5793a6c9c3e0 100644
  	grf: syscon@ff100000 {
  		compatible = "rockchip,rk3328-grf", "syscon", "simple-mfd";
  		reg = <0x0 0xff100000 0x0 0x1000>;
-@@ -282,7 +293,7 @@
+@@ -330,7 +341,7 @@ pd_vpu@RK3328_PD_VPU {
  			};
  		};
  
@@ -1883,7 +1886,7 @@ index 31cc1541f1f5..5793a6c9c3e0 100644
  			compatible = "syscon-reboot-mode";
  			offset = <0x5c8>;
  			mode-normal = <BOOT_NORMAL>;
-@@ -744,7 +755,7 @@
+@@ -792,7 +803,7 @@ cru: clock-controller@ff440000 {
  			<&cru ACLK_BUS_PRE>, <&cru HCLK_BUS_PRE>,
  			<&cru PCLK_BUS_PRE>, <&cru ACLK_PERI_PRE>,
  			<&cru HCLK_PERI>, <&cru PCLK_PERI>,
@@ -1892,7 +1895,7 @@ index 31cc1541f1f5..5793a6c9c3e0 100644
  		assigned-clock-parents =
  			<&cru HDMIPHY>, <&cru PLL_APLL>,
  			<&cru PLL_GPLL>, <&xin24m>,
-@@ -765,7 +776,7 @@
+@@ -813,7 +824,7 @@ cru: clock-controller@ff440000 {
  			<150000000>, <75000000>,
  			<75000000>, <150000000>,
  			<75000000>, <75000000>,
@@ -1901,7 +1904,7 @@ index 31cc1541f1f5..5793a6c9c3e0 100644
  	};
  
  	usb2phy_grf: syscon@ff450000 {
-@@ -805,6 +816,47 @@
+@@ -853,6 +864,47 @@ u2phy_host: host-port {
  		};
  	};
  
@@ -1946,10 +1949,10 @@ index 31cc1541f1f5..5793a6c9c3e0 100644
 +		};
 +	};
 +
- 	sdmmc: dwmmc@ff500000 {
+ 	sdmmc: mmc@ff500000 {
  		compatible = "rockchip,rk3328-dw-mshc", "rockchip,rk3288-dw-mshc";
  		reg = <0x0 0xff500000 0x0 0x4000>;
-@@ -936,6 +988,35 @@
+@@ -983,6 +1035,35 @@ usb_host0_ohci: usb@ff5d0000 {
  		status = "disabled";
  	};
  
@@ -1986,7 +1989,7 @@ index 31cc1541f1f5..5793a6c9c3e0 100644
  		compatible = "arm,gic-400";
  		#interrupt-cells = <3>;
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopc-t4.dts b/arch/arm64/boot/dts/rockchip/rk3399-nanopc-t4.dts
-index d3ed8e5e770f..9839dbba886a 100644
+index e0d75617bb7e..2e80ac9c6413 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3399-nanopc-t4.dts
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopc-t4.dts
 @@ -13,7 +13,7 @@
@@ -1998,8 +2001,8 @@ index d3ed8e5e770f..9839dbba886a 100644
  
  	vcc12v0_sys: vcc12v0-sys {
  		compatible = "regulator-fixed";
-@@ -94,6 +94,11 @@
- 	};
+@@ -99,6 +99,11 @@ &pcie0 {
+ 	vpcie3v3-supply = <&vcc3v3_sys>;
  };
  
 +&mach {
@@ -2023,7 +2026,7 @@ index 60358ab8c7df..41519a160050 100644
  
  	vdd_5v: vdd-5v {
  		compatible = "regulator-fixed";
-@@ -48,6 +48,11 @@
+@@ -48,6 +48,11 @@ vcc5v0_usb2: vcc5v0-usb2 {
  	};
  };
  
@@ -2048,7 +2051,7 @@ index 195410b089b9..c5a1847d33cb 100644
  
  	vdd_5v: vdd-5v {
  		compatible = "regulator-fixed";
-@@ -36,6 +36,11 @@
+@@ -36,6 +36,11 @@ vcc5v0_usb1: vcc5v0-usb1 {
  	};
  };
  
@@ -2062,7 +2065,7 @@ index 195410b089b9..c5a1847d33cb 100644
  };
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts b/arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts
 new file mode 100644
-index 000000000000..a80243c1be64
+index 000000000000..7dae004b543d
 --- /dev/null
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts
 @@ -0,0 +1,158 @@
@@ -2168,7 +2171,7 @@ index 000000000000..a80243c1be64
 +	};
 +};
 +
-+&leds_gpio {
++&status_led_pin {
 +	rockchip,pins =
 +		<0 RK_PB5 RK_FUNC_GPIO &pcfg_pull_none>,
 +		<1 RK_PA0 RK_FUNC_GPIO &pcfg_pull_none>,
@@ -2225,7 +2228,7 @@ index 000000000000..a80243c1be64
 +	vin-supply = <&vcc5v0_sys>;
 +};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
-index dd16c80d923e..cc4e9a36aead 100644
+index 76a8b40a93c6..cddf5eee798c 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
 @@ -13,14 +13,23 @@
@@ -2253,7 +2256,7 @@ index dd16c80d923e..cc4e9a36aead 100644
  	clkin_gmac: external-gmac-clock {
  		compatible = "fixed-clock";
  		clock-frequency = <125000000>;
-@@ -78,11 +87,11 @@
+@@ -99,11 +108,11 @@ vbus_typec: vbus-typec {
  		regulator-name = "vbus_typec";
  	};
  
@@ -2267,7 +2270,7 @@ index dd16c80d923e..cc4e9a36aead 100644
  
  		power {
  			debounce-interval = <100>;
-@@ -105,6 +114,36 @@
+@@ -126,6 +135,36 @@ status_led: led-0 {
  		};
  	};
  
@@ -2304,7 +2307,7 @@ index dd16c80d923e..cc4e9a36aead 100644
  	sdio_pwrseq: sdio-pwrseq {
  		compatible = "mmc-pwrseq-simple";
  		clocks = <&rk808 1>;
-@@ -467,6 +506,10 @@
+@@ -496,6 +535,10 @@ &io_domains {
  	status = "okay";
  };
  
@@ -2315,7 +2318,7 @@ index dd16c80d923e..cc4e9a36aead 100644
  &pcie_phy {
  	assigned-clock-parents = <&cru SCLK_PCIEPHY_REF100M>;
  	assigned-clock-rates = <100000000>;
-@@ -519,7 +562,7 @@
+@@ -550,7 +593,7 @@ pmic_int_l: pmic-int-l {
  	};
  
  	rockchip-key {
@@ -2324,7 +2327,7 @@ index dd16c80d923e..cc4e9a36aead 100644
  			rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_up>;
  		};
  	};
-@@ -573,6 +616,10 @@
+@@ -604,6 +647,10 @@ &pwm2 {
  	status = "okay";
  };
  
@@ -2335,7 +2338,7 @@ index dd16c80d923e..cc4e9a36aead 100644
  &saradc {
  	vref-supply = <&vcca1v8_s3>;
  	status = "okay";
-@@ -685,10 +732,14 @@
+@@ -716,10 +763,14 @@ &usbdrd3_1 {
  };
  
  &usbdrd_dwc3_0 {
@@ -2351,7 +2354,7 @@ index dd16c80d923e..cc4e9a36aead 100644
  	status = "okay";
  };
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-index c5d8d1c58291..f3a298823279 100644
+index ada724b12f01..f1108ba26198 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
 @@ -9,6 +9,7 @@
@@ -2362,7 +2365,7 @@ index c5d8d1c58291..f3a298823279 100644
  #include <dt-bindings/thermal/thermal.h>
  
  / {
-@@ -1129,6 +1130,16 @@
+@@ -1131,6 +1132,16 @@ pmu_io_domains: io-domains {
  			compatible = "rockchip,rk3399-pmu-io-voltage-domain";
  			status = "disabled";
  		};
@@ -2379,7 +2382,7 @@ index c5d8d1c58291..f3a298823279 100644
  	};
  
  	spi3: spi@ff350000 {
-@@ -1584,6 +1595,16 @@
+@@ -1609,6 +1620,16 @@ i2s2: i2s@ff8a0000 {
  		status = "disabled";
  	};
  
@@ -5752,447 +5755,13 @@ index 000000000000..8600caf351fc
 +CONFIG_DEBUG_SPINLOCK=y
 +CONFIG_FUNCTION_TRACER=y
 +CONFIG_BLK_DEV_IO_TRACE=y
-diff --git a/block/partitions/Kconfig b/block/partitions/Kconfig
-index 702689a628f0..50bbebaac83c 100644
---- a/block/partitions/Kconfig
-+++ b/block/partitions/Kconfig
-@@ -262,6 +262,16 @@ config SYSV68_PARTITION
- 	  sysv68).
- 	  Otherwise, say N.
- 
-+config RK_PARTITION
-+	bool "Rockchip partition table support" if PARTITION_ADVANCED
-+	default y if ARCH_ROCKCHIP
-+	help
-+	  Like most systems, Rockchip use its own hard disk partition table
-+	  format, incompatible with all others. Say Y here if you would like
-+	  to be able to read the hard disk partition table format used by
-+	  Rockchip SoCs inside machines with eMMC as main storage disk.
-+	  Otherwise, say N.
-+
- config CMDLINE_PARTITION
- 	bool "Command line partition support" if PARTITION_ADVANCED
- 	select BLK_CMDLINE_PARSER
-diff --git a/block/partitions/Makefile b/block/partitions/Makefile
-index 2f276b677c81..1fb98d1191ad 100644
---- a/block/partitions/Makefile
-+++ b/block/partitions/Makefile
-@@ -21,3 +21,4 @@ obj-$(CONFIG_IBM_PARTITION) += ibm.o
- obj-$(CONFIG_EFI_PARTITION) += efi.o
- obj-$(CONFIG_KARMA_PARTITION) += karma.o
- obj-$(CONFIG_SYSV68_PARTITION) += sysv68.o
-+obj-$(CONFIG_RK_PARTITION) += rk.o
-diff --git a/block/partitions/check.c b/block/partitions/check.c
-index ffe408fead0c..33c609ac5007 100644
---- a/block/partitions/check.c
-+++ b/block/partitions/check.c
-@@ -35,6 +35,7 @@
- #include "efi.h"
- #include "karma.h"
- #include "sysv68.h"
-+#include "rk.h"
- #include "cmdline.h"
- 
- int warn_no_part = 1; /*This is ugly: should make genhd removable media aware*/
-@@ -108,6 +109,9 @@ static int (*check_part[])(struct parsed_partitions *) = {
- #endif
- #ifdef CONFIG_SYSV68_PARTITION
- 	sysv68_partition,
-+#endif
-+#ifdef CONFIG_RK_PARTITION
-+	rkpart_partition,
- #endif
- 	NULL
- };
-diff --git a/block/partitions/rk.c b/block/partitions/rk.c
-new file mode 100644
-index 000000000000..398370714db0
---- /dev/null
-+++ b/block/partitions/rk.c
-@@ -0,0 +1,320 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <linux/kernel.h>
-+#include <linux/slab.h>
-+#include "check.h"
-+#include "rk.h"
-+
-+/* rkpart_setup() parses into here */
-+static struct cmdline_rk_partition *partitions;
-+
-+/* the command line passed to mtdpart_setupd() */
-+static char *cmdline;
-+static int cmdline_parsed;
-+
-+/*
-+ * Parse one partition definition for an rkpart. Since there can be many
-+ * comma separated partition definitions, this function calls itself
-+ * recursively until no more partition definitions are found. Nice side
-+ * effect: the memory to keep the rk_partition structs and the names
-+ * is allocated upon the last definition being found. At that point the
-+ * syntax has been verified ok.
-+ */
-+static struct rk_partition *newpart(char *s, char **retptr,
-+		int *num_parts, int this_part,
-+		unsigned char **extra_mem_ptr, int extra_mem_size)
-+{
-+	struct rk_partition *parts;
-+	sector_t size;
-+	sector_t from = OFFSET_CONTINUOUS;
-+	char *name;
-+	int name_len;
-+	unsigned char *extra_mem;
-+	char delim;
-+
-+	/* fetch the partition size */
-+	if (*s == '-') {
-+		/* assign all remaining space to this partition */
-+		size = SIZE_REMAINING;
-+		s++;
-+	} else {
-+		size = memparse(s, &s);
-+		/* No sense support partition less than 8B */
-+		if (size < ((PAGE_SIZE) >> 9)) {
-+			printk(KERN_ERR ERRP "partition size too small (%llx)\n", (u64)size);
-+			return NULL;
-+		}
-+	}
-+
-+	/* fetch partition name */
-+	delim = 0;
-+	/* check for from */
-+	if (*s == '@') {
-+		s++;
-+		from = memparse(s, &s);
-+	}
-+	/* now look for name */
-+	if (*s == '(') {
-+		delim = ')';
-+	}
-+
-+	if (delim) {
-+		char *p;
-+		name = ++s;
-+		p = strchr(name, delim);
-+		if (!p) {
-+			printk(KERN_ERR ERRP "no closing %c found in partition name\n", delim);
-+			return NULL;
-+		}
-+		name_len = p - name;
-+		s = p + 1;
-+	} else {
-+		name = NULL;
-+		name_len = 13; /* Partition_000 */
-+	}
-+
-+	/* record name length for memory allocation later */
-+	extra_mem_size += name_len + 1;
-+
-+	/* test if more partitions are following */
-+	if (*s == ',') {
-+		if (size == SIZE_REMAINING) {
-+			printk(KERN_ERR ERRP "no partitions allowed after a fill-up partition\n");
-+			return NULL;
-+		}
-+		/* more partitions follow, parse them */
-+		parts = newpart(s + 1, &s, num_parts, this_part + 1,
-+				&extra_mem, extra_mem_size);
-+		if (!parts)
-+			return NULL;
-+	} else {
-+		/* this is the last partition: allocate space for all */
-+		int alloc_size;
-+
-+		*num_parts = this_part + 1;
-+		alloc_size = *num_parts * sizeof(struct rk_partition) + extra_mem_size;
-+		parts = kzalloc(alloc_size, GFP_KERNEL);
-+		if (!parts) {
-+			printk(KERN_ERR ERRP "out of memory\n");
-+			return NULL;
-+		}
-+		extra_mem = (unsigned char *)(parts + *num_parts);
-+	}
-+
-+	/* enter this partition (from will be calculated later if it is zero at this point) */
-+	parts[this_part].size = size;
-+	parts[this_part].from = from;
-+	if (name) {
-+		strlcpy(extra_mem, name, name_len + 1);
-+	} else {
-+		sprintf(extra_mem, "Partition_%03d", this_part);
-+	}
-+	parts[this_part].name = extra_mem;
-+	extra_mem += name_len + 1;
-+
-+	dbg(("partition %d: name <%s>, from %llx, size %llx\n",
-+		this_part,
-+		parts[this_part].name,
-+		parts[this_part].from,
-+		parts[this_part].size));
-+
-+	/* return (updated) pointer to extra_mem memory */
-+	if (extra_mem_ptr)
-+		*extra_mem_ptr = extra_mem;
-+
-+	/* return (updated) pointer command line string */
-+	*retptr = s;
-+
-+	/* return partition table */
-+	return parts;
-+}
-+
-+/*
-+ * Parse the command line.
-+ */
-+static int rkpart_setup_real(char *s)
-+{
-+	cmdline_parsed = 1;
-+
-+	for ( ; s != NULL; ) {
-+		struct cmdline_rk_partition *this_rk;
-+		struct rk_partition *parts;
-+		int rk_id_len;
-+		int num_parts;
-+		char *p, *rk_id;
-+
-+		rk_id = s;
-+		/* fetch <rk-id> */
-+		if (!(p = strchr(s, ':'))) {
-+			dbg(( "no rk-id\n"));
-+			return 0;
-+		}
-+		rk_id_len = p - rk_id;
-+
-+		dbg(("parsing <%s>\n", p + 1));
-+
-+		/*
-+		 * parse one mtd. have it reserve memory for the
-+		 * struct cmdline_mtd_partition and the mtd-id string.
-+		 */
-+		parts = newpart(p + 1,		/* cmdline */
-+				&s,		/* out: updated cmdline ptr */
-+				&num_parts,	/* out: number of parts */
-+				0,		/* first partition */
-+				(unsigned char**)&this_rk, /* out: extra mem */
-+				rk_id_len + 1 + sizeof(*this_rk) +
-+				sizeof(void*)-1 /*alignment*/);
-+		if (!parts) {
-+			/*
-+			 * An error occurred. We're either:
-+			 * a) out of memory, or
-+			 * b) in the middle of the partition spec
-+			 * Either way, this mtd is hosed and we're
-+			 * unlikely to succeed in parsing any more
-+			 */
-+			 return 0;
-+		 }
-+
-+		/* align this_rk */
-+		this_rk = (struct cmdline_rk_partition *)
-+			ALIGN((unsigned long)this_rk, sizeof(void*));
-+		/* enter results */
-+		this_rk->parts = parts;
-+		this_rk->num_parts = num_parts;
-+		this_rk->rk_id = (char*)(this_rk + 1);
-+		strlcpy(this_rk->rk_id, rk_id, rk_id_len + 1);
-+
-+		/* link into chain */
-+		this_rk->next = partitions;
-+		partitions = this_rk;
-+
-+		dbg(("rkid=<%s> num_parts=<%d>\n",
-+			 this_rk->mtd_id, this_rk->num_parts));
-+
-+		/* EOS - we're done */
-+		if (*s == 0)
-+			break;
-+		s++;
-+	}
-+
-+	return 1;
-+}
-+
-+/*
-+ * Main function to be called from the MTD mapping driver/device to
-+ * obtain the partitioning information. At this point the command line
-+ * arguments will actually be parsed and turned to struct mtd_partition
-+ * information. It returns partitions for the requested mtd device, or
-+ * the first one in the chain if a NULL mtd_id is passed in.
-+ */
-+static int parse_cmdline_partitions(sector_t n,
-+		struct rk_partition **pparts, unsigned long origin)
-+{
-+	unsigned long from;
-+	int i;
-+	struct cmdline_rk_partition *part;
-+	/* Fixme: parameter should be coherence with part table id */
-+	const char *rk_id = "rk29xxnand";
-+
-+	/* parse command line */
-+	if (!cmdline_parsed)
-+		rkpart_setup_real(cmdline);
-+
-+	for (part = partitions; part; part = part->next) {
-+		if ((!rk_id) || (!strcmp(part->rk_id, rk_id))) {
-+			for (i = 0, from = 0; i < part->num_parts; i++) {
-+				if (part->parts[i].from == OFFSET_CONTINUOUS)
-+					part->parts[i].from = from;
-+				else
-+					from = part->parts[i].from;
-+				if (part->parts[i].size == SIZE_REMAINING)
-+					part->parts[i].size = n - from - FROM_OFFSET;
-+
-+				if (from + part->parts[i].size > n) {
-+					printk(KERN_WARNING ERRP
-+						"%s: partitioning exceeds flash size, truncating\n",
-+						part->rk_id);
-+					part->parts[i].size = n - from;
-+					part->num_parts = i;
-+				}
-+				from += part->parts[i].size;
-+			}
-+
-+			*pparts = kmemdup(part->parts,
-+					sizeof(*part->parts) * part->num_parts,
-+					GFP_KERNEL);
-+			if (!*pparts)
-+				return -ENOMEM;
-+			return part->num_parts;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static void rkpart_bootmode_fixup(void)
-+{
-+	const char mode_emmc[] = " androidboot.mode=emmc";
-+	const char mode_nvme[] = " androidboot.mode=nvme";
-+	const char charger[] = " androidboot.charger.emmc=1";
-+	char *new_command_line;
-+	size_t saved_command_line_len = strlen(saved_command_line);
-+
-+	if (strstr(saved_command_line, "androidboot.mode=charger")) {
-+		new_command_line = kzalloc(saved_command_line_len +
-+				strlen(charger) + 1, GFP_KERNEL);
-+		sprintf(new_command_line, "%s%s",
-+			saved_command_line, charger);
-+	} else {
-+		new_command_line = kzalloc(saved_command_line_len +
-+				strlen(mode_emmc) + 1, GFP_KERNEL);
-+		if (strstr(saved_command_line, "storagemedia=nvme"))
-+			sprintf(new_command_line, "%s%s",
-+				saved_command_line, mode_nvme);
-+		else
-+			sprintf(new_command_line, "%s%s",
-+				saved_command_line, mode_emmc);
-+	}
-+	saved_command_line = new_command_line;
-+}
-+
-+int rkpart_partition(struct parsed_partitions *state)
-+{
-+	int num_parts = 0, i;
-+	sector_t n = get_capacity(state->bdev->bd_disk);
-+	struct rk_partition *parts = NULL;
-+
-+	if (n < SECTOR_1G)
-+		return 0;
-+
-+	if (!(state->bdev->bd_disk->flags & GENHD_FL_RKPART))
-+		return 0;
-+
-+	/* Fixme: parameter should be coherence with part table */
-+	cmdline = strstr(saved_command_line, "mtdparts=");
-+	if (!cmdline)
-+		return 0;
-+	cmdline += 9;
-+	cmdline_parsed = 0;
-+
-+	num_parts = parse_cmdline_partitions(n, &parts, 0);
-+	if (num_parts < 0)
-+		return num_parts;
-+
-+	for (i = 0; i < num_parts; i++) {
-+		put_partition(state,
-+				i+1,
-+				parts[i].from + FROM_OFFSET,
-+				parts[i].size);
-+		strcpy(state->parts[i+1].info.volname, parts[i].name);
-+		printk(KERN_INFO "%10s: 0x%09llx -- 0x%09llx (%llu MB)\n", 
-+				parts[i].name,
-+				(u64)parts[i].from * 512,
-+				(u64)(parts[i].from + parts[i].size) * 512,
-+				(u64)parts[i].size / 2048);
-+	}
-+
-+	rkpart_bootmode_fixup();
-+
-+	return 1;
-+}
-+
-diff --git a/block/partitions/rk.h b/block/partitions/rk.h
-new file mode 100644
-index 000000000000..3840f6efcced
---- /dev/null
-+++ b/block/partitions/rk.h
-@@ -0,0 +1,50 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * block/partitions/rk.h
-+ */
-+
-+#ifndef FS_PART_RK_H_INCLUDED
-+#define FS_PART_RK_H_INCLUDED
-+
-+/* error message prefix */
-+#define ERRP "rkpart: "
-+
-+/* debug macro */
-+#define RKPART_DEBUG		0
-+
-+#if RKPART_DEBUG
-+#define dbg(x) \
-+	do { \
-+		printk("DEBUG-CMDLINE-PART: "); \
-+		printk x; \
-+	} while (0)
-+#else
-+#define dbg(x)
-+#endif
-+
-+/* At least 1GB disk support*/
-+#define SECTOR_1G		0x200000
-+
-+/* Default partition table offet got from loader: 4MB*/
-+#define FROM_OFFSET		0x2000
-+
-+/* special size referring to all the remaining space in a partition */
-+#define SIZE_REMAINING		UINT_MAX
-+#define OFFSET_CONTINUOUS	UINT_MAX
-+
-+struct rk_partition {
-+	char *name;
-+	sector_t from;
-+	sector_t size;
-+};
-+
-+struct cmdline_rk_partition {
-+	struct cmdline_rk_partition *next;
-+	char *rk_id;
-+	int num_parts;
-+	struct rk_partition *parts;
-+};
-+
-+extern int rkpart_partition(struct parsed_partitions *state);
-+
-+#endif
 diff --git a/drivers/char/hw_random/Kconfig b/drivers/char/hw_random/Kconfig
-index 59f25286befe..a75f9dcb43b1 100644
+index f976a49e1fb5..f000d20e138c 100644
 --- a/drivers/char/hw_random/Kconfig
 +++ b/drivers/char/hw_random/Kconfig
-@@ -440,6 +440,18 @@ config HW_RANDOM_OPTEE
- 
- 	  If unsure, say Y.
+@@ -512,6 +512,18 @@ config HW_RANDOM_CCTRNG
+ 	  will be called cctrng.
+ 	  If unsure, say 'N'.
  
 +config HW_RANDOM_ROCKCHIP
 +	tristate "Rockchip Random Number Generator support"
@@ -6210,13 +5779,13 @@ index 59f25286befe..a75f9dcb43b1 100644
  
  config UML_RANDOM
 diff --git a/drivers/char/hw_random/Makefile b/drivers/char/hw_random/Makefile
-index 7c9ef4a7667f..092f788a9b20 100644
+index 26ae06844f09..3fe1699bc5d8 100644
 --- a/drivers/char/hw_random/Makefile
 +++ b/drivers/char/hw_random/Makefile
-@@ -39,3 +39,4 @@ obj-$(CONFIG_HW_RANDOM_MTK)	+= mtk-rng.o
- obj-$(CONFIG_HW_RANDOM_S390) += s390-trng.o
- obj-$(CONFIG_HW_RANDOM_KEYSTONE) += ks-sa-rng.o
+@@ -44,3 +44,4 @@ obj-$(CONFIG_HW_RANDOM_KEYSTONE) += ks-sa-rng.o
  obj-$(CONFIG_HW_RANDOM_OPTEE) += optee-rng.o
+ obj-$(CONFIG_HW_RANDOM_NPCM) += npcm-rng.o
+ obj-$(CONFIG_HW_RANDOM_CCTRNG) += cctrng.o
 +obj-$(CONFIG_HW_RANDOM_ROCKCHIP) += rockchip-rng.o
 diff --git a/drivers/char/hw_random/rockchip-rng.c b/drivers/char/hw_random/rockchip-rng.c
 new file mode 100644
@@ -6712,7 +6281,7 @@ index 9273bce4d7b6..555aaf4e758d 100644
  		pr_err("%s: unsupported ddrclk type %d\n", __func__, ddr_flag);
  		kfree(ddrclk);
 diff --git a/drivers/clk/rockchip/clk-rk3328.c b/drivers/clk/rockchip/clk-rk3328.c
-index c186a1985bf4..d77925271198 100644
+index 2429b7c2a8b3..d77925271198 100644
 --- a/drivers/clk/rockchip/clk-rk3328.c
 +++ b/drivers/clk/rockchip/clk-rk3328.c
 @@ -314,9 +314,10 @@ static struct rockchip_clk_branch rk3328_clk_branches[] __initdata = {
@@ -6729,33 +6298,6 @@ index c186a1985bf4..d77925271198 100644
  	GATE(0, "clk_ddrmsch", "clk_ddr", CLK_IGNORE_UNUSED,
  			RK3328_CLKGATE_CON(18), 6, GFLAGS),
  	GATE(0, "clk_ddrupctl", "clk_ddr", CLK_IGNORE_UNUSED,
-@@ -808,22 +809,22 @@ static struct rockchip_clk_branch rk3328_clk_branches[] __initdata = {
- 	MMC(SCLK_SDMMC_DRV, "sdmmc_drv", "clk_sdmmc",
- 	    RK3328_SDMMC_CON0, 1),
- 	MMC(SCLK_SDMMC_SAMPLE, "sdmmc_sample", "clk_sdmmc",
--	    RK3328_SDMMC_CON1, 0),
-+	    RK3328_SDMMC_CON1, 1),
- 
- 	MMC(SCLK_SDIO_DRV, "sdio_drv", "clk_sdio",
- 	    RK3328_SDIO_CON0, 1),
- 	MMC(SCLK_SDIO_SAMPLE, "sdio_sample", "clk_sdio",
--	    RK3328_SDIO_CON1, 0),
-+	    RK3328_SDIO_CON1, 1),
- 
- 	MMC(SCLK_EMMC_DRV, "emmc_drv", "clk_emmc",
- 	    RK3328_EMMC_CON0, 1),
- 	MMC(SCLK_EMMC_SAMPLE, "emmc_sample", "clk_emmc",
--	    RK3328_EMMC_CON1, 0),
-+	    RK3328_EMMC_CON1, 1),
- 
- 	MMC(SCLK_SDMMC_EXT_DRV, "sdmmc_ext_drv", "clk_sdmmc_ext",
- 	    RK3328_SDMMC_EXT_CON0, 1),
- 	MMC(SCLK_SDMMC_EXT_SAMPLE, "sdmmc_ext_sample", "clk_sdmmc_ext",
--	    RK3328_SDMMC_EXT_CON1, 0),
-+	    RK3328_SDMMC_EXT_CON1, 1),
- };
- 
- static const char *const rk3328_critical_clocks[] __initconst = {
 diff --git a/drivers/clk/rockchip/clk.h b/drivers/clk/rockchip/clk.h
 index 2271a84124b0..7405aaf965ec 100644
 --- a/drivers/clk/rockchip/clk.h
@@ -6771,10 +6313,10 @@ index 2271a84124b0..7405aaf965ec 100644
  struct clk *rockchip_clk_register_ddrclk(const char *name, int flags,
  					 const char *const *parent_names,
 diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-index 1433f2ba9d3b..aac1cc0b69bd 100644
+index 37dc40d1fcfb..15fedc95abff 100644
 --- a/drivers/devfreq/Kconfig
 +++ b/drivers/devfreq/Kconfig
-@@ -116,6 +116,18 @@ config ARM_TEGRA20_DEVFREQ
+@@ -131,6 +131,18 @@ config ARM_TEGRA20_DEVFREQ
  	  It reads Memory Controller counters and adjusts the operating
  	  frequencies and voltages with OPP support.
  
@@ -6793,33 +6335,20 @@ index 1433f2ba9d3b..aac1cc0b69bd 100644
  config ARM_RK3399_DMC_DEVFREQ
  	tristate "ARM RK3399 DMC DEVFREQ Driver"
  	depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
-@@ -125,9 +137,9 @@ config ARM_RK3399_DMC_DEVFREQ
- 	select PM_DEVFREQ_EVENT
- 	select PM_OPP
- 	help
--          This adds the DEVFREQ driver for the RK3399 DMC(Dynamic Memory Controller).
--          It sets the frequency for the memory controller and reads the usage counts
--          from hardware.
-+	  This adds the DEVFREQ driver for the RK3399 DMC(Dynamic Memory Controller).
-+	  It sets the frequency for the memory controller and reads the usage counts
-+	  from hardware.
- 
- source "drivers/devfreq/event/Kconfig"
- 
 diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
-index 338ae8440db6..ec568406ef50 100644
+index 3ca1ad0ecb97..2fe9340f20e1 100644
 --- a/drivers/devfreq/Makefile
 +++ b/drivers/devfreq/Makefile
-@@ -10,6 +10,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+= governor_passive.o
- # DEVFREQ Drivers
- obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
+@@ -12,6 +12,7 @@ obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
+ obj-$(CONFIG_ARM_IMX_BUS_DEVFREQ)	+= imx-bus.o
+ obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)	+= imx8m-ddrc.o
  obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+= rk3399_dmc.o
 +obj-$(CONFIG_ARM_RK3328_DMC_DEVFREQ)	+= rk3328_dmc.o
  obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra30-devfreq.o
  obj-$(CONFIG_ARM_TEGRA20_DEVFREQ)	+= tegra20-devfreq.o
  
 diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
-index 5d1042188727..80be0efdfb9b 100644
+index 9a88faaf8b27..c034df869173 100644
 --- a/drivers/devfreq/event/rockchip-dfi.c
 +++ b/drivers/devfreq/event/rockchip-dfi.c
 @@ -18,25 +18,66 @@
@@ -7241,7 +6770,7 @@ index 5d1042188727..80be0efdfb9b 100644
  
  	edata->load_count = info->ch_usage[busier_ch].access;
  	edata->total_count = info->ch_usage[busier_ch].total;
-@@ -167,23 +453,117 @@ static const struct devfreq_event_ops rockchip_dfi_ops = {
+@@ -167,22 +453,116 @@ static const struct devfreq_event_ops rockchip_dfi_ops = {
  	.set_event = rockchip_dfi_set_event,
  };
  
@@ -7284,9 +6813,15 @@ index 5d1042188727..80be0efdfb9b 100644
 +static __init int rk3128_dfi_init(struct platform_device *pdev,
 +				  struct rockchip_dfi *data,
 +				  struct devfreq_event_desc *desc)
-+{
-+	struct device_node *np = pdev->dev.of_node, *node;
-+
+ {
+-	struct device *dev = &pdev->dev;
+-	struct rockchip_dfi *data;
+-	struct devfreq_event_desc *desc;
+ 	struct device_node *np = pdev->dev.of_node, *node;
+ 
+-	data = devm_kzalloc(dev, sizeof(struct rockchip_dfi), GFP_KERNEL);
+-	if (!data)
+-		return -ENOMEM;
 +	node = of_parse_phandle(np, "rockchip,grf", 0);
 +	if (node) {
 +		data->regmap_grf = syscon_node_to_regmap(node);
@@ -7357,21 +6892,14 @@ index 5d1042188727..80be0efdfb9b 100644
 +static __init int rockchip_dfi_init(struct platform_device *pdev,
 +				    struct rockchip_dfi *data,
 +				    struct devfreq_event_desc *desc)
- {
- 	struct device *dev = &pdev->dev;
--	struct rockchip_dfi *data;
- 	struct resource *res;
--	struct devfreq_event_desc *desc;
- 	struct device_node *np = pdev->dev.of_node, *node;
--
--	data = devm_kzalloc(dev, sizeof(struct rockchip_dfi), GFP_KERNEL);
--	if (!data)
--		return -ENOMEM;
++{
++	struct device *dev = &pdev->dev;
++	struct device_node *np = pdev->dev.of_node, *node;
 +	u32 val;
  
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	data->regs = devm_ioremap_resource(&pdev->dev, res);
-@@ -203,21 +583,97 @@ static int rockchip_dfi_probe(struct platform_device *pdev)
+ 	data->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(data->regs))
+@@ -202,21 +582,97 @@ static int rockchip_dfi_probe(struct platform_device *pdev)
  		if (IS_ERR(data->regmap_pmu))
  			return PTR_ERR(data->regmap_pmu);
  	}
@@ -8326,199 +7854,11 @@ index 000000000000..9e3c87019ada
 +MODULE_LICENSE("GPL v2");
 +MODULE_AUTHOR("Lin Huang <hl@rock-chips.com>");
 +MODULE_DESCRIPTION("RK3328 dmcfreq driver with devfreq framework");
-diff --git a/drivers/mfd/rk808.c b/drivers/mfd/rk808.c
-index 050478cabc95..eb9448009a8e 100644
---- a/drivers/mfd/rk808.c
-+++ b/drivers/mfd/rk808.c
-@@ -506,6 +506,22 @@ static void rk808_device_shutdown(void)
- 		dev_err(&rk808_i2c_client->dev, "Failed to shutdown device!\n");
- }
- 
-+static void rk817_device_shutdown(void)
-+{
-+	int ret;
-+	struct rk808 *rk808 = i2c_get_clientdata(rk808_i2c_client);
-+
-+	if (!rk808)
-+		return;
-+
-+	ret = regmap_update_bits(rk808->regmap,
-+				 RK817_SYS_CFG(3),
-+				 RK817_SLPPIN_FUNC_MSK,
-+				 SLPPIN_DN_FUN);
-+	if (ret)
-+		dev_err(&rk808_i2c_client->dev, "Failed to shutdown device!\n");
-+}
-+
- static void rk818_device_shutdown(void)
- {
- 	int ret;
-@@ -521,21 +537,44 @@ static void rk818_device_shutdown(void)
- 		dev_err(&rk808_i2c_client->dev, "Failed to shutdown device!\n");
- }
- 
-+/* Called in syscore shutdown */
-+static void (*orig_pm_power_off)(void);
-+static void (*pm_shutdown)(void);
-+
- static void rk8xx_syscore_shutdown(void)
- {
- 	struct rk808 *rk808 = i2c_get_clientdata(rk808_i2c_client);
--	int ret;
- 
--	if (system_state == SYSTEM_POWER_OFF &&
--	    (rk808->variant == RK809_ID || rk808->variant == RK817_ID)) {
--		ret = regmap_update_bits(rk808->regmap,
--					 RK817_SYS_CFG(3),
--					 RK817_SLPPIN_FUNC_MSK,
--					 SLPPIN_DN_FUN);
--		if (ret) {
--			dev_warn(&rk808_i2c_client->dev,
--				 "Cannot switch to power down function\n");
--		}
-+	if (!rk808) {
-+		dev_warn(&rk808_i2c_client->dev,
-+			 "have no rk808, so do nothing here\n");
-+		return;
-+	}
-+
-+	/*
-+	 * For PMIC that power off supplies by write register via i2c bus,
-+	 * it's better to do power off at syscore shutdown here.
-+	 *
-+	 * Because when run to kernel's "pm_power_off" call, i2c may has
-+	 * been stopped or PMIC may not be able to get i2c transfer while
-+	 * there are too many devices are competiting.
-+	 */
-+	if (system_state == SYSTEM_POWER_OFF && pm_shutdown) {
-+		dev_info(&rk808_i2c_client->dev, "System power off\n");
-+		pm_shutdown();
-+
-+		/*
-+		 * The above call should not return, if it does fall back to
-+		 * the original power off method (typically PSCI poweroff).
-+		 */
-+		if (orig_pm_power_off)
-+			orig_pm_power_off();
-+
-+		mdelay(10);
-+		dev_info(&rk808_i2c_client->dev,
-+			 "Power off failed !\n");
-+		while (1)
-+			;
- 	}
- }
- 
-@@ -635,7 +674,7 @@ static int rk808_probe(struct i2c_client *client,
- 		nr_pre_init_regs = ARRAY_SIZE(rk817_pre_init_reg);
- 		cells = rk817s;
- 		nr_cells = ARRAY_SIZE(rk817s);
--		register_syscore_ops(&rk808_syscore_ops);
-+		rk808->pm_pwroff_fn = rk817_device_shutdown;
- 		break;
- 	default:
- 		dev_err(&client->dev, "Unsupported RK8XX ID %lu\n",
-@@ -688,15 +727,19 @@ static int rk808_probe(struct i2c_client *client,
- 
- 	pm_off = of_property_read_bool(np,
- 				"rockchip,system-power-controller");
--	if (pm_off && !pm_power_off) {
-+	if (pm_off) {
- 		rk808_i2c_client = client;
--		pm_power_off = rk808->pm_pwroff_fn;
--	}
- 
--	if (pm_off && !pm_power_off_prepare) {
--		if (!rk808_i2c_client)
--			rk808_i2c_client = client;
--		pm_power_off_prepare = rk808->pm_pwroff_prep_fn;
-+		if (!pm_power_off_prepare)
-+			pm_power_off_prepare = rk808->pm_pwroff_prep_fn;
-+
-+		if (rk808->pm_pwroff_fn) {
-+			orig_pm_power_off = pm_power_off;
-+			pm_shutdown = rk808->pm_pwroff_fn;
-+
-+			/* power off system in the syscore shutdown */
-+			register_syscore_ops(&rk808_syscore_ops);
-+		}
- 	}
- 
- 	return 0;
-@@ -726,6 +769,9 @@ static int rk808_remove(struct i2c_client *client)
- 	    pm_power_off_prepare == rk808->pm_pwroff_prep_fn)
- 		pm_power_off_prepare = NULL;
- 
-+	if (pm_shutdown)
-+		unregister_syscore_ops(&rk808_syscore_ops);
-+
- 	return 0;
- }
- 
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index 7f480c6b1981..2857987e148f 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -2322,6 +2322,10 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
- 	if (area_type & (MMC_BLK_DATA_AREA_RPMB | MMC_BLK_DATA_AREA_BOOT))
- 		md->disk->flags |= GENHD_FL_NO_PART_SCAN
- 				   | GENHD_FL_SUPPRESS_PARTITION_INFO;
-+#if defined(CONFIG_RK_PARTITION)
-+	else if (card->host->caps2 & MMC_CAP2_NO_SD)
-+		md->disk->flags |= GENHD_FL_RKPART;
-+#endif
- 
- 	/*
- 	 * As discussed on lkml, GENHD_FL_REMOVABLE should:
-diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-index 26644b7ec13e..94534bc40bae 100644
---- a/drivers/mmc/core/core.c
-+++ b/drivers/mmc/core/core.c
-@@ -1366,6 +1366,14 @@ void mmc_power_off(struct mmc_host *host)
- 	if (host->ios.power_mode == MMC_POWER_OFF)
- 		return;
- 
-+	mmc_set_initial_signal_voltage(host);
-+
-+	/*
-+	 * This delay should be sufficient to allow the power supply
-+	 * to reach the minimum voltage.
-+	 */
-+	mmc_delay(10);
-+
- 	mmc_pwrseq_power_off(host);
- 
- 	host->ios.clock = 0;
-diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
-index b3484def0a8b..9cb982bc2349 100644
---- a/drivers/mmc/core/host.c
-+++ b/drivers/mmc/core/host.c
-@@ -397,6 +397,7 @@ struct mmc_host *mmc_alloc_host(int extra, struct device *dev)
- {
- 	int err;
- 	struct mmc_host *host;
-+	u32 index_min = 0;
- 
- 	host = kzalloc(sizeof(struct mmc_host) + extra, GFP_KERNEL);
- 	if (!host)
-@@ -405,7 +406,11 @@ struct mmc_host *mmc_alloc_host(int extra, struct device *dev)
- 	/* scanning will be enabled when we're ready */
- 	host->rescan_disable = 1;
- 
--	err = ida_simple_get(&mmc_host_ida, 0, 0, GFP_KERNEL);
-+	device_property_read_u32(dev, "host-index-min", &index_min);
-+	if (index_min > 0)
-+		dev_dbg(dev, "alloc index from %d\n", index_min);
-+
-+	err = ida_simple_get(&mmc_host_ida, index_min, 0, GFP_KERNEL);
- 	if (err < 0) {
- 		kfree(host);
- 		return NULL;
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 189cdb763367..0d0b76e121be 100644
+index aa51d16965fe..b8074c079403 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -4440,6 +4440,8 @@ int stmmac_dvr_probe(struct device *device,
+@@ -4740,6 +4740,8 @@ int stmmac_dvr_probe(struct device *device,
  	struct net_device *ndev = NULL;
  	struct stmmac_priv *priv;
  	u32 queue, rxq, maxq;
@@ -8527,7 +7867,7 @@ index 189cdb763367..0d0b76e121be 100644
  	int i, ret = 0;
  
  	ndev = devm_alloc_etherdev_mqs(device, sizeof(struct stmmac_priv),
-@@ -4459,6 +4461,13 @@ int stmmac_dvr_probe(struct device *device,
+@@ -4759,6 +4761,13 @@ int stmmac_dvr_probe(struct device *device,
  	priv->ioaddr = res->addr;
  	priv->dev->base_addr = (unsigned long)res->addr;
  
@@ -8542,7 +7882,7 @@ index 189cdb763367..0d0b76e121be 100644
  	priv->wol_irq = res->wol_irq;
  	priv->lpi_irq = res->lpi_irq;
 diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index cd1a07175e11..e06da897625d 100644
+index b1770489aca5..5638be47b32f 100644
 --- a/drivers/net/usb/r8152.c
 +++ b/drivers/net/usb/r8152.c
 @@ -6,6 +6,7 @@
@@ -8553,20 +7893,7 @@ index cd1a07175e11..e06da897625d 100644
  #include <linux/netdevice.h>
  #include <linux/etherdevice.h>
  #include <linux/mii.h>
-@@ -24,9 +25,11 @@
- #include <linux/suspend.h>
- #include <linux/atomic.h>
- #include <linux/acpi.h>
-+#include <linux/firmware.h>
-+#include <crypto/hash.h>
- 
- /* Information for net-next */
--#define NETNEXT_VERSION		"10"
-+#define NETNEXT_VERSION		"11"
- 
- /* Information for net */
- #define NET_VERSION		"11"
-@@ -36,6 +39,11 @@
+@@ -38,6 +39,11 @@
  #define DRIVER_DESC "Realtek RTL8152/RTL8153 Based USB Ethernet Adapters"
  #define MODULENAME "r8152"
  
@@ -8578,1931 +7905,25 @@ index cd1a07175e11..e06da897625d 100644
  #define R8152_PHY_ID		32
  
  #define PLA_IDR			0xc000
-@@ -54,8 +62,11 @@
- #define PLA_BDC_CR		0xd1a0
- #define PLA_TEREDO_TIMER	0xd2cc
- #define PLA_REALWOW_TIMER	0xd2e8
-+#define PLA_UPHY_TIMER		0xd388
- #define PLA_SUSPEND_FLAG	0xd38a
- #define PLA_INDICATE_FALG	0xd38c
-+#define PLA_MACDBG_PRE		0xd38c	/* RTL_VER_04 only */
-+#define PLA_MACDBG_POST		0xd38e	/* RTL_VER_04 only */
- #define PLA_EXTRA_STATUS	0xd398
- #define PLA_EFUSE_DATA		0xdd00
- #define PLA_EFUSE_CMD		0xdd02
-@@ -113,7 +124,12 @@
- #define USB_CONNECT_TIMER	0xcbf8
- #define USB_MSC_TIMER		0xcbfc
- #define USB_BURST_SIZE		0xcfc0
-+#define USB_FW_FIX_EN0		0xcfca
-+#define USB_FW_FIX_EN1		0xcfcc
- #define USB_LPM_CONFIG		0xcfd8
-+#define USB_CSTMR		0xcfef	/* RTL8153A */
-+#define USB_FW_CTRL		0xd334	/* RTL8153B */
-+#define USB_FC_TIMER		0xd340
- #define USB_USB_CTRL		0xd406
- #define USB_PHY_CTRL		0xd408
- #define USB_TX_AGG		0xd40a
-@@ -129,6 +145,7 @@
- #define USB_LPM_CTRL		0xd41a
- #define USB_BMU_RESET		0xd4b0
- #define USB_U1U2_TIMER		0xd4da
-+#define USB_FW_TASK		0xd4e8	/* RTL8153B */
- #define USB_UPS_CTRL		0xd800
- #define USB_POWER_CUT		0xd80a
- #define USB_MISC_0		0xd81a
-@@ -136,18 +153,19 @@
- #define USB_AFE_CTRL2		0xd824
- #define USB_UPS_CFG		0xd842
- #define USB_UPS_FLAGS		0xd848
-+#define USB_WDT1_CTRL		0xe404
- #define USB_WDT11_CTRL		0xe43c
--#define USB_BP_BA		0xfc26
--#define USB_BP_0		0xfc28
--#define USB_BP_1		0xfc2a
--#define USB_BP_2		0xfc2c
--#define USB_BP_3		0xfc2e
--#define USB_BP_4		0xfc30
--#define USB_BP_5		0xfc32
--#define USB_BP_6		0xfc34
--#define USB_BP_7		0xfc36
--#define USB_BP_EN		0xfc38
--#define USB_BP_8		0xfc38
-+#define USB_BP_BA		PLA_BP_BA
-+#define USB_BP_0		PLA_BP_0
-+#define USB_BP_1		PLA_BP_1
-+#define USB_BP_2		PLA_BP_2
-+#define USB_BP_3		PLA_BP_3
-+#define USB_BP_4		PLA_BP_4
-+#define USB_BP_5		PLA_BP_5
-+#define USB_BP_6		PLA_BP_6
-+#define USB_BP_7		PLA_BP_7
-+#define USB_BP_EN		PLA_BP_EN	/* RTL8153A */
-+#define USB_BP_8		0xfc38		/* RTL8153B */
- #define USB_BP_9		0xfc3a
- #define USB_BP_10		0xfc3c
- #define USB_BP_11		0xfc3e
-@@ -178,6 +196,7 @@
- #define OCP_PHY_STATE		0xa708		/* nway state for 8153 */
- #define OCP_PHY_PATCH_STAT	0xb800
- #define OCP_PHY_PATCH_CMD	0xb820
-+#define OCP_PHY_LOCK		0xb82e
- #define OCP_ADC_IOFFSET		0xbcfc
- #define OCP_ADC_CFG		0xbc06
- #define OCP_SYSCLK_CFG		0xc416
-@@ -188,6 +207,7 @@
- #define SRAM_10M_AMP1		0x8080
- #define SRAM_10M_AMP2		0x8082
- #define SRAM_IMPEDANCE		0x8084
-+#define SRAM_PHY_LOCK		0xb82e
- 
- /* PLA_RCR */
- #define RCR_AAP			0x00000001
-@@ -357,8 +377,15 @@
- /* PLA_INDICATE_FALG */
- #define UPCOMING_RUNTIME_D3	BIT(0)
- 
-+/* PLA_MACDBG_PRE and PLA_MACDBG_POST */
-+#define DEBUG_OE		BIT(0)
-+#define DEBUG_LTSSM		0x0082
-+
- /* PLA_EXTRA_STATUS */
-+#define CUR_LINK_OK		BIT(15)
-+#define U3P3_CHECK_EN		BIT(7)	/* RTL_VER_05 only */
- #define LINK_CHANGE_FLAG	BIT(8)
-+#define POLL_LINK_CHG		BIT(0)
- 
- /* USB_USB2PHY */
- #define USB2PHY_SUSPEND		0x0001
-@@ -382,6 +409,12 @@
- #define STAT_SPEED_HIGH		0x0000
- #define STAT_SPEED_FULL		0x0002
- 
-+/* USB_FW_FIX_EN0 */
-+#define FW_FIX_SUSPEND		BIT(14)
-+
-+/* USB_FW_FIX_EN1 */
-+#define FW_IP_RESET_EN		BIT(9)
-+
- /* USB_LPM_CONFIG */
- #define LPM_U1U2_EN		BIT(0)
- 
-@@ -406,12 +439,24 @@
- #define OWN_UPDATE		BIT(0)
- #define OWN_CLEAR		BIT(1)
- 
-+/* USB_FW_TASK */
-+#define FC_PATCH_TASK		BIT(1)
-+
- /* USB_UPS_CTRL */
- #define POWER_CUT		0x0100
- 
- /* USB_PM_CTRL_STATUS */
- #define RESUME_INDICATE		0x0001
- 
-+/* USB_CSTMR */
-+#define FORCE_SUPER		BIT(0)
-+
-+/* USB_FW_CTRL */
-+#define FLOW_CTRL_PATCH_OPT	BIT(1)
-+
-+/* USB_FC_TIMER */
-+#define CTRL_TIMER_EN		BIT(15)
-+
- /* USB_USB_CTRL */
- #define RX_AGG_DISABLE		0x0010
- #define RX_ZERO_EN		0x0080
-@@ -433,6 +478,9 @@
- #define COALESCE_HIGH		250000U
- #define COALESCE_SLOW		524280U
- 
-+/* USB_WDT1_CTRL */
-+#define WTD1_EN			BIT(0)
-+
- /* USB_WDT11_CTRL */
- #define TIMER11_EN		0x0001
- 
-@@ -553,6 +601,9 @@ enum spd_duplex {
- /* OCP_PHY_PATCH_CMD */
- #define PATCH_REQUEST		BIT(4)
- 
-+/* OCP_PHY_LOCK */
-+#define PATCH_LOCK		BIT(0)
-+
- /* OCP_ADC_CFG */
- #define CKADSEL_L		0x0100
- #define ADC_EN			0x0080
-@@ -577,6 +628,9 @@ enum spd_duplex {
- /* SRAM_IMPEDANCE */
- #define RX_DRIVING_MASK		0x6000
- 
-+/* SRAM_PHY_LOCK */
-+#define PHY_PATCH_LOCK		0x0001
-+
- /* MAC PASSTHRU */
- #define AD_MASK			0xfee0
- #define BND_MASK		0x0004
-@@ -584,6 +638,8 @@ enum spd_duplex {
- #define EFUSE			0xcfdb
- #define PASS_THRU_MASK		0x1
- 
-+#define BP4_SUPER_ONLY		0x1578	/* RTL_VER_04 only */
-+
- enum rtl_register_content {
- 	_1000bps	= 0x10,
- 	_100bps		= 0x08,
-@@ -636,6 +692,7 @@ enum rtl8152_flags {
- 	SCHEDULE_TASKLET,
- 	GREEN_ETHERNET,
- 	DELL_TB_RX_AGG_BUG,
-+	LENOVO_MACPASSTHRU,
- };
- 
- /* Define these values to match your device */
-@@ -647,6 +704,9 @@ enum rtl8152_flags {
- #define VENDOR_ID_NVIDIA		0x0955
- #define VENDOR_ID_TPLINK		0x2357
- 
-+#define DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2	0x3082
-+#define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2		0xa387
-+
- #define MCU_TYPE_PLA			0x0100
- #define MCU_TYPE_USB			0x0000
- 
-@@ -750,16 +810,16 @@ struct r8152 {
- 	struct tasklet_struct tx_tl;
- 
- 	struct rtl_ops {
--		void (*init)(struct r8152 *);
--		int (*enable)(struct r8152 *);
--		void (*disable)(struct r8152 *);
--		void (*up)(struct r8152 *);
--		void (*down)(struct r8152 *);
--		void (*unload)(struct r8152 *);
--		int (*eee_get)(struct r8152 *, struct ethtool_eee *);
--		int (*eee_set)(struct r8152 *, struct ethtool_eee *);
--		bool (*in_nway)(struct r8152 *);
--		void (*hw_phy_cfg)(struct r8152 *);
-+		void (*init)(struct r8152 *tp);
-+		int (*enable)(struct r8152 *tp);
-+		void (*disable)(struct r8152 *tp);
-+		void (*up)(struct r8152 *tp);
-+		void (*down)(struct r8152 *tp);
-+		void (*unload)(struct r8152 *tp);
-+		int (*eee_get)(struct r8152 *tp, struct ethtool_eee *eee);
-+		int (*eee_set)(struct r8152 *tp, struct ethtool_eee *eee);
-+		bool (*in_nway)(struct r8152 *tp);
-+		void (*hw_phy_cfg)(struct r8152 *tp);
- 		void (*autosuspend_en)(struct r8152 *tp, bool enable);
- 	} rtl_ops;
- 
-@@ -780,6 +840,19 @@ struct r8152 {
- 		u32 ctap_short_off:1;
- 	} ups_info;
- 
-+#define RTL_VER_SIZE		32
-+
-+	struct rtl_fw {
-+		const char *fw_name;
-+		const struct firmware *fw;
-+
-+		char version[RTL_VER_SIZE];
-+		int (*pre_fw)(struct r8152 *tp);
-+		int (*post_fw)(struct r8152 *tp);
-+
-+		bool retry;
-+	} rtl_fw;
-+
- 	atomic_t rx_count;
- 
- 	bool eee_en;
-@@ -802,6 +875,131 @@ struct r8152 {
- 	u8 autoneg;
- };
- 
-+/**
-+ * struct fw_block - block type and total length
-+ * @type: type of the current block, such as RTL_FW_END, RTL_FW_PLA,
-+ *	RTL_FW_USB and so on.
-+ * @length: total length of the current block.
-+ */
-+struct fw_block {
-+	__le32 type;
-+	__le32 length;
-+} __packed;
-+
-+/**
-+ * struct fw_header - header of the firmware file
-+ * @checksum: checksum of sha256 which is calculated from the whole file
-+ *	except the checksum field of the file. That is, calculate sha256
-+ *	from the version field to the end of the file.
-+ * @version: version of this firmware.
-+ * @blocks: the first firmware block of the file
-+ */
-+struct fw_header {
-+	u8 checksum[32];
-+	char version[RTL_VER_SIZE];
-+	struct fw_block blocks[];
-+} __packed;
-+
-+/**
-+ * struct fw_mac - a firmware block used by RTL_FW_PLA and RTL_FW_USB.
-+ *	The layout of the firmware block is:
-+ *	<struct fw_mac> + <info> + <firmware data>.
-+ * @fw_offset: offset of the firmware binary data. The start address of
-+ *	the data would be the address of struct fw_mac + @fw_offset.
-+ * @fw_reg: the register to load the firmware. Depends on chip.
-+ * @bp_ba_addr: the register to write break point base address. Depends on
-+ *	chip.
-+ * @bp_ba_value: break point base address. Depends on chip.
-+ * @bp_en_addr: the register to write break point enabled mask. Depends
-+ *	on chip.
-+ * @bp_en_value: break point enabled mask. Depends on the firmware.
-+ * @bp_start: the start register of break points. Depends on chip.
-+ * @bp_num: the break point number which needs to be set for this firmware.
-+ *	Depends on the firmware.
-+ * @bp: break points. Depends on firmware.
-+ * @fw_ver_reg: the register to store the fw version.
-+ * @fw_ver_data: the firmware version of the current type.
-+ * @info: additional information for debugging, and is followed by the
-+ *	binary data of firmware.
-+ */
-+struct fw_mac {
-+	struct fw_block blk_hdr;
-+	__le16 fw_offset;
-+	__le16 fw_reg;
-+	__le16 bp_ba_addr;
-+	__le16 bp_ba_value;
-+	__le16 bp_en_addr;
-+	__le16 bp_en_value;
-+	__le16 bp_start;
-+	__le16 bp_num;
-+	__le16 bp[16]; /* any value determined by firmware */
-+	__le32 reserved;
-+	__le16 fw_ver_reg;
-+	u8 fw_ver_data;
-+	char info[];
-+} __packed;
-+
-+/**
-+ * struct fw_phy_patch_key - a firmware block used by RTL_FW_PHY_START.
-+ *	This is used to set patch key when loading the firmware of PHY.
-+ * @key_reg: the register to write the patch key.
-+ * @key_data: patch key.
-+ */
-+struct fw_phy_patch_key {
-+	struct fw_block blk_hdr;
-+	__le16 key_reg;
-+	__le16 key_data;
-+	__le32 reserved;
-+} __packed;
-+
-+/**
-+ * struct fw_phy_nc - a firmware block used by RTL_FW_PHY_NC.
-+ *	The layout of the firmware block is:
-+ *	<struct fw_phy_nc> + <info> + <firmware data>.
-+ * @fw_offset: offset of the firmware binary data. The start address of
-+ *	the data would be the address of struct fw_phy_nc + @fw_offset.
-+ * @fw_reg: the register to load the firmware. Depends on chip.
-+ * @ba_reg: the register to write the base address. Depends on chip.
-+ * @ba_data: base address. Depends on chip.
-+ * @patch_en_addr: the register of enabling patch mode. Depends on chip.
-+ * @patch_en_value: patch mode enabled mask. Depends on the firmware.
-+ * @mode_reg: the regitster of switching the mode.
-+ * @mod_pre: the mode needing to be set before loading the firmware.
-+ * @mod_post: the mode to be set when finishing to load the firmware.
-+ * @bp_start: the start register of break points. Depends on chip.
-+ * @bp_num: the break point number which needs to be set for this firmware.
-+ *	Depends on the firmware.
-+ * @bp: break points. Depends on firmware.
-+ * @info: additional information for debugging, and is followed by the
-+ *	binary data of firmware.
-+ */
-+struct fw_phy_nc {
-+	struct fw_block blk_hdr;
-+	__le16 fw_offset;
-+	__le16 fw_reg;
-+	__le16 ba_reg;
-+	__le16 ba_data;
-+	__le16 patch_en_addr;
-+	__le16 patch_en_value;
-+	__le16 mode_reg;
-+	__le16 mode_pre;
-+	__le16 mode_post;
-+	__le16 reserved;
-+	__le16 bp_start;
-+	__le16 bp_num;
-+	__le16 bp[4];
-+	char info[];
-+} __packed;
-+
-+enum rtl_fw_type {
-+	RTL_FW_END = 0,
-+	RTL_FW_PLA,
-+	RTL_FW_USB,
-+	RTL_FW_PHY_START,
-+	RTL_FW_PHY_STOP,
-+	RTL_FW_PHY_NC,
-+};
-+
- enum rtl_version {
- 	RTL_VER_UNKNOWN = 0,
- 	RTL_VER_01,
-@@ -1236,38 +1434,52 @@ static int vendor_mac_passthru_addr_read(struct r8152 *tp, struct sockaddr *sa)
- 	int ret = -EINVAL;
- 	u32 ocp_data;
- 	unsigned char buf[6];
--
--	/* test for -AD variant of RTL8153 */
--	ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_MISC_0);
--	if ((ocp_data & AD_MASK) == 0x1000) {
--		/* test for MAC address pass-through bit */
--		ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, EFUSE);
--		if ((ocp_data & PASS_THRU_MASK) != 1) {
--			netif_dbg(tp, probe, tp->netdev,
--				  "No efuse for RTL8153-AD MAC pass through\n");
--			return -ENODEV;
--		}
-+	char *mac_obj_name;
-+	acpi_object_type mac_obj_type;
-+	int mac_strlen;
-+
-+	if (test_bit(LENOVO_MACPASSTHRU, &tp->flags)) {
-+		mac_obj_name = "\\MACA";
-+		mac_obj_type = ACPI_TYPE_STRING;
-+		mac_strlen = 0x16;
- 	} else {
--		/* test for RTL8153-BND and RTL8153-BD */
--		ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, USB_MISC_1);
--		if ((ocp_data & BND_MASK) == 0 && (ocp_data & BD_MASK) == 0) {
--			netif_dbg(tp, probe, tp->netdev,
--				  "Invalid variant for MAC pass through\n");
--			return -ENODEV;
-+		/* test for -AD variant of RTL8153 */
-+		ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_MISC_0);
-+		if ((ocp_data & AD_MASK) == 0x1000) {
-+			/* test for MAC address pass-through bit */
-+			ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, EFUSE);
-+			if ((ocp_data & PASS_THRU_MASK) != 1) {
-+				netif_dbg(tp, probe, tp->netdev,
-+						"No efuse for RTL8153-AD MAC pass through\n");
-+				return -ENODEV;
-+			}
-+		} else {
-+			/* test for RTL8153-BND and RTL8153-BD */
-+			ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, USB_MISC_1);
-+			if ((ocp_data & BND_MASK) == 0 && (ocp_data & BD_MASK) == 0) {
-+				netif_dbg(tp, probe, tp->netdev,
-+						"Invalid variant for MAC pass through\n");
-+				return -ENODEV;
-+			}
- 		}
-+
-+		mac_obj_name = "\\_SB.AMAC";
-+		mac_obj_type = ACPI_TYPE_BUFFER;
-+		mac_strlen = 0x17;
- 	}
- 
- 	/* returns _AUXMAC_#AABBCCDDEEFF# */
--	status = acpi_evaluate_object(NULL, "\\_SB.AMAC", NULL, &buffer);
-+	status = acpi_evaluate_object(NULL, mac_obj_name, NULL, &buffer);
- 	obj = (union acpi_object *)buffer.pointer;
- 	if (!ACPI_SUCCESS(status))
- 		return -ENODEV;
--	if (obj->type != ACPI_TYPE_BUFFER || obj->string.length != 0x17) {
-+	if (obj->type != mac_obj_type || obj->string.length != mac_strlen) {
- 		netif_warn(tp, probe, tp->netdev,
- 			   "Invalid buffer for pass-thru MAC addr: (%d, %d)\n",
- 			   obj->type, obj->string.length);
- 		goto amacout;
- 	}
-+
- 	if (strncmp(obj->string.pointer, "_AUXMAC_#", 9) != 0 ||
- 	    strncmp(obj->string.pointer + 0x15, "#", 1) != 0) {
- 		netif_warn(tp, probe, tp->netdev,
-@@ -1306,12 +1518,22 @@ static int determine_ethernet_addr(struct r8152 *tp, struct sockaddr *sa)
- 		 */
- 		ret = vendor_mac_passthru_addr_read(tp, sa);
- 		if (ret < 0)
--			ret = pla_ocp_read(tp, PLA_BACKUP, 8, sa->sa_data);
-+			ret = pla_ocp_read(tp, PLA_BACKUP, 8,
-+					   sa->sa_data);
- 	}
- 
+@@ -1522,6 +1528,17 @@ static int determine_ethernet_addr(struct r8152 *tp, struct sockaddr *sa)
  	if (ret < 0) {
  		netif_err(tp, probe, dev, "Get ether addr fail\n");
  	} else if (!is_valid_ether_addr(sa->sa_data)) {
 +		/* try to get MAC address from DT */
-+		const u8 *mac = of_get_mac_address(tp->udev->dev.of_node);
-+		if (mac) {
-+			ether_addr_copy(sa->sa_data, mac);
-+			netif_info(tp, probe, dev, "DT mac addr %pM\n",
-+				   sa->sa_data);
-+			return 0;
++		if (tp->udev->dev.of_node) {
++			const u8 *mac = of_get_mac_address(tp->udev->dev.of_node);
++			if (!IS_ERR(mac) && is_valid_ether_addr(mac)) {
++				ether_addr_copy(sa->sa_data, mac);
++				netif_info(tp, probe, dev, "DT mac addr %pM\n",
++					   sa->sa_data);
++				return 0;
++			}
 +		}
 +
  		netif_err(tp, probe, dev, "Invalid ether addr %pM\n",
  			  sa->sa_data);
  		eth_hw_addr_random(dev);
-@@ -1702,7 +1924,7 @@ static struct tx_agg *r8152_get_tx_agg(struct r8152 *tp)
- }
- 
- /* r8152_csum_workaround()
-- * The hw limites the value the transport offset. When the offset is out of the
-+ * The hw limits the value of the transport offset. When the offset is out of
-  * range, calculate the checksum by sw.
-  */
- static void r8152_csum_workaround(struct r8152 *tp, struct sk_buff *skb,
-@@ -2192,6 +2414,7 @@ static void tx_bottom(struct r8152 *tp)
- 	int res;
- 
- 	do {
-+		struct net_device *netdev = tp->netdev;
- 		struct tx_agg *agg;
- 
- 		if (skb_queue_empty(&tp->tx_queue))
-@@ -2202,24 +2425,23 @@ static void tx_bottom(struct r8152 *tp)
- 			break;
- 
- 		res = r8152_tx_agg_fill(tp, agg);
--		if (res) {
--			struct net_device *netdev = tp->netdev;
-+		if (!res)
-+			continue;
- 
--			if (res == -ENODEV) {
--				rtl_set_unplug(tp);
--				netif_device_detach(netdev);
--			} else {
--				struct net_device_stats *stats = &netdev->stats;
--				unsigned long flags;
-+		if (res == -ENODEV) {
-+			rtl_set_unplug(tp);
-+			netif_device_detach(netdev);
-+		} else {
-+			struct net_device_stats *stats = &netdev->stats;
-+			unsigned long flags;
- 
--				netif_warn(tp, tx_err, netdev,
--					   "failed tx_urb %d\n", res);
--				stats->tx_dropped += agg->skb_num;
-+			netif_warn(tp, tx_err, netdev,
-+				   "failed tx_urb %d\n", res);
-+			stats->tx_dropped += agg->skb_num;
- 
--				spin_lock_irqsave(&tp->tx_lock, flags);
--				list_add_tail(&agg->list, &tp->tx_free);
--				spin_unlock_irqrestore(&tp->tx_lock, flags);
--			}
-+			spin_lock_irqsave(&tp->tx_lock, flags);
-+			list_add_tail(&agg->list, &tp->tx_free);
-+			spin_unlock_irqrestore(&tp->tx_lock, flags);
- 		}
- 	} while (res == 0);
- }
-@@ -2676,6 +2898,17 @@ static int rtl8153_enable(struct r8152 *tp)
- 	r8153_set_rx_early_timeout(tp);
- 	r8153_set_rx_early_size(tp);
- 
-+	if (tp->version == RTL_VER_09) {
-+		u32 ocp_data;
-+
-+		ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_FW_TASK);
-+		ocp_data &= ~FC_PATCH_TASK;
-+		ocp_write_word(tp, MCU_TYPE_USB, USB_FW_TASK, ocp_data);
-+		usleep_range(1000, 2000);
-+		ocp_data |= FC_PATCH_TASK;
-+		ocp_write_word(tp, MCU_TYPE_USB, USB_FW_TASK, ocp_data);
-+	}
-+
- 	return rtl_enable(tp);
- }
- 
-@@ -3191,7 +3424,8 @@ static void rtl8153b_runtime_enable(struct r8152 *tp, bool enable)
- 		r8153b_ups_en(tp, false);
- 		r8153_queue_wake(tp, false);
- 		rtl_runtime_suspend_enable(tp, false);
--		r8153b_u1u2en(tp, true);
-+		if (tp->udev->speed != USB_SPEED_HIGH)
-+			r8153b_u1u2en(tp, true);
- 	}
- }
- 
-@@ -3241,196 +3475,881 @@ static void rtl_reset_bmu(struct r8152 *tp)
- 	ocp_write_byte(tp, MCU_TYPE_USB, USB_BMU_RESET, ocp_data);
- }
- 
--static void r8152_aldps_en(struct r8152 *tp, bool enable)
-+/* Clear the bp to stop the firmware before loading a new one */
-+static void rtl_clear_bp(struct r8152 *tp, u16 type)
- {
--	if (enable) {
--		ocp_reg_write(tp, OCP_ALDPS_CONFIG, ENPWRSAVE | ENPDNPS |
--						    LINKENA | DIS_SDSAVE);
--	} else {
--		ocp_reg_write(tp, OCP_ALDPS_CONFIG, ENPDNPS | LINKENA |
--						    DIS_SDSAVE);
--		msleep(20);
-+	switch (tp->version) {
-+	case RTL_VER_01:
-+	case RTL_VER_02:
-+	case RTL_VER_07:
-+		break;
-+	case RTL_VER_03:
-+	case RTL_VER_04:
-+	case RTL_VER_05:
-+	case RTL_VER_06:
-+		ocp_write_byte(tp, type, PLA_BP_EN, 0);
-+		break;
-+	case RTL_VER_08:
-+	case RTL_VER_09:
-+	default:
-+		if (type == MCU_TYPE_USB) {
-+			ocp_write_byte(tp, MCU_TYPE_USB, USB_BP2_EN, 0);
-+
-+			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_8, 0);
-+			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_9, 0);
-+			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_10, 0);
-+			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_11, 0);
-+			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_12, 0);
-+			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_13, 0);
-+			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_14, 0);
-+			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_15, 0);
-+		} else {
-+			ocp_write_byte(tp, MCU_TYPE_PLA, PLA_BP_EN, 0);
-+		}
-+		break;
- 	}
--}
- 
--static inline void r8152_mmd_indirect(struct r8152 *tp, u16 dev, u16 reg)
--{
--	ocp_reg_write(tp, OCP_EEE_AR, FUN_ADDR | dev);
--	ocp_reg_write(tp, OCP_EEE_DATA, reg);
--	ocp_reg_write(tp, OCP_EEE_AR, FUN_DATA | dev);
-+	ocp_write_word(tp, type, PLA_BP_0, 0);
-+	ocp_write_word(tp, type, PLA_BP_1, 0);
-+	ocp_write_word(tp, type, PLA_BP_2, 0);
-+	ocp_write_word(tp, type, PLA_BP_3, 0);
-+	ocp_write_word(tp, type, PLA_BP_4, 0);
-+	ocp_write_word(tp, type, PLA_BP_5, 0);
-+	ocp_write_word(tp, type, PLA_BP_6, 0);
-+	ocp_write_word(tp, type, PLA_BP_7, 0);
-+
-+	/* wait 3 ms to make sure the firmware is stopped */
-+	usleep_range(3000, 6000);
-+	ocp_write_word(tp, type, PLA_BP_BA, 0);
- }
- 
--static u16 r8152_mmd_read(struct r8152 *tp, u16 dev, u16 reg)
-+static int r8153_patch_request(struct r8152 *tp, bool request)
- {
- 	u16 data;
-+	int i;
- 
--	r8152_mmd_indirect(tp, dev, reg);
--	data = ocp_reg_read(tp, OCP_EEE_DATA);
--	ocp_reg_write(tp, OCP_EEE_AR, 0x0000);
-+	data = ocp_reg_read(tp, OCP_PHY_PATCH_CMD);
-+	if (request)
-+		data |= PATCH_REQUEST;
-+	else
-+		data &= ~PATCH_REQUEST;
-+	ocp_reg_write(tp, OCP_PHY_PATCH_CMD, data);
- 
--	return data;
--}
-+	for (i = 0; request && i < 5000; i++) {
-+		usleep_range(1000, 2000);
-+		if (ocp_reg_read(tp, OCP_PHY_PATCH_STAT) & PATCH_READY)
-+			break;
-+	}
- 
--static void r8152_mmd_write(struct r8152 *tp, u16 dev, u16 reg, u16 data)
--{
--	r8152_mmd_indirect(tp, dev, reg);
--	ocp_reg_write(tp, OCP_EEE_DATA, data);
--	ocp_reg_write(tp, OCP_EEE_AR, 0x0000);
-+	if (request && !(ocp_reg_read(tp, OCP_PHY_PATCH_STAT) & PATCH_READY)) {
-+		netif_err(tp, drv, tp->netdev, "patch request fail\n");
-+		r8153_patch_request(tp, false);
-+		return -ETIME;
-+	} else {
-+		return 0;
-+	}
- }
- 
--static void r8152_eee_en(struct r8152 *tp, bool enable)
-+static int r8153_pre_ram_code(struct r8152 *tp, u16 key_addr, u16 patch_key)
- {
--	u16 config1, config2, config3;
--	u32 ocp_data;
--
--	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_EEE_CR);
--	config1 = ocp_reg_read(tp, OCP_EEE_CONFIG1) & ~sd_rise_time_mask;
--	config2 = ocp_reg_read(tp, OCP_EEE_CONFIG2);
--	config3 = ocp_reg_read(tp, OCP_EEE_CONFIG3) & ~fast_snr_mask;
--
--	if (enable) {
--		ocp_data |= EEE_RX_EN | EEE_TX_EN;
--		config1 |= EEE_10_CAP | EEE_NWAY_EN | TX_QUIET_EN | RX_QUIET_EN;
--		config1 |= sd_rise_time(1);
--		config2 |= RG_DACQUIET_EN | RG_LDVQUIET_EN;
--		config3 |= fast_snr(42);
--	} else {
--		ocp_data &= ~(EEE_RX_EN | EEE_TX_EN);
--		config1 &= ~(EEE_10_CAP | EEE_NWAY_EN | TX_QUIET_EN |
--			     RX_QUIET_EN);
--		config1 |= sd_rise_time(7);
--		config2 &= ~(RG_DACQUIET_EN | RG_LDVQUIET_EN);
--		config3 |= fast_snr(511);
-+	if (r8153_patch_request(tp, true)) {
-+		dev_err(&tp->intf->dev, "patch request fail\n");
-+		return -ETIME;
- 	}
- 
--	ocp_write_word(tp, MCU_TYPE_PLA, PLA_EEE_CR, ocp_data);
--	ocp_reg_write(tp, OCP_EEE_CONFIG1, config1);
--	ocp_reg_write(tp, OCP_EEE_CONFIG2, config2);
--	ocp_reg_write(tp, OCP_EEE_CONFIG3, config3);
-+	sram_write(tp, key_addr, patch_key);
-+	sram_write(tp, SRAM_PHY_LOCK, PHY_PATCH_LOCK);
-+
-+	return 0;
- }
- 
--static void r8153_eee_en(struct r8152 *tp, bool enable)
-+static int r8153_post_ram_code(struct r8152 *tp, u16 key_addr)
- {
--	u32 ocp_data;
--	u16 config;
-+	u16 data;
- 
--	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_EEE_CR);
--	config = ocp_reg_read(tp, OCP_EEE_CFG);
-+	sram_write(tp, 0x0000, 0x0000);
- 
--	if (enable) {
--		ocp_data |= EEE_RX_EN | EEE_TX_EN;
--		config |= EEE10_EN;
--	} else {
--		ocp_data &= ~(EEE_RX_EN | EEE_TX_EN);
--		config &= ~EEE10_EN;
--	}
-+	data = ocp_reg_read(tp, OCP_PHY_LOCK);
-+	data &= ~PATCH_LOCK;
-+	ocp_reg_write(tp, OCP_PHY_LOCK, data);
- 
--	ocp_write_word(tp, MCU_TYPE_PLA, PLA_EEE_CR, ocp_data);
--	ocp_reg_write(tp, OCP_EEE_CFG, config);
-+	sram_write(tp, key_addr, 0x0000);
- 
--	tp->ups_info.eee = enable;
-+	r8153_patch_request(tp, false);
-+
-+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_OCP_GPHY_BASE, tp->ocp_base);
-+
-+	return 0;
- }
- 
--static void rtl_eee_enable(struct r8152 *tp, bool enable)
-+static bool rtl8152_is_fw_phy_nc_ok(struct r8152 *tp, struct fw_phy_nc *phy)
- {
-+	u32 length;
-+	u16 fw_offset, fw_reg, ba_reg, patch_en_addr, mode_reg, bp_start;
-+	bool rc = false;
-+
- 	switch (tp->version) {
--	case RTL_VER_01:
--	case RTL_VER_02:
--	case RTL_VER_07:
--		if (enable) {
--			r8152_eee_en(tp, true);
--			r8152_mmd_write(tp, MDIO_MMD_AN, MDIO_AN_EEE_ADV,
--					tp->eee_adv);
--		} else {
--			r8152_eee_en(tp, false);
--			r8152_mmd_write(tp, MDIO_MMD_AN, MDIO_AN_EEE_ADV, 0);
--		}
--		break;
--	case RTL_VER_03:
- 	case RTL_VER_04:
- 	case RTL_VER_05:
- 	case RTL_VER_06:
--	case RTL_VER_08:
--	case RTL_VER_09:
--		if (enable) {
--			r8153_eee_en(tp, true);
--			ocp_reg_write(tp, OCP_EEE_ADV, tp->eee_adv);
--		} else {
--			r8153_eee_en(tp, false);
--			ocp_reg_write(tp, OCP_EEE_ADV, 0);
--		}
-+		fw_reg = 0xa014;
-+		ba_reg = 0xa012;
-+		patch_en_addr = 0xa01a;
-+		mode_reg = 0xb820;
-+		bp_start = 0xa000;
- 		break;
- 	default:
--		break;
-+		goto out;
- 	}
--}
- 
--static void r8152b_enable_fc(struct r8152 *tp)
--{
--	u16 anar;
-+	fw_offset = __le16_to_cpu(phy->fw_offset);
-+	if (fw_offset < sizeof(*phy)) {
-+		dev_err(&tp->intf->dev, "fw_offset too small\n");
-+		goto out;
-+	}
- 
--	anar = r8152_mdio_read(tp, MII_ADVERTISE);
--	anar |= ADVERTISE_PAUSE_CAP | ADVERTISE_PAUSE_ASYM;
--	r8152_mdio_write(tp, MII_ADVERTISE, anar);
-+	length = __le32_to_cpu(phy->blk_hdr.length);
-+	if (length < fw_offset) {
-+		dev_err(&tp->intf->dev, "invalid fw_offset\n");
-+		goto out;
-+	}
- 
--	tp->ups_info.flow_control = true;
--}
-+	length -= __le16_to_cpu(phy->fw_offset);
-+	if (!length || (length & 1)) {
-+		dev_err(&tp->intf->dev, "invalid block length\n");
-+		goto out;
-+	}
- 
--static void rtl8152_disable(struct r8152 *tp)
--{
--	r8152_aldps_en(tp, false);
--	rtl_disable(tp);
--	r8152_aldps_en(tp, true);
--}
-+	if (__le16_to_cpu(phy->fw_reg) != fw_reg) {
-+		dev_err(&tp->intf->dev, "invalid register to load firmware\n");
-+		goto out;
-+	}
- 
--static void r8152b_hw_phy_cfg(struct r8152 *tp)
--{
--	rtl_eee_enable(tp, tp->eee_en);
--	r8152_aldps_en(tp, true);
--	r8152b_enable_fc(tp);
-+	if (__le16_to_cpu(phy->ba_reg) != ba_reg) {
-+		dev_err(&tp->intf->dev, "invalid base address register\n");
-+		goto out;
-+	}
- 
--	set_bit(PHY_RESET, &tp->flags);
--}
-+	if (__le16_to_cpu(phy->patch_en_addr) != patch_en_addr) {
-+		dev_err(&tp->intf->dev,
-+			"invalid patch mode enabled register\n");
-+		goto out;
-+	}
- 
--static void r8152b_exit_oob(struct r8152 *tp)
--{
--	u32 ocp_data;
--	int i;
-+	if (__le16_to_cpu(phy->mode_reg) != mode_reg) {
-+		dev_err(&tp->intf->dev,
-+			"invalid register to switch the mode\n");
-+		goto out;
-+	}
- 
--	ocp_data = ocp_read_dword(tp, MCU_TYPE_PLA, PLA_RCR);
--	ocp_data &= ~RCR_ACPT_ALL;
--	ocp_write_dword(tp, MCU_TYPE_PLA, PLA_RCR, ocp_data);
-+	if (__le16_to_cpu(phy->bp_start) != bp_start) {
-+		dev_err(&tp->intf->dev,
-+			"invalid start register of break point\n");
-+		goto out;
-+	}
- 
--	rxdy_gated_en(tp, true);
--	r8153_teredo_off(tp);
--	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CRWECR, CRWECR_NORAML);
--	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CR, 0x00);
-+	if (__le16_to_cpu(phy->bp_num) > 4) {
-+		dev_err(&tp->intf->dev, "invalid break point number\n");
-+		goto out;
-+	}
- 
--	ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL);
--	ocp_data &= ~NOW_IS_OOB;
--	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL, ocp_data);
-+	rc = true;
-+out:
-+	return rc;
-+}
- 
--	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7);
--	ocp_data &= ~MCU_BORW_EN;
--	ocp_write_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7, ocp_data);
-+static bool rtl8152_is_fw_mac_ok(struct r8152 *tp, struct fw_mac *mac)
-+{
-+	u16 fw_reg, bp_ba_addr, bp_en_addr, bp_start, fw_offset;
-+	bool rc = false;
-+	u32 length, type;
-+	int i, max_bp;
- 
--	for (i = 0; i < 1000; i++) {
--		ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL);
--		if (ocp_data & LINK_LIST_READY)
-+	type = __le32_to_cpu(mac->blk_hdr.type);
-+	if (type == RTL_FW_PLA) {
-+		switch (tp->version) {
-+		case RTL_VER_01:
-+		case RTL_VER_02:
-+		case RTL_VER_07:
-+			fw_reg = 0xf800;
-+			bp_ba_addr = PLA_BP_BA;
-+			bp_en_addr = 0;
-+			bp_start = PLA_BP_0;
-+			max_bp = 8;
- 			break;
--		usleep_range(1000, 2000);
--	}
--
--	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7);
--	ocp_data |= RE_INIT_LL;
--	ocp_write_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7, ocp_data);
--
--	for (i = 0; i < 1000; i++) {
-+		case RTL_VER_03:
-+		case RTL_VER_04:
-+		case RTL_VER_05:
-+		case RTL_VER_06:
-+		case RTL_VER_08:
-+		case RTL_VER_09:
-+			fw_reg = 0xf800;
-+			bp_ba_addr = PLA_BP_BA;
-+			bp_en_addr = PLA_BP_EN;
-+			bp_start = PLA_BP_0;
-+			max_bp = 8;
-+			break;
-+		default:
-+			goto out;
-+		}
-+	} else if (type == RTL_FW_USB) {
-+		switch (tp->version) {
-+		case RTL_VER_03:
-+		case RTL_VER_04:
-+		case RTL_VER_05:
-+		case RTL_VER_06:
-+			fw_reg = 0xf800;
-+			bp_ba_addr = USB_BP_BA;
-+			bp_en_addr = USB_BP_EN;
-+			bp_start = USB_BP_0;
-+			max_bp = 8;
-+			break;
-+		case RTL_VER_08:
-+		case RTL_VER_09:
-+			fw_reg = 0xe600;
-+			bp_ba_addr = USB_BP_BA;
-+			bp_en_addr = USB_BP2_EN;
-+			bp_start = USB_BP_0;
-+			max_bp = 16;
-+			break;
-+		case RTL_VER_01:
-+		case RTL_VER_02:
-+		case RTL_VER_07:
-+		default:
-+			goto out;
-+		}
-+	} else {
-+		goto out;
-+	}
-+
-+	fw_offset = __le16_to_cpu(mac->fw_offset);
-+	if (fw_offset < sizeof(*mac)) {
-+		dev_err(&tp->intf->dev, "fw_offset too small\n");
-+		goto out;
-+	}
-+
-+	length = __le32_to_cpu(mac->blk_hdr.length);
-+	if (length < fw_offset) {
-+		dev_err(&tp->intf->dev, "invalid fw_offset\n");
-+		goto out;
-+	}
-+
-+	length -= fw_offset;
-+	if (length < 4 || (length & 3)) {
-+		dev_err(&tp->intf->dev, "invalid block length\n");
-+		goto out;
-+	}
-+
-+	if (__le16_to_cpu(mac->fw_reg) != fw_reg) {
-+		dev_err(&tp->intf->dev, "invalid register to load firmware\n");
-+		goto out;
-+	}
-+
-+	if (__le16_to_cpu(mac->bp_ba_addr) != bp_ba_addr) {
-+		dev_err(&tp->intf->dev, "invalid base address register\n");
-+		goto out;
-+	}
-+
-+	if (__le16_to_cpu(mac->bp_en_addr) != bp_en_addr) {
-+		dev_err(&tp->intf->dev, "invalid enabled mask register\n");
-+		goto out;
-+	}
-+
-+	if (__le16_to_cpu(mac->bp_start) != bp_start) {
-+		dev_err(&tp->intf->dev,
-+			"invalid start register of break point\n");
-+		goto out;
-+	}
-+
-+	if (__le16_to_cpu(mac->bp_num) > max_bp) {
-+		dev_err(&tp->intf->dev, "invalid break point number\n");
-+		goto out;
-+	}
-+
-+	for (i = __le16_to_cpu(mac->bp_num); i < max_bp; i++) {
-+		if (mac->bp[i]) {
-+			dev_err(&tp->intf->dev, "unused bp%u is not zero\n", i);
-+			goto out;
-+		}
-+	}
-+
-+	rc = true;
-+out:
-+	return rc;
-+}
-+
-+/* Verify the checksum for the firmware file. It is calculated from the version
-+ * field to the end of the file. Compare the result with the checksum field to
-+ * make sure the file is correct.
-+ */
-+static long rtl8152_fw_verify_checksum(struct r8152 *tp,
-+				       struct fw_header *fw_hdr, size_t size)
-+{
-+	unsigned char checksum[sizeof(fw_hdr->checksum)];
-+	struct crypto_shash *alg;
-+	struct shash_desc *sdesc;
-+	size_t len;
-+	long rc;
-+
-+	alg = crypto_alloc_shash("sha256", 0, 0);
-+	if (IS_ERR(alg)) {
-+		rc = PTR_ERR(alg);
-+		goto out;
-+	}
-+
-+	if (crypto_shash_digestsize(alg) != sizeof(fw_hdr->checksum)) {
-+		rc = -EFAULT;
-+		dev_err(&tp->intf->dev, "digestsize incorrect (%u)\n",
-+			crypto_shash_digestsize(alg));
-+		goto free_shash;
-+	}
-+
-+	len = sizeof(*sdesc) + crypto_shash_descsize(alg);
-+	sdesc = kmalloc(len, GFP_KERNEL);
-+	if (!sdesc) {
-+		rc = -ENOMEM;
-+		goto free_shash;
-+	}
-+	sdesc->tfm = alg;
-+
-+	len = size - sizeof(fw_hdr->checksum);
-+	rc = crypto_shash_digest(sdesc, fw_hdr->version, len, checksum);
-+	kfree(sdesc);
-+	if (rc)
-+		goto free_shash;
-+
-+	if (memcmp(fw_hdr->checksum, checksum, sizeof(fw_hdr->checksum))) {
-+		dev_err(&tp->intf->dev, "checksum fail\n");
-+		rc = -EFAULT;
-+	}
-+
-+free_shash:
-+	crypto_free_shash(alg);
-+out:
-+	return rc;
-+}
-+
-+static long rtl8152_check_firmware(struct r8152 *tp, struct rtl_fw *rtl_fw)
-+{
-+	const struct firmware *fw = rtl_fw->fw;
-+	struct fw_header *fw_hdr = (struct fw_header *)fw->data;
-+	struct fw_mac *pla = NULL, *usb = NULL;
-+	struct fw_phy_patch_key *start = NULL;
-+	struct fw_phy_nc *phy_nc = NULL;
-+	struct fw_block *stop = NULL;
-+	long ret = -EFAULT;
-+	int i;
-+
-+	if (fw->size < sizeof(*fw_hdr)) {
-+		dev_err(&tp->intf->dev, "file too small\n");
-+		goto fail;
-+	}
-+
-+	ret = rtl8152_fw_verify_checksum(tp, fw_hdr, fw->size);
-+	if (ret)
-+		goto fail;
-+
-+	ret = -EFAULT;
-+
-+	for (i = sizeof(*fw_hdr); i < fw->size;) {
-+		struct fw_block *block = (struct fw_block *)&fw->data[i];
-+		u32 type;
-+
-+		if ((i + sizeof(*block)) > fw->size)
-+			goto fail;
-+
-+		type = __le32_to_cpu(block->type);
-+		switch (type) {
-+		case RTL_FW_END:
-+			if (__le32_to_cpu(block->length) != sizeof(*block))
-+				goto fail;
-+			goto fw_end;
-+		case RTL_FW_PLA:
-+			if (pla) {
-+				dev_err(&tp->intf->dev,
-+					"multiple PLA firmware encountered");
-+				goto fail;
-+			}
-+
-+			pla = (struct fw_mac *)block;
-+			if (!rtl8152_is_fw_mac_ok(tp, pla)) {
-+				dev_err(&tp->intf->dev,
-+					"check PLA firmware failed\n");
-+				goto fail;
-+			}
-+			break;
-+		case RTL_FW_USB:
-+			if (usb) {
-+				dev_err(&tp->intf->dev,
-+					"multiple USB firmware encountered");
-+				goto fail;
-+			}
-+
-+			usb = (struct fw_mac *)block;
-+			if (!rtl8152_is_fw_mac_ok(tp, usb)) {
-+				dev_err(&tp->intf->dev,
-+					"check USB firmware failed\n");
-+				goto fail;
-+			}
-+			break;
-+		case RTL_FW_PHY_START:
-+			if (start || phy_nc || stop) {
-+				dev_err(&tp->intf->dev,
-+					"check PHY_START fail\n");
-+				goto fail;
-+			}
-+
-+			if (__le32_to_cpu(block->length) != sizeof(*start)) {
-+				dev_err(&tp->intf->dev,
-+					"Invalid length for PHY_START\n");
-+				goto fail;
-+			}
-+
-+			start = (struct fw_phy_patch_key *)block;
-+			break;
-+		case RTL_FW_PHY_STOP:
-+			if (stop || !start) {
-+				dev_err(&tp->intf->dev,
-+					"Check PHY_STOP fail\n");
-+				goto fail;
-+			}
-+
-+			if (__le32_to_cpu(block->length) != sizeof(*block)) {
-+				dev_err(&tp->intf->dev,
-+					"Invalid length for PHY_STOP\n");
-+				goto fail;
-+			}
-+
-+			stop = block;
-+			break;
-+		case RTL_FW_PHY_NC:
-+			if (!start || stop) {
-+				dev_err(&tp->intf->dev,
-+					"check PHY_NC fail\n");
-+				goto fail;
-+			}
-+
-+			if (phy_nc) {
-+				dev_err(&tp->intf->dev,
-+					"multiple PHY NC encountered\n");
-+				goto fail;
-+			}
-+
-+			phy_nc = (struct fw_phy_nc *)block;
-+			if (!rtl8152_is_fw_phy_nc_ok(tp, phy_nc)) {
-+				dev_err(&tp->intf->dev,
-+					"check PHY NC firmware failed\n");
-+				goto fail;
-+			}
-+
-+			break;
-+		default:
-+			dev_warn(&tp->intf->dev, "Unknown type %u is found\n",
-+				 type);
-+			break;
-+		}
-+
-+		/* next block */
-+		i += ALIGN(__le32_to_cpu(block->length), 8);
-+	}
-+
-+fw_end:
-+	if ((phy_nc || start) && !stop) {
-+		dev_err(&tp->intf->dev, "without PHY_STOP\n");
-+		goto fail;
-+	}
-+
-+	return 0;
-+fail:
-+	return ret;
-+}
-+
-+static void rtl8152_fw_phy_nc_apply(struct r8152 *tp, struct fw_phy_nc *phy)
-+{
-+	u16 mode_reg, bp_index;
-+	u32 length, i, num;
-+	__le16 *data;
-+
-+	mode_reg = __le16_to_cpu(phy->mode_reg);
-+	sram_write(tp, mode_reg, __le16_to_cpu(phy->mode_pre));
-+	sram_write(tp, __le16_to_cpu(phy->ba_reg),
-+		   __le16_to_cpu(phy->ba_data));
-+
-+	length = __le32_to_cpu(phy->blk_hdr.length);
-+	length -= __le16_to_cpu(phy->fw_offset);
-+	num = length / 2;
-+	data = (__le16 *)((u8 *)phy + __le16_to_cpu(phy->fw_offset));
-+
-+	ocp_reg_write(tp, OCP_SRAM_ADDR, __le16_to_cpu(phy->fw_reg));
-+	for (i = 0; i < num; i++)
-+		ocp_reg_write(tp, OCP_SRAM_DATA, __le16_to_cpu(data[i]));
-+
-+	sram_write(tp, __le16_to_cpu(phy->patch_en_addr),
-+		   __le16_to_cpu(phy->patch_en_value));
-+
-+	bp_index = __le16_to_cpu(phy->bp_start);
-+	num = __le16_to_cpu(phy->bp_num);
-+	for (i = 0; i < num; i++) {
-+		sram_write(tp, bp_index, __le16_to_cpu(phy->bp[i]));
-+		bp_index += 2;
-+	}
-+
-+	sram_write(tp, mode_reg, __le16_to_cpu(phy->mode_post));
-+
-+	dev_dbg(&tp->intf->dev, "successfully applied %s\n", phy->info);
-+}
-+
-+static void rtl8152_fw_mac_apply(struct r8152 *tp, struct fw_mac *mac)
-+{
-+	u16 bp_en_addr, bp_index, type, bp_num, fw_ver_reg;
-+	u32 length;
-+	u8 *data;
-+	int i;
-+
-+	switch (__le32_to_cpu(mac->blk_hdr.type)) {
-+	case RTL_FW_PLA:
-+		type = MCU_TYPE_PLA;
-+		break;
-+	case RTL_FW_USB:
-+		type = MCU_TYPE_USB;
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	rtl_clear_bp(tp, type);
-+
-+	/* Enable backup/restore of MACDBG. This is required after clearing PLA
-+	 * break points and before applying the PLA firmware.
-+	 */
-+	if (tp->version == RTL_VER_04 && type == MCU_TYPE_PLA &&
-+	    !(ocp_read_word(tp, MCU_TYPE_PLA, PLA_MACDBG_POST) & DEBUG_OE)) {
-+		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MACDBG_PRE, DEBUG_LTSSM);
-+		ocp_write_word(tp, MCU_TYPE_PLA, PLA_MACDBG_POST, DEBUG_LTSSM);
-+	}
-+
-+	length = __le32_to_cpu(mac->blk_hdr.length);
-+	length -= __le16_to_cpu(mac->fw_offset);
-+
-+	data = (u8 *)mac;
-+	data += __le16_to_cpu(mac->fw_offset);
-+
-+	generic_ocp_write(tp, __le16_to_cpu(mac->fw_reg), 0xff, length, data,
-+			  type);
-+
-+	ocp_write_word(tp, type, __le16_to_cpu(mac->bp_ba_addr),
-+		       __le16_to_cpu(mac->bp_ba_value));
-+
-+	bp_index = __le16_to_cpu(mac->bp_start);
-+	bp_num = __le16_to_cpu(mac->bp_num);
-+	for (i = 0; i < bp_num; i++) {
-+		ocp_write_word(tp, type, bp_index, __le16_to_cpu(mac->bp[i]));
-+		bp_index += 2;
-+	}
-+
-+	bp_en_addr = __le16_to_cpu(mac->bp_en_addr);
-+	if (bp_en_addr)
-+		ocp_write_word(tp, type, bp_en_addr,
-+			       __le16_to_cpu(mac->bp_en_value));
-+
-+	fw_ver_reg = __le16_to_cpu(mac->fw_ver_reg);
-+	if (fw_ver_reg)
-+		ocp_write_byte(tp, MCU_TYPE_USB, fw_ver_reg,
-+			       mac->fw_ver_data);
-+
-+	dev_dbg(&tp->intf->dev, "successfully applied %s\n", mac->info);
-+}
-+
-+static void rtl8152_apply_firmware(struct r8152 *tp)
-+{
-+	struct rtl_fw *rtl_fw = &tp->rtl_fw;
-+	const struct firmware *fw;
-+	struct fw_header *fw_hdr;
-+	struct fw_phy_patch_key *key;
-+	u16 key_addr = 0;
-+	int i;
-+
-+	if (IS_ERR_OR_NULL(rtl_fw->fw))
-+		return;
-+
-+	fw = rtl_fw->fw;
-+	fw_hdr = (struct fw_header *)fw->data;
-+
-+	if (rtl_fw->pre_fw)
-+		rtl_fw->pre_fw(tp);
-+
-+	for (i = offsetof(struct fw_header, blocks); i < fw->size;) {
-+		struct fw_block *block = (struct fw_block *)&fw->data[i];
-+
-+		switch (__le32_to_cpu(block->type)) {
-+		case RTL_FW_END:
-+			goto post_fw;
-+		case RTL_FW_PLA:
-+		case RTL_FW_USB:
-+			rtl8152_fw_mac_apply(tp, (struct fw_mac *)block);
-+			break;
-+		case RTL_FW_PHY_START:
-+			key = (struct fw_phy_patch_key *)block;
-+			key_addr = __le16_to_cpu(key->key_reg);
-+			r8153_pre_ram_code(tp, key_addr,
-+					   __le16_to_cpu(key->key_data));
-+			break;
-+		case RTL_FW_PHY_STOP:
-+			WARN_ON(!key_addr);
-+			r8153_post_ram_code(tp, key_addr);
-+			break;
-+		case RTL_FW_PHY_NC:
-+			rtl8152_fw_phy_nc_apply(tp, (struct fw_phy_nc *)block);
-+			break;
-+		default:
-+			break;
-+		}
-+
-+		i += ALIGN(__le32_to_cpu(block->length), 8);
-+	}
-+
-+post_fw:
-+	if (rtl_fw->post_fw)
-+		rtl_fw->post_fw(tp);
-+
-+	strscpy(rtl_fw->version, fw_hdr->version, RTL_VER_SIZE);
-+	dev_info(&tp->intf->dev, "load %s successfully\n", rtl_fw->version);
-+}
-+
-+static void rtl8152_release_firmware(struct r8152 *tp)
-+{
-+	struct rtl_fw *rtl_fw = &tp->rtl_fw;
-+
-+	if (!IS_ERR_OR_NULL(rtl_fw->fw)) {
-+		release_firmware(rtl_fw->fw);
-+		rtl_fw->fw = NULL;
-+	}
-+}
-+
-+static int rtl8152_request_firmware(struct r8152 *tp)
-+{
-+	struct rtl_fw *rtl_fw = &tp->rtl_fw;
-+	long rc;
-+
-+	if (rtl_fw->fw || !rtl_fw->fw_name) {
-+		dev_info(&tp->intf->dev, "skip request firmware\n");
-+		rc = 0;
-+		goto result;
-+	}
-+
-+	rc = request_firmware(&rtl_fw->fw, rtl_fw->fw_name, &tp->intf->dev);
-+	if (rc < 0)
-+		goto result;
-+
-+	rc = rtl8152_check_firmware(tp, rtl_fw);
-+	if (rc < 0)
-+		release_firmware(rtl_fw->fw);
-+
-+result:
-+	if (rc) {
-+		rtl_fw->fw = ERR_PTR(rc);
-+
-+		dev_warn(&tp->intf->dev,
-+			 "unable to load firmware patch %s (%ld)\n",
-+			 rtl_fw->fw_name, rc);
-+	}
-+
-+	return rc;
-+}
-+
-+static void r8152_aldps_en(struct r8152 *tp, bool enable)
-+{
-+	if (enable) {
-+		ocp_reg_write(tp, OCP_ALDPS_CONFIG, ENPWRSAVE | ENPDNPS |
-+						    LINKENA | DIS_SDSAVE);
-+	} else {
-+		ocp_reg_write(tp, OCP_ALDPS_CONFIG, ENPDNPS | LINKENA |
-+						    DIS_SDSAVE);
-+		msleep(20);
-+	}
-+}
-+
-+static inline void r8152_mmd_indirect(struct r8152 *tp, u16 dev, u16 reg)
-+{
-+	ocp_reg_write(tp, OCP_EEE_AR, FUN_ADDR | dev);
-+	ocp_reg_write(tp, OCP_EEE_DATA, reg);
-+	ocp_reg_write(tp, OCP_EEE_AR, FUN_DATA | dev);
-+}
-+
-+static u16 r8152_mmd_read(struct r8152 *tp, u16 dev, u16 reg)
-+{
-+	u16 data;
-+
-+	r8152_mmd_indirect(tp, dev, reg);
-+	data = ocp_reg_read(tp, OCP_EEE_DATA);
-+	ocp_reg_write(tp, OCP_EEE_AR, 0x0000);
-+
-+	return data;
-+}
-+
-+static void r8152_mmd_write(struct r8152 *tp, u16 dev, u16 reg, u16 data)
-+{
-+	r8152_mmd_indirect(tp, dev, reg);
-+	ocp_reg_write(tp, OCP_EEE_DATA, data);
-+	ocp_reg_write(tp, OCP_EEE_AR, 0x0000);
-+}
-+
-+static void r8152_eee_en(struct r8152 *tp, bool enable)
-+{
-+	u16 config1, config2, config3;
-+	u32 ocp_data;
-+
-+	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_EEE_CR);
-+	config1 = ocp_reg_read(tp, OCP_EEE_CONFIG1) & ~sd_rise_time_mask;
-+	config2 = ocp_reg_read(tp, OCP_EEE_CONFIG2);
-+	config3 = ocp_reg_read(tp, OCP_EEE_CONFIG3) & ~fast_snr_mask;
-+
-+	if (enable) {
-+		ocp_data |= EEE_RX_EN | EEE_TX_EN;
-+		config1 |= EEE_10_CAP | EEE_NWAY_EN | TX_QUIET_EN | RX_QUIET_EN;
-+		config1 |= sd_rise_time(1);
-+		config2 |= RG_DACQUIET_EN | RG_LDVQUIET_EN;
-+		config3 |= fast_snr(42);
-+	} else {
-+		ocp_data &= ~(EEE_RX_EN | EEE_TX_EN);
-+		config1 &= ~(EEE_10_CAP | EEE_NWAY_EN | TX_QUIET_EN |
-+			     RX_QUIET_EN);
-+		config1 |= sd_rise_time(7);
-+		config2 &= ~(RG_DACQUIET_EN | RG_LDVQUIET_EN);
-+		config3 |= fast_snr(511);
-+	}
-+
-+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_EEE_CR, ocp_data);
-+	ocp_reg_write(tp, OCP_EEE_CONFIG1, config1);
-+	ocp_reg_write(tp, OCP_EEE_CONFIG2, config2);
-+	ocp_reg_write(tp, OCP_EEE_CONFIG3, config3);
-+}
-+
-+static void r8153_eee_en(struct r8152 *tp, bool enable)
-+{
-+	u32 ocp_data;
-+	u16 config;
-+
-+	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_EEE_CR);
-+	config = ocp_reg_read(tp, OCP_EEE_CFG);
-+
-+	if (enable) {
-+		ocp_data |= EEE_RX_EN | EEE_TX_EN;
-+		config |= EEE10_EN;
-+	} else {
-+		ocp_data &= ~(EEE_RX_EN | EEE_TX_EN);
-+		config &= ~EEE10_EN;
-+	}
-+
-+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_EEE_CR, ocp_data);
-+	ocp_reg_write(tp, OCP_EEE_CFG, config);
-+
-+	tp->ups_info.eee = enable;
-+}
-+
-+static void rtl_eee_enable(struct r8152 *tp, bool enable)
-+{
-+	switch (tp->version) {
-+	case RTL_VER_01:
-+	case RTL_VER_02:
-+	case RTL_VER_07:
-+		if (enable) {
-+			r8152_eee_en(tp, true);
-+			r8152_mmd_write(tp, MDIO_MMD_AN, MDIO_AN_EEE_ADV,
-+					tp->eee_adv);
-+		} else {
-+			r8152_eee_en(tp, false);
-+			r8152_mmd_write(tp, MDIO_MMD_AN, MDIO_AN_EEE_ADV, 0);
-+		}
-+		break;
-+	case RTL_VER_03:
-+	case RTL_VER_04:
-+	case RTL_VER_05:
-+	case RTL_VER_06:
-+	case RTL_VER_08:
-+	case RTL_VER_09:
-+		if (enable) {
-+			r8153_eee_en(tp, true);
-+			ocp_reg_write(tp, OCP_EEE_ADV, tp->eee_adv);
-+		} else {
-+			r8153_eee_en(tp, false);
-+			ocp_reg_write(tp, OCP_EEE_ADV, 0);
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static void r8152b_enable_fc(struct r8152 *tp)
-+{
-+	u16 anar;
-+
-+	anar = r8152_mdio_read(tp, MII_ADVERTISE);
-+	anar |= ADVERTISE_PAUSE_CAP | ADVERTISE_PAUSE_ASYM;
-+	r8152_mdio_write(tp, MII_ADVERTISE, anar);
-+
-+	tp->ups_info.flow_control = true;
-+}
-+
-+static void rtl8152_disable(struct r8152 *tp)
-+{
-+	r8152_aldps_en(tp, false);
-+	rtl_disable(tp);
-+	r8152_aldps_en(tp, true);
-+}
-+
-+static void r8152b_hw_phy_cfg(struct r8152 *tp)
-+{
-+	rtl8152_apply_firmware(tp);
-+	rtl_eee_enable(tp, tp->eee_en);
-+	r8152_aldps_en(tp, true);
-+	r8152b_enable_fc(tp);
-+
-+	set_bit(PHY_RESET, &tp->flags);
-+}
-+
-+static void wait_oob_link_list_ready(struct r8152 *tp)
-+{
-+	u32 ocp_data;
-+	int i;
-+
-+	for (i = 0; i < 1000; i++) {
- 		ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL);
- 		if (ocp_data & LINK_LIST_READY)
- 			break;
- 		usleep_range(1000, 2000);
- 	}
-+}
-+
-+static void r8152b_exit_oob(struct r8152 *tp)
-+{
-+	u32 ocp_data;
-+
-+	ocp_data = ocp_read_dword(tp, MCU_TYPE_PLA, PLA_RCR);
-+	ocp_data &= ~RCR_ACPT_ALL;
-+	ocp_write_dword(tp, MCU_TYPE_PLA, PLA_RCR, ocp_data);
-+
-+	rxdy_gated_en(tp, true);
-+	r8153_teredo_off(tp);
-+	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CRWECR, CRWECR_NORAML);
-+	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_CR, 0x00);
-+
-+	ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL);
-+	ocp_data &= ~NOW_IS_OOB;
-+	ocp_write_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL, ocp_data);
-+
-+	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7);
-+	ocp_data &= ~MCU_BORW_EN;
-+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7, ocp_data);
-+
-+	wait_oob_link_list_ready(tp);
-+
-+	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7);
-+	ocp_data |= RE_INIT_LL;
-+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7, ocp_data);
-+
-+	wait_oob_link_list_ready(tp);
- 
- 	rtl8152_nic_reset(tp);
- 
-@@ -3472,7 +4391,6 @@ static void r8152b_exit_oob(struct r8152 *tp)
- static void r8152b_enter_oob(struct r8152 *tp)
- {
- 	u32 ocp_data;
--	int i;
- 
- 	ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL);
- 	ocp_data &= ~NOW_IS_OOB;
-@@ -3484,23 +4402,13 @@ static void r8152b_enter_oob(struct r8152 *tp)
- 
- 	rtl_disable(tp);
- 
--	for (i = 0; i < 1000; i++) {
--		ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL);
--		if (ocp_data & LINK_LIST_READY)
--			break;
--		usleep_range(1000, 2000);
--	}
-+	wait_oob_link_list_ready(tp);
- 
- 	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7);
- 	ocp_data |= RE_INIT_LL;
- 	ocp_write_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7, ocp_data);
- 
--	for (i = 0; i < 1000; i++) {
--		ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL);
--		if (ocp_data & LINK_LIST_READY)
--			break;
--		usleep_range(1000, 2000);
--	}
-+	wait_oob_link_list_ready(tp);
- 
- 	ocp_write_word(tp, MCU_TYPE_PLA, PLA_RMS, RTL8152_RMS);
- 
-@@ -3521,31 +4429,124 @@ static void r8152b_enter_oob(struct r8152 *tp)
- 	ocp_write_dword(tp, MCU_TYPE_PLA, PLA_RCR, ocp_data);
- }
- 
--static int r8153_patch_request(struct r8152 *tp, bool request)
-+static int r8153_pre_firmware_1(struct r8152 *tp)
- {
--	u16 data;
- 	int i;
- 
--	data = ocp_reg_read(tp, OCP_PHY_PATCH_CMD);
--	if (request)
--		data |= PATCH_REQUEST;
--	else
--		data &= ~PATCH_REQUEST;
--	ocp_reg_write(tp, OCP_PHY_PATCH_CMD, data);
-+	/* Wait till the WTD timer is ready. It would take at most 104 ms. */
-+	for (i = 0; i < 104; i++) {
-+		u32 ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, USB_WDT1_CTRL);
- 
--	for (i = 0; request && i < 5000; i++) {
--		usleep_range(1000, 2000);
--		if (ocp_reg_read(tp, OCP_PHY_PATCH_STAT) & PATCH_READY)
-+		if (!(ocp_data & WTD1_EN))
- 			break;
-+		usleep_range(1000, 2000);
- 	}
- 
--	if (request && !(ocp_reg_read(tp, OCP_PHY_PATCH_STAT) & PATCH_READY)) {
--		netif_err(tp, drv, tp->netdev, "patch request fail\n");
--		r8153_patch_request(tp, false);
--		return -ETIME;
--	} else {
--		return 0;
-+	return 0;
-+}
-+
-+static int r8153_post_firmware_1(struct r8152 *tp)
-+{
-+	/* set USB_BP_4 to support USB_SPEED_SUPER only */
-+	if (ocp_read_byte(tp, MCU_TYPE_USB, USB_CSTMR) & FORCE_SUPER)
-+		ocp_write_word(tp, MCU_TYPE_USB, USB_BP_4, BP4_SUPER_ONLY);
-+
-+	/* reset UPHY timer to 36 ms */
-+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_UPHY_TIMER, 36000 / 16);
-+
-+	return 0;
-+}
-+
-+static int r8153_pre_firmware_2(struct r8152 *tp)
-+{
-+	u32 ocp_data;
-+
-+	r8153_pre_firmware_1(tp);
-+
-+	ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_FW_FIX_EN0);
-+	ocp_data &= ~FW_FIX_SUSPEND;
-+	ocp_write_word(tp, MCU_TYPE_USB, USB_FW_FIX_EN0, ocp_data);
-+
-+	return 0;
-+}
-+
-+static int r8153_post_firmware_2(struct r8152 *tp)
-+{
-+	u32 ocp_data;
-+
-+	/* enable bp0 if support USB_SPEED_SUPER only */
-+	if (ocp_read_byte(tp, MCU_TYPE_USB, USB_CSTMR) & FORCE_SUPER) {
-+		ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_BP_EN);
-+		ocp_data |= BIT(0);
-+		ocp_write_word(tp, MCU_TYPE_PLA, PLA_BP_EN, ocp_data);
-+	}
-+
-+	/* reset UPHY timer to 36 ms */
-+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_UPHY_TIMER, 36000 / 16);
-+
-+	/* enable U3P3 check, set the counter to 4 */
-+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS, U3P3_CHECK_EN | 4);
-+
-+	ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_FW_FIX_EN0);
-+	ocp_data |= FW_FIX_SUSPEND;
-+	ocp_write_word(tp, MCU_TYPE_USB, USB_FW_FIX_EN0, ocp_data);
-+
-+	ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, USB_USB2PHY);
-+	ocp_data |= USB2PHY_L1 | USB2PHY_SUSPEND;
-+	ocp_write_byte(tp, MCU_TYPE_USB, USB_USB2PHY, ocp_data);
-+
-+	return 0;
-+}
-+
-+static int r8153_post_firmware_3(struct r8152 *tp)
-+{
-+	u32 ocp_data;
-+
-+	ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, USB_USB2PHY);
-+	ocp_data |= USB2PHY_L1 | USB2PHY_SUSPEND;
-+	ocp_write_byte(tp, MCU_TYPE_USB, USB_USB2PHY, ocp_data);
-+
-+	ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_FW_FIX_EN1);
-+	ocp_data |= FW_IP_RESET_EN;
-+	ocp_write_word(tp, MCU_TYPE_USB, USB_FW_FIX_EN1, ocp_data);
-+
-+	return 0;
-+}
-+
-+static int r8153b_pre_firmware_1(struct r8152 *tp)
-+{
-+	/* enable fc timer and set timer to 1 second. */
-+	ocp_write_word(tp, MCU_TYPE_USB, USB_FC_TIMER,
-+		       CTRL_TIMER_EN | (1000 / 8));
-+
-+	return 0;
-+}
-+
-+static int r8153b_post_firmware_1(struct r8152 *tp)
-+{
-+	u32 ocp_data;
-+
-+	/* enable bp0 for RTL8153-BND */
-+	ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, USB_MISC_1);
-+	if (ocp_data & BND_MASK) {
-+		ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_BP_EN);
-+		ocp_data |= BIT(0);
-+		ocp_write_word(tp, MCU_TYPE_PLA, PLA_BP_EN, ocp_data);
- 	}
-+
-+	ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_FW_CTRL);
-+	ocp_data |= FLOW_CTRL_PATCH_OPT;
-+	ocp_write_word(tp, MCU_TYPE_USB, USB_FW_CTRL, ocp_data);
-+
-+	ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_FW_TASK);
-+	ocp_data |= FC_PATCH_TASK;
-+	ocp_write_word(tp, MCU_TYPE_USB, USB_FW_TASK, ocp_data);
-+
-+	ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_FW_FIX_EN1);
-+	ocp_data |= FW_IP_RESET_EN;
-+	ocp_write_word(tp, MCU_TYPE_USB, USB_FW_FIX_EN1, ocp_data);
-+
-+	return 0;
- }
- 
- static void r8153_aldps_en(struct r8152 *tp, bool enable)
-@@ -3582,6 +4583,8 @@ static void r8153_hw_phy_cfg(struct r8152 *tp)
- 	/* disable EEE before updating the PHY parameters */
- 	rtl_eee_enable(tp, false);
- 
-+	rtl8152_apply_firmware(tp);
-+
- 	if (tp->version == RTL_VER_03) {
- 		data = ocp_reg_read(tp, OCP_EEE_CFG);
- 		data &= ~CTAP_SHORT_EN;
-@@ -3654,6 +4657,8 @@ static void r8153b_hw_phy_cfg(struct r8152 *tp)
- 	/* disable EEE before updating the PHY parameters */
- 	rtl_eee_enable(tp, false);
- 
-+	rtl8152_apply_firmware(tp);
-+
- 	r8153b_green_en(tp, test_bit(GREEN_ETHERNET, &tp->flags));
- 
- 	data = sram_read(tp, SRAM_GREEN_CFG);
-@@ -3725,7 +4730,6 @@ static void r8153b_hw_phy_cfg(struct r8152 *tp)
- static void r8153_first_init(struct r8152 *tp)
- {
- 	u32 ocp_data;
--	int i;
- 
- 	r8153_mac_clk_spd(tp, false);
- 	rxdy_gated_en(tp, true);
-@@ -3746,23 +4750,13 @@ static void r8153_first_init(struct r8152 *tp)
- 	ocp_data &= ~MCU_BORW_EN;
- 	ocp_write_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7, ocp_data);
- 
--	for (i = 0; i < 1000; i++) {
--		ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL);
--		if (ocp_data & LINK_LIST_READY)
--			break;
--		usleep_range(1000, 2000);
--	}
-+	wait_oob_link_list_ready(tp);
- 
- 	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7);
- 	ocp_data |= RE_INIT_LL;
- 	ocp_write_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7, ocp_data);
- 
--	for (i = 0; i < 1000; i++) {
--		ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL);
--		if (ocp_data & LINK_LIST_READY)
--			break;
--		usleep_range(1000, 2000);
--	}
-+	wait_oob_link_list_ready(tp);
- 
- 	rtl_rx_vlan_en(tp, tp->netdev->features & NETIF_F_HW_VLAN_CTAG_RX);
- 
-@@ -3787,7 +4781,6 @@ static void r8153_first_init(struct r8152 *tp)
- static void r8153_enter_oob(struct r8152 *tp)
- {
- 	u32 ocp_data;
--	int i;
- 
- 	r8153_mac_clk_spd(tp, true);
- 
-@@ -3798,23 +4791,13 @@ static void r8153_enter_oob(struct r8152 *tp)
- 	rtl_disable(tp);
- 	rtl_reset_bmu(tp);
- 
--	for (i = 0; i < 1000; i++) {
--		ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL);
--		if (ocp_data & LINK_LIST_READY)
--			break;
--		usleep_range(1000, 2000);
--	}
-+	wait_oob_link_list_ready(tp);
- 
- 	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7);
- 	ocp_data |= RE_INIT_LL;
- 	ocp_write_word(tp, MCU_TYPE_PLA, PLA_SFF_STS_7, ocp_data);
- 
--	for (i = 0; i < 1000; i++) {
--		ocp_data = ocp_read_byte(tp, MCU_TYPE_PLA, PLA_OOB_CTRL);
--		if (ocp_data & LINK_LIST_READY)
--			break;
--		usleep_range(1000, 2000);
--	}
-+	wait_oob_link_list_ready(tp);
- 
- 	ocp_data = tp->netdev->mtu + VLAN_ETH_HLEN + ETH_FCS_LEN;
- 	ocp_write_word(tp, MCU_TYPE_PLA, PLA_RMS, ocp_data);
-@@ -4096,7 +5079,9 @@ static void rtl8153b_up(struct r8152 *tp)
- 	ocp_write_word(tp, MCU_TYPE_PLA, PLA_MAC_PWR_CTRL3, ocp_data);
- 
- 	r8153_aldps_en(tp, true);
--	r8153b_u1u2en(tp, true);
-+
-+	if (tp->udev->speed != USB_SPEED_HIGH)
-+		r8153b_u1u2en(tp, true);
- }
- 
- static void rtl8153b_down(struct r8152 *tp)
-@@ -4233,11 +5218,22 @@ static void rtl_hw_phy_work_func_t(struct work_struct *work)
- 
- 	mutex_lock(&tp->control);
- 
-+	if (rtl8152_request_firmware(tp) == -ENODEV && tp->rtl_fw.retry) {
-+		tp->rtl_fw.retry = false;
-+		tp->rtl_fw.fw = NULL;
-+
-+		/* Delay execution in case request_firmware() is not ready yet.
-+		 */
-+		queue_delayed_work(system_long_wq, &tp->hw_phy_work, HZ * 10);
-+		goto ignore_once;
-+	}
-+
- 	tp->rtl_ops.hw_phy_cfg(tp);
- 
- 	rtl8152_set_speed(tp, tp->autoneg, tp->speed, tp->duplex,
- 			  tp->advertising);
- 
-+ignore_once:
- 	mutex_unlock(&tp->control);
- 
- 	usb_autopm_put_interface(tp->intf);
-@@ -4275,6 +5271,11 @@ static int rtl8152_open(struct net_device *netdev)
- 	struct r8152 *tp = netdev_priv(netdev);
- 	int res = 0;
- 
-+	if (work_busy(&tp->hw_phy_work.work) & WORK_BUSY_PENDING) {
-+		cancel_delayed_work_sync(&tp->hw_phy_work);
-+		rtl_hw_phy_work_func_t(&tp->hw_phy_work.work);
-+	}
-+
- 	res = alloc_all_mem(tp);
- 	if (res)
- 		goto out;
-@@ -4470,6 +5471,16 @@ static void r8153_init(struct r8152 *tp)
- 		else
- 			ocp_data |= DYNAMIC_BURST;
- 		ocp_write_byte(tp, MCU_TYPE_USB, USB_CSR_DUMMY1, ocp_data);
-+
-+		r8153_queue_wake(tp, false);
-+
-+		ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS);
-+		if (rtl8152_get_speed(tp) & LINK_STATUS)
-+			ocp_data |= CUR_LINK_OK;
-+		else
-+			ocp_data &= ~CUR_LINK_OK;
-+		ocp_data |= POLL_LINK_CHG;
-+		ocp_write_word(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS, ocp_data);
- 	}
- 
- 	ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, USB_CSR_DUMMY2);
-@@ -4499,6 +5510,7 @@ static void r8153_init(struct r8152 *tp)
- 	ocp_write_word(tp, MCU_TYPE_USB, USB_CONNECT_TIMER, 0x0001);
- 
- 	r8153_power_cut_en(tp, false);
-+	rtl_runtime_suspend_enable(tp, false);
- 	r8153_u1u2en(tp, true);
- 	r8153_mac_clk_spd(tp, false);
- 	usb_enable_lpm(tp->udev);
-@@ -4578,7 +5590,17 @@ static void r8153b_init(struct r8152 *tp)
- 	r8153b_ups_en(tp, false);
- 	r8153_queue_wake(tp, false);
- 	rtl_runtime_suspend_enable(tp, false);
--	r8153b_u1u2en(tp, true);
-+
-+	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS);
-+	if (rtl8152_get_speed(tp) & LINK_STATUS)
-+		ocp_data |= CUR_LINK_OK;
-+	else
-+		ocp_data &= ~CUR_LINK_OK;
-+	ocp_data |= POLL_LINK_CHG;
-+	ocp_write_word(tp, MCU_TYPE_PLA, PLA_EXTRA_STATUS, ocp_data);
-+
-+	if (tp->udev->speed != USB_SPEED_HIGH)
-+		r8153b_u1u2en(tp, true);
- 	usb_enable_lpm(tp->udev);
- 
- 	/* MAC clock speed down */
-@@ -4606,6 +5628,9 @@ static void r8153b_init(struct r8152 *tp)
+@@ -5592,6 +5609,9 @@ static void r8153b_init(struct r8152 *tp)
  	ocp_data &= ~(RX_AGG_DISABLE | RX_ZERO_EN);
  	ocp_write_word(tp, MCU_TYPE_USB, USB_USB_CTRL, ocp_data);
  
@@ -10512,126 +7933,13 @@ index cd1a07175e11..e06da897625d 100644
  	rtl_tally_reset(tp);
  
  	tp->coalesce = 15000;	/* 15 us */
-@@ -4948,6 +5973,9 @@ static void rtl8152_get_drvinfo(struct net_device *netdev,
- 	strlcpy(info->driver, MODULENAME, sizeof(info->driver));
- 	strlcpy(info->version, DRIVER_VERSION, sizeof(info->version));
- 	usb_make_path(tp->udev, info->bus_info, sizeof(info->bus_info));
-+	if (!IS_ERR_OR_NULL(tp->rtl_fw.fw))
-+		strlcpy(info->fw_version, tp->rtl_fw.version,
-+			sizeof(info->fw_version));
- }
- 
- static
-@@ -5584,6 +6612,47 @@ static int rtl_ops_init(struct r8152 *tp)
- 	return ret;
- }
- 
-+#define FIRMWARE_8153A_2	"rtl_nic/rtl8153a-2.fw"
-+#define FIRMWARE_8153A_3	"rtl_nic/rtl8153a-3.fw"
-+#define FIRMWARE_8153A_4	"rtl_nic/rtl8153a-4.fw"
-+#define FIRMWARE_8153B_2	"rtl_nic/rtl8153b-2.fw"
-+
-+MODULE_FIRMWARE(FIRMWARE_8153A_2);
-+MODULE_FIRMWARE(FIRMWARE_8153A_3);
-+MODULE_FIRMWARE(FIRMWARE_8153A_4);
-+MODULE_FIRMWARE(FIRMWARE_8153B_2);
-+
-+static int rtl_fw_init(struct r8152 *tp)
-+{
-+	struct rtl_fw *rtl_fw = &tp->rtl_fw;
-+
-+	switch (tp->version) {
-+	case RTL_VER_04:
-+		rtl_fw->fw_name		= FIRMWARE_8153A_2;
-+		rtl_fw->pre_fw		= r8153_pre_firmware_1;
-+		rtl_fw->post_fw		= r8153_post_firmware_1;
-+		break;
-+	case RTL_VER_05:
-+		rtl_fw->fw_name		= FIRMWARE_8153A_3;
-+		rtl_fw->pre_fw		= r8153_pre_firmware_2;
-+		rtl_fw->post_fw		= r8153_post_firmware_2;
-+		break;
-+	case RTL_VER_06:
-+		rtl_fw->fw_name		= FIRMWARE_8153A_4;
-+		rtl_fw->post_fw		= r8153_post_firmware_3;
-+		break;
-+	case RTL_VER_09:
-+		rtl_fw->fw_name		= FIRMWARE_8153B_2;
-+		rtl_fw->pre_fw		= r8153b_pre_firmware_1;
-+		rtl_fw->post_fw		= r8153b_post_firmware_1;
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
- static u8 rtl_get_version(struct usb_interface *intf)
- {
- 	struct usb_device *udev = interface_to_usbdev(intf);
-@@ -5694,6 +6763,8 @@ static int rtl8152_probe(struct usb_interface *intf,
- 	if (ret)
- 		goto out;
- 
-+	rtl_fw_init(tp);
-+
- 	mutex_init(&tp->control);
- 	INIT_DELAYED_WORK(&tp->schedule, rtl_work_func_t);
- 	INIT_DELAYED_WORK(&tp->hw_phy_work, rtl_hw_phy_work_func_t);
-@@ -5720,8 +6791,17 @@ static int rtl8152_probe(struct usb_interface *intf,
- 		netdev->hw_features &= ~NETIF_F_RXCSUM;
- 	}
- 
-+	if (le16_to_cpu(udev->descriptor.idVendor) == VENDOR_ID_LENOVO) {
-+		switch (le16_to_cpu(udev->descriptor.idProduct)) {
-+		case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
-+		case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
-+			set_bit(LENOVO_MACPASSTHRU, &tp->flags);
-+		}
-+	}
-+
- 	if (le16_to_cpu(udev->descriptor.bcdDevice) == 0x3011 && udev->serial &&
--	    (!strcmp(udev->serial, "000001000000") || !strcmp(udev->serial, "000002000000"))) {
-+	    (!strcmp(udev->serial, "000001000000") ||
-+	     !strcmp(udev->serial, "000002000000"))) {
- 		dev_info(&udev->dev, "Dell TB16 Dock, disable RX aggregation");
- 		set_bit(DELL_TB_RX_AGG_BUG, &tp->flags);
- 	}
-@@ -5769,6 +6849,10 @@ static int rtl8152_probe(struct usb_interface *intf,
- 		tp->saved_wolopts = __rtl_get_wol(tp);
- 
- 	tp->rtl_ops.init(tp);
-+#if IS_BUILTIN(CONFIG_USB_RTL8152)
-+	/* Retry in case request_firmware() is not ready yet. */
-+	tp->rtl_fw.retry = true;
-+#endif
- 	queue_delayed_work(system_long_wq, &tp->hw_phy_work, 0);
- 	set_ethernet_addr(tp);
- 
-@@ -5810,6 +6894,7 @@ static void rtl8152_disconnect(struct usb_interface *intf)
- 		tasklet_kill(&tp->tx_tl);
- 		cancel_delayed_work_sync(&tp->hw_phy_work);
- 		tp->rtl_ops.unload(tp);
-+		rtl8152_release_firmware(tp);
- 		free_netdev(tp->netdev);
- 	}
- }
-@@ -5842,6 +6927,7 @@ static const struct usb_device_id rtl8152_table[] = {
- 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x304f)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3062)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3069)},
-+	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3082)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7205)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x720c)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7214)},
 diff --git a/drivers/phy/rockchip/Kconfig b/drivers/phy/rockchip/Kconfig
-index c454c90cd99e..a98adef5153b 100644
+index 0824b9dd5683..9c07b41967a9 100644
 --- a/drivers/phy/rockchip/Kconfig
 +++ b/drivers/phy/rockchip/Kconfig
-@@ -35,6 +35,14 @@ config PHY_ROCKCHIP_INNO_USB2
- 	help
- 	  Support for Rockchip USB2.0 PHY with Innosilicon IP block.
+@@ -44,6 +44,14 @@ config PHY_ROCKCHIP_INNO_DSIDPHY
+ 	  Enable this to support the Rockchip MIPI/LVDS/TTL PHY with
+ 	  Innosilicon IP block.
  
 +config PHY_ROCKCHIP_INNO_USB3
 +	tristate "Rockchip INNO USB 3.0 PHY Driver"
@@ -10645,11 +7953,11 @@ index c454c90cd99e..a98adef5153b 100644
  	tristate "Rockchip PCIe PHY Driver"
  	depends on (ARCH_ROCKCHIP && OF) || COMPILE_TEST
 diff --git a/drivers/phy/rockchip/Makefile b/drivers/phy/rockchip/Makefile
-index fd21cbaf40dd..d7b3d16c19ae 100644
+index 9f59a81e4e0d..02cd208e8e00 100644
 --- a/drivers/phy/rockchip/Makefile
 +++ b/drivers/phy/rockchip/Makefile
-@@ -3,6 +3,7 @@ obj-$(CONFIG_PHY_ROCKCHIP_DP)		+= phy-rockchip-dp.o
- obj-$(CONFIG_PHY_ROCKCHIP_EMMC)		+= phy-rockchip-emmc.o
+@@ -4,6 +4,7 @@ obj-$(CONFIG_PHY_ROCKCHIP_EMMC)		+= phy-rockchip-emmc.o
+ obj-$(CONFIG_PHY_ROCKCHIP_INNO_DSIDPHY)	+= phy-rockchip-inno-dsidphy.o
  obj-$(CONFIG_PHY_ROCKCHIP_INNO_HDMI)	+= phy-rockchip-inno-hdmi.o
  obj-$(CONFIG_PHY_ROCKCHIP_INNO_USB2)	+= phy-rockchip-inno-usb2.o
 +obj-$(CONFIG_PHY_ROCKCHIP_INNO_USB3)	+= phy-rockchip-inno-usb3.o
@@ -11838,7 +9146,7 @@ index 000000000000..a84a017e4bbd
 +MODULE_DESCRIPTION("Rockchip USB 3.0 PHY driver");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/pwm/pwm-rockchip.c b/drivers/pwm/pwm-rockchip.c
-index 73352e6fbccb..c2d606d8d832 100644
+index 098e94335cb5..4b78a9b5fc2f 100644
 --- a/drivers/pwm/pwm-rockchip.c
 +++ b/drivers/pwm/pwm-rockchip.c
 @@ -11,6 +11,7 @@
@@ -11849,7 +9157,7 @@ index 73352e6fbccb..c2d606d8d832 100644
  #include <linux/platform_device.h>
  #include <linux/pwm.h>
  #include <linux/time.h>
-@@ -404,6 +405,11 @@ static int rockchip_pwm_remove(struct platform_device *pdev)
+@@ -402,6 +403,11 @@ static int rockchip_pwm_remove(struct platform_device *pdev)
  	return pwmchip_remove(&pc->chip);
  }
  
@@ -11861,7 +9169,7 @@ index 73352e6fbccb..c2d606d8d832 100644
  static struct platform_driver rockchip_pwm_driver = {
  	.driver = {
  		.name = "rockchip-pwm",
-@@ -411,6 +417,7 @@ static struct platform_driver rockchip_pwm_driver = {
+@@ -409,6 +415,7 @@ static struct platform_driver rockchip_pwm_driver = {
  	},
  	.probe = rockchip_pwm_probe,
  	.remove = rockchip_pwm_remove,
@@ -11870,10 +9178,10 @@ index 73352e6fbccb..c2d606d8d832 100644
  module_platform_driver(rockchip_pwm_driver);
  
 diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index c9b8613e69db..63ceeeeafb22 100644
+index 3b329b5ed9b2..f0040bc6fe68 100644
 --- a/drivers/regulator/core.c
 +++ b/drivers/regulator/core.c
-@@ -5141,6 +5141,9 @@ regulator_register(const struct regulator_desc *regulator_desc,
+@@ -5239,6 +5239,9 @@ regulator_register(const struct regulator_desc *regulator_desc,
  		dangling_of_gpiod = false;
  	}
  
@@ -11884,10 +9192,10 @@ index c9b8613e69db..63ceeeeafb22 100644
  	rdev->dev.class = &regulator_class;
  	rdev->dev.parent = dev;
 diff --git a/drivers/regulator/fixed.c b/drivers/regulator/fixed.c
-index f81533070058..00bb4c88dd95 100644
+index 142a70a89153..e5240259d148 100644
 --- a/drivers/regulator/fixed.c
 +++ b/drivers/regulator/fixed.c
-@@ -159,6 +159,9 @@ static int reg_fixed_voltage_probe(struct platform_device *pdev)
+@@ -160,6 +160,9 @@ static int reg_fixed_voltage_probe(struct platform_device *pdev)
  						     &drvdata->desc);
  		if (IS_ERR(config))
  			return PTR_ERR(config);
@@ -11898,24 +9206,24 @@ index f81533070058..00bb4c88dd95 100644
  		config = dev_get_platdata(&pdev->dev);
  	}
 diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-index 833e04a7835c..9ddbd976395d 100644
+index 425ab6f7e375..365873407cb8 100644
 --- a/drivers/soc/Kconfig
 +++ b/drivers/soc/Kconfig
-@@ -21,5 +21,6 @@ source "drivers/soc/ux500/Kconfig"
- source "drivers/soc/versatile/Kconfig"
+@@ -23,5 +23,6 @@ source "drivers/soc/versatile/Kconfig"
  source "drivers/soc/xilinx/Kconfig"
  source "drivers/soc/zte/Kconfig"
+ source "drivers/soc/kendryte/Kconfig"
 +source "drivers/soc/friendlyelec/Kconfig"
  
  endmenu
 diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-index 2ec355003524..277b5bf269c7 100644
+index 36452bed86ef..7b8471884a47 100644
 --- a/drivers/soc/Makefile
 +++ b/drivers/soc/Makefile
-@@ -27,3 +27,4 @@ obj-$(CONFIG_ARCH_U8500)	+= ux500/
- obj-$(CONFIG_PLAT_VERSATILE)	+= versatile/
+@@ -29,3 +29,4 @@ obj-$(CONFIG_PLAT_VERSATILE)	+= versatile/
  obj-y				+= xilinx/
  obj-$(CONFIG_ARCH_ZX)		+= zte/
+ obj-$(CONFIG_SOC_KENDRYTE)	+= kendryte/
 +obj-$(CONFIG_VENDOR_FRIENDLYELEC)	+= friendlyelec/
 diff --git a/drivers/soc/friendlyelec/Kconfig b/drivers/soc/friendlyelec/Kconfig
 new file mode 100644
@@ -12274,12 +9582,12 @@ index 000000000000..4c82f6561c8c
 +}
 +subsys_initcall(rockchip_pm_drv_register);
 diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-index 556a876c7896..621e8253904e 100644
+index 7a2304565a73..d01bd4fddf24 100644
 --- a/drivers/usb/dwc3/Kconfig
 +++ b/drivers/usb/dwc3/Kconfig
-@@ -116,6 +116,16 @@ config USB_DWC3_OF_SIMPLE
- 	 Currently supports Xilinx and Qualcomm DWC USB3 IP.
- 	 Say 'Y' or 'M' if you have one such device.
+@@ -117,6 +117,16 @@ config USB_DWC3_OF_SIMPLE
+ 	  Currently supports Xilinx and Qualcomm DWC USB3 IP.
+ 	  Say 'Y' or 'M' if you have one such device.
  
 +config USB_DWC3_ROCKCHIP_INNO
 +	tristate "Rockchip Platforms with INNO PHY"
@@ -12306,10 +9614,10 @@ index ae86da0dc5bd..6031a443bcc1 100644
  obj-$(CONFIG_USB_DWC3_ST)		+= dwc3-st.o
  obj-$(CONFIG_USB_DWC3_QCOM)		+= dwc3-qcom.o
 diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 440dbf55ddf7..98d58dbcd74d 100644
+index 60b5a6940973..891734aa3c08 100644
 --- a/drivers/usb/dwc3/core.c
 +++ b/drivers/usb/dwc3/core.c
-@@ -1316,6 +1316,10 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+@@ -1342,6 +1342,10 @@ static void dwc3_get_properties(struct dwc3 *dwc)
  				"snps,dis-tx-ipgap-linecheck-quirk");
  	dwc->parkmode_disable_ss_quirk = device_property_read_bool(dev,
  				"snps,parkmode-disable-ss-quirk");
@@ -12321,10 +9629,10 @@ index 440dbf55ddf7..98d58dbcd74d 100644
  	dwc->tx_de_emphasis_quirk = device_property_read_bool(dev,
  				"snps,tx_de_emphasis_quirk");
 diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index c848f9164f92..29e389988996 100644
+index 6d843e6c2941..126328bcf7f1 100644
 --- a/drivers/usb/dwc3/core.h
 +++ b/drivers/usb/dwc3/core.h
-@@ -1036,6 +1036,12 @@ struct dwc3_scratchpad_array {
+@@ -1050,6 +1050,12 @@ struct dwc3_scratchpad_array {
   *			check during HS transmit.
   * @parkmode_disable_ss_quirk: set if we need to disable all SuperSpeed
   *			instances in park mode.
@@ -12337,7 +9645,7 @@ index c848f9164f92..29e389988996 100644
   * @tx_de_emphasis_quirk: set if we enable Tx de-emphasis quirk
   * @tx_de_emphasis: Tx de-emphasis value
   * 	0	- -6dB de-emphasis
-@@ -1229,6 +1235,8 @@ struct dwc3 {
+@@ -1245,6 +1251,8 @@ struct dwc3 {
  	unsigned		dis_del_phy_power_chg_quirk:1;
  	unsigned		dis_tx_ipgap_linecheck_quirk:1;
  	unsigned		parkmode_disable_ss_quirk:1;
@@ -12639,15 +9947,15 @@ index 000000000000..5c907b97d6a6
 +MODULE_LICENSE("GPL v2");
 +MODULE_DESCRIPTION("DesignWare USB3 rockchip-inno Glue Layer");
 diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index fa252870c926..48a17bbea60f 100644
+index e195176580de..5334ca47a348 100644
 --- a/drivers/usb/dwc3/host.c
 +++ b/drivers/usb/dwc3/host.c
-@@ -43,11 +43,13 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
+@@ -44,11 +44,13 @@ static int dwc3_host_get_irq(struct dwc3 *dwc)
  
  int dwc3_host_init(struct dwc3 *dwc)
  {
 -	struct property_entry	props[4];
-+	struct property_entry	props[5];
++	struct property_entry	props[6];
  	struct platform_device	*xhci;
  	int			ret, irq;
  	struct resource		*res;
@@ -12657,7 +9965,7 @@ index fa252870c926..48a17bbea60f 100644
  	int			prop_idx = 0;
  
  	irq = dwc3_host_get_irq(dwc);
-@@ -63,6 +65,13 @@ int dwc3_host_init(struct dwc3 *dwc)
+@@ -64,6 +66,13 @@ int dwc3_host_init(struct dwc3 *dwc)
  	if (!res)
  		return -ENOMEM;
  
@@ -12671,24 +9979,24 @@ index fa252870c926..48a17bbea60f 100644
  	dwc->xhci_resources[1].start = irq;
  	dwc->xhci_resources[1].end = irq;
  	dwc->xhci_resources[1].flags = res->flags;
-@@ -93,6 +102,12 @@ int dwc3_host_init(struct dwc3 *dwc)
+@@ -95,6 +104,12 @@ int dwc3_host_init(struct dwc3 *dwc)
  	if (dwc->usb2_lpm_disable)
  		props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb2-lpm-disable");
  
 +	if (dwc->xhci_slow_suspend_quirk)
-+		props[prop_idx++].name = "xhci-slow-suspend";
++		props[prop_idx++] = PROPERTY_ENTRY_BOOL("xhci-slow-suspend");
 +
 +	if (dwc->xhci_trb_ent_quirk)
-+		props[prop_idx++].name = "xhci-trb-ent-quirk";
++		props[prop_idx++] = PROPERTY_ENTRY_BOOL("xhci-trb-ent-quirk");
 +
  	/**
  	 * WORKAROUND: dwc3 revisions <=3.00a have a limitation
  	 * where Port Disable command doesn't work.
 diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 52c625c02341..ce88877c4e0a 100644
+index 3057cfc76d6a..cd940f946bef 100644
 --- a/drivers/usb/host/xhci-plat.c
 +++ b/drivers/usb/host/xhci-plat.c
-@@ -289,6 +289,12 @@ static int xhci_plat_probe(struct platform_device *pdev)
+@@ -298,6 +298,12 @@ static int xhci_plat_probe(struct platform_device *pdev)
  		if (device_property_read_bool(tmpdev, "quirk-broken-port-ped"))
  			xhci->quirks |= XHCI_BROKEN_PORT_PED;
  
@@ -12702,10 +10010,10 @@ index 52c625c02341..ce88877c4e0a 100644
  					 &xhci->imod_interval);
  	}
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 49894541ea9a..d32c000cc900 100644
+index a741a38a4c69..f9225094b549 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -3300,6 +3300,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3312,6 +3312,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  	bool more_trbs_coming = true;
  	bool need_zero_pkt = false;
  	bool first_trb = true;
@@ -12713,7 +10021,7 @@ index 49894541ea9a..d32c000cc900 100644
  	unsigned int num_trbs;
  	unsigned int start_cycle, num_sgs = 0;
  	unsigned int enqd_len, block_len, trb_buff_len, full_len;
-@@ -3336,6 +3337,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3348,6 +3349,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  	if (urb->transfer_flags & URB_ZERO_PACKET && urb_priv->num_tds > 1)
  		need_zero_pkt = true;
  
@@ -12727,7 +10035,7 @@ index 49894541ea9a..d32c000cc900 100644
  	td = &urb_priv->td[0];
  
  	/*
-@@ -3364,6 +3372,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3376,6 +3384,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  			first_trb = false;
  			if (start_cycle == 0)
  				field |= TRB_CYCLE;
@@ -12741,7 +10049,7 @@ index 49894541ea9a..d32c000cc900 100644
  		} else
  			field |= ring->cycle_state;
  
-@@ -3372,6 +3387,8 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3384,6 +3399,8 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  		 */
  		if (enqd_len + trb_buff_len < full_len) {
  			field |= TRB_CHAIN;
@@ -12751,7 +10059,7 @@ index 49894541ea9a..d32c000cc900 100644
  				if (xhci_align_td(xhci, urb, enqd_len,
  						  &trb_buff_len,
 diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index b483317bcb17..dcf7cea340b9 100644
+index 564945eae502..e852c14fa8f3 100644
 --- a/drivers/usb/host/xhci.h
 +++ b/drivers/usb/host/xhci.h
 @@ -1512,7 +1512,11 @@ static inline const char *xhci_trb_type_string(u8 type)
@@ -12766,11 +10074,11 @@ index b483317bcb17..dcf7cea340b9 100644
  #define TRB_MAX_BUFF_SIZE	(1 << TRB_MAX_BUFF_SHIFT)
  /* How much data is left before the 64KB boundary? */
  #define TRB_BUFF_LEN_UP_TO_BOUNDARY(addr)	(TRB_MAX_BUFF_SIZE - \
-@@ -1873,6 +1877,7 @@ struct xhci_hcd {
- #define XHCI_DEFAULT_PM_RUNTIME_ALLOW	BIT_ULL(33)
+@@ -1874,6 +1878,7 @@ struct xhci_hcd {
  #define XHCI_RESET_PLL_ON_DISCONNECT	BIT_ULL(34)
  #define XHCI_SNPS_BROKEN_SUSPEND    BIT_ULL(35)
-+#define XHCI_TRB_ENT_QUIRK	BIT_ULL(36)
+ #define XHCI_RENESAS_FW_QUIRK	BIT_ULL(36)
++#define XHCI_TRB_ENT_QUIRK	BIT_ULL(37)
  #define XHCI_DISABLE_SPARSE	BIT_ULL(38)
  
  	unsigned int		num_active_eps;
@@ -13075,22 +10383,6 @@ index 000000000000..176c7cfcd989
 +#define RKPM_APIO5_SUSPEND			(1 << 5)
 +
 +#endif
-diff --git a/include/linux/genhd.h b/include/linux/genhd.h
-index c1bf9956256f..49884d20cd78 100644
---- a/include/linux/genhd.h
-+++ b/include/linux/genhd.h
-@@ -145,6 +145,11 @@ struct hd_struct {
- #define GENHD_FL_NO_PART_SCAN			512
- #define GENHD_FL_HIDDEN				1024
- 
-+#if defined(CONFIG_RK_PARTITION)
-+/* Flag of rockchip specific disk: eMMC/eSD, NVMe, etc. */
-+#define GENHD_FL_RKPART				2048
-+#endif
-+
- enum {
- 	DISK_EVENT_MEDIA_CHANGE			= 1 << 0, /* media changed */
- 	DISK_EVENT_EJECT_REQUEST		= 1 << 1, /* eject requested */
 diff --git a/include/soc/rockchip/rockchip_sip.h b/include/soc/rockchip/rockchip_sip.h
 index c46a9ae2a2ab..fa7e0a2d72cc 100644
 --- a/include/soc/rockchip/rockchip_sip.h

@@ -1,10 +1,10 @@
 buildarch=8
 pkgbase=linux-r2s
-_srcname=linux-5.4
+_srcname=linux-5.9
 _kernelname=${pkgbase#linux}
 _desc="NanoPi R2S"
-pkgver=5.4.80
-pkgrel=6
+pkgver=5.9.13
+pkgrel=1
 arch=('aarch64')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -13,16 +13,16 @@ options=('!strip')
 
 source=("http://www.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.xz"
         "http://www.kernel.org/pub/linux/kernel/v5.x/patch-${pkgver}.xz"
-        '0001-linux-5.4.80-r2s.patch'
+        '0001-linux-5.9.13-r2s.patch'
         'config'
         'linux.preset'
         '60-linux.hook'
         '90-linux.hook'
         'extlinux.conf')
-md5sums=('ce9b2d974d27408a61c53a30d3f98fb9'
-         'ee164a6b827f77028e9956925360ddff'
-         '4b27b72200cd95ee51d32b5c7ecdd0a8'
-         'e3bd8a93b0876c64fbed98fda22246c3'
+md5sums=('0959d759fd19e146367221aff504ad91'
+         '013a89f04024ebf1349ad55ee7f1c486'
+         '765ac706547e8b724ebad2b3242d7e95'
+         '096e36eaa4798d24f1b3baadfe7ff5b4'
          '41cb5fef62715ead2dd109dbea8413d6'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          '3dc88030a8f2f5a5f97266d99b149f77'
@@ -35,7 +35,7 @@ prepare() {
   patch -p1 < ../patch-${pkgver}
 
   # NanoPi R2S patches
-  patch -p1 < ../0001-linux-5.4.80-r2s.patch
+  patch -p1 < ../0001-linux-${pkgver}-r2s.patch
 
   cat "${srcdir}/config" > .config
   make olddefconfig
@@ -51,7 +51,7 @@ build() {
   cd ${_srcname}
   # build!
   unset LDFLAGS
-  make ${MAKEFLAGS} -j$(nproc) Image Image.gz modules
+  make ${MAKEFLAGS} Image Image.gz modules
   # Generate device tree blobs with symbols to support applying device tree overlays in U-Boot
   make DTC_FLAGS="-@" dtbs
 }
@@ -60,7 +60,7 @@ _package() {
   pkgdesc="The Linux Kernel and modules - ${_desc}"
   depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
   optdepends=('crda: to set the correct wireless channels of your country')
-  provides=("linux=${pkgver}")
+  provides=("linux=${pkgver}" "WIREGUARD-MODULE")
   replaces=('linux-armv8' 'linux-aarch64')
   conflicts=('linux')
   backup=("etc/mkinitcpio.d/${pkgbase}.preset")
