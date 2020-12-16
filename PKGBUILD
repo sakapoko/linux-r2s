@@ -3,7 +3,7 @@ pkgbase=linux-r2s
 _srcname=linux-5.9
 _kernelname=${pkgbase#linux}
 _desc="NanoPi R2S"
-pkgver=5.9.13
+pkgver=5.9.14
 pkgrel=1
 arch=('aarch64')
 url="http://www.kernel.org/"
@@ -20,7 +20,7 @@ source=("http://www.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.xz"
         '90-linux.hook'
         'extlinux.conf')
 md5sums=('0959d759fd19e146367221aff504ad91'
-         '013a89f04024ebf1349ad55ee7f1c486'
+         'd7f9892b339f14f5d2afa6bfb842b1f4'
          '765ac706547e8b724ebad2b3242d7e95'
          '096e36eaa4798d24f1b3baadfe7ff5b4'
          '41cb5fef62715ead2dd109dbea8413d6'
@@ -35,7 +35,7 @@ prepare() {
   patch -p1 < ../patch-${pkgver}
 
   # NanoPi R2S patches
-  patch -p1 < ../0001-linux-${pkgver}-r2s.patch
+  patch -p1 < ../0001-linux-5.9.13-r2s.patch
 
   cat "${srcdir}/config" > .config
   make olddefconfig
