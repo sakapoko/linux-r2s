@@ -3,7 +3,7 @@ pkgbase=linux-r2s
 _srcname=linux-5.9
 _kernelname=${pkgbase#linux}
 _desc="NanoPi R2S"
-pkgver=5.9.14
+pkgver=5.9.16
 pkgrel=1
 arch=('aarch64')
 url="http://www.kernel.org/"
@@ -13,16 +13,16 @@ options=('!strip')
 
 source=("http://www.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.xz"
         "http://www.kernel.org/pub/linux/kernel/v5.x/patch-${pkgver}.xz"
-        '0001-linux-5.9.13-r2s.patch'
+        '0001-linux-5.9.16-r2s.patch'
         'config'
         'linux.preset'
         '60-linux.hook'
         '90-linux.hook'
         'extlinux.conf')
 md5sums=('0959d759fd19e146367221aff504ad91'
-         'd7f9892b339f14f5d2afa6bfb842b1f4'
-         '765ac706547e8b724ebad2b3242d7e95'
-         '096e36eaa4798d24f1b3baadfe7ff5b4'
+         '56a021a2cd474691ebcac9a1380d9fc2'
+         '5f1c0156340d5904c1bfb39600d323c4'
+         '7ee3cbd5f4f71f62b9ded457745c82bd'
          '41cb5fef62715ead2dd109dbea8413d6'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          '3dc88030a8f2f5a5f97266d99b149f77'
@@ -35,7 +35,7 @@ prepare() {
   patch -p1 < ../patch-${pkgver}
 
   # NanoPi R2S patches
-  patch -p1 < ../0001-linux-5.9.13-r2s.patch
+  patch -p1 < ../0001-linux-5.9.16-r2s.patch
 
   cat "${srcdir}/config" > .config
   make olddefconfig
