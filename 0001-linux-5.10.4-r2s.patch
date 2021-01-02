@@ -331,13 +331,13 @@ index 000000000000..47cadfce73cc
 +		>;
 +	};
 diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
-index d03edf9d3935..fdfdeecc7982 100644
+index 1aae2b6160c1..8f818966d4df 100644
 --- a/Documentation/devicetree/bindings/usb/dwc3.txt
 +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
-@@ -78,6 +78,9 @@ Optional properties:
- 			park mode are disabled.
-  - snps,dis_metastability_quirk: when set, disable metastability workaround.
- 			CAUTION: use only if you are absolutely sure of it.
+@@ -81,6 +81,9 @@ Optional properties:
+  - snps,dis-split-quirk: when set, change the way URBs are handled by the
+ 			 driver. Needed to avoid -EPROTO errors with usbhid
+ 			 on some devices (Hikey 970).
 + - snps,xhci-slow-suspend-quirk: when set, need an extraordinary delay to wait
 +			for xHC enter the Halted state (i.e. HCH in the USBSTS
 +			register is '1').
@@ -410,18 +410,19 @@ index 000000000000..d618867fda69
 +		};
 +	};
 diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index b87b1f773083..2c3c77ab3b22 100644
+index 26661c7b736b..f4c93bfae7de 100644
 --- a/arch/arm64/boot/dts/rockchip/Makefile
 +++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -1,10 +1,17 @@
+@@ -1,4 +1,5 @@
  # SPDX-License-Identifier: GPL-2.0
 +
  dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-evb.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-evb.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-roc-cc.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go2.dtb
+@@ -7,6 +8,12 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go2.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-a1.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-evb.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2s.dtb
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2-rev00.dtb
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2-rev02.dtb
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2-rev03.dtb
@@ -431,7 +432,7 @@ index b87b1f773083..2c3c77ab3b22 100644
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-rock64.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-roc-cc.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3368-evb-act8846.dtb
-@@ -28,6 +35,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-leez-p710.dtb
+@@ -30,6 +37,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-leez-p710.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopc-t4.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopi-m4.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopi-neo4.dtb
@@ -439,7 +440,7 @@ index b87b1f773083..2c3c77ab3b22 100644
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-orangepi.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-pinebook-pro.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-puma-haikou.dtb
-@@ -40,3 +48,8 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64.dtb
+@@ -44,3 +52,8 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire-excavator.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
@@ -1857,7 +1858,7 @@ index 000000000000..78f6d4cc976d
 +	status = "okay";
 +};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-index bbdb19a3e85d..23d53902d1b0 100644
+index db0d5c8e5f96..36f263a6cc19 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
 @@ -297,6 +297,17 @@ &pdmm0_sdi2_sleep
@@ -2086,7 +2087,7 @@ index 195410b089b9..c5a1847d33cb 100644
  };
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts b/arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts
 new file mode 100644
-index 000000000000..6877072ee335
+index 000000000000..7b136d4707c8
 --- /dev/null
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi-r4s.dts
 @@ -0,0 +1,158 @@
@@ -2186,7 +2187,7 @@ index 000000000000..6877072ee335
 +		label = "lan_led";
 +	};
 +
-+	wan_led: led-3 {
++	wan_len: led-3 {
 +		gpios = <&gpio1 RK_PA0 GPIO_ACTIVE_HIGH>;
 +		label = "wan_led";
 +	};
@@ -5815,19 +5816,16 @@ index a7f05cdb02a8..e11f2800e684 100644
  obj-$(CONFIG_SYSV68_PARTITION) += sysv68.o
 +obj-$(CONFIG_RK_PARTITION) += rk.o
 diff --git a/block/partitions/check.h b/block/partitions/check.h
-index c577e9ee67f0..74c09dd8838c 100644
+index c577e9ee67f0..21c78a0c5a6b 100644
 --- a/block/partitions/check.h
 +++ b/block/partitions/check.h
-@@ -64,6 +64,7 @@ int ldm_partition(struct parsed_partitions *state);
- int mac_partition(struct parsed_partitions *state);
- int msdos_partition(struct parsed_partitions *state);
- int osf_partition(struct parsed_partitions *state);
-+int rkpart_partition(struct parsed_partitions *state);
- int sgi_partition(struct parsed_partitions *state);
+@@ -68,3 +68,4 @@ int sgi_partition(struct parsed_partitions *state);
  int sun_partition(struct parsed_partitions *state);
  int sysv68_partition(struct parsed_partitions *state);
+ int ultrix_partition(struct parsed_partitions *state);
++int rkpart_partition(struct parsed_partitions *state);
 diff --git a/block/partitions/core.c b/block/partitions/core.c
-index 722406b841df..7a10808c5dc2 100644
+index a02e22411594..2c4f26c4d918 100644
 --- a/block/partitions/core.c
 +++ b/block/partitions/core.c
 @@ -81,6 +81,9 @@ static int (*check_part[])(struct parsed_partitions *) = {
@@ -5842,7 +5840,7 @@ index 722406b841df..7a10808c5dc2 100644
  };
 diff --git a/block/partitions/rk.c b/block/partitions/rk.c
 new file mode 100644
-index 000000000000..d0a8f35cfb9f
+index 000000000000..09a2751d1e2d
 --- /dev/null
 +++ b/block/partitions/rk.c
 @@ -0,0 +1,324 @@
@@ -6158,7 +6156,7 @@ index 000000000000..d0a8f35cfb9f
 +				parts[i].from + FROM_OFFSET,
 +				parts[i].size);
 +		strcpy(state->parts[i+1].info.volname, parts[i].name);
-+		printk(KERN_INFO "%10s: 0x%09llx -- 0x%09llx (%llu MB)\n",
++		printk(KERN_INFO "%10s: 0x%09llx -- 0x%09llx (%llu MB)\n", 
 +				parts[i].name,
 +				(u64)parts[i].from * 512,
 +				(u64)(parts[i].from + parts[i].size) * 512,
@@ -6225,12 +6223,12 @@ index 000000000000..a2541dd261c7
 +
 +#endif
 diff --git a/drivers/char/hw_random/Kconfig b/drivers/char/hw_random/Kconfig
-index f976a49e1fb5..f000d20e138c 100644
+index e92c4d9469d8..b1526ef975dc 100644
 --- a/drivers/char/hw_random/Kconfig
 +++ b/drivers/char/hw_random/Kconfig
-@@ -512,6 +512,18 @@ config HW_RANDOM_CCTRNG
- 	  will be called cctrng.
- 	  If unsure, say 'N'.
+@@ -536,6 +536,18 @@ config HW_RANDOM_XIPHERA
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called xiphera-trng.
  
 +config HW_RANDOM_ROCKCHIP
 +	tristate "Rockchip Random Number Generator support"
@@ -6248,13 +6246,13 @@ index f976a49e1fb5..f000d20e138c 100644
  
  config UML_RANDOM
 diff --git a/drivers/char/hw_random/Makefile b/drivers/char/hw_random/Makefile
-index 26ae06844f09..3fe1699bc5d8 100644
+index 5da344509a4d..ff587206a4b0 100644
 --- a/drivers/char/hw_random/Makefile
 +++ b/drivers/char/hw_random/Makefile
-@@ -44,3 +44,4 @@ obj-$(CONFIG_HW_RANDOM_KEYSTONE) += ks-sa-rng.o
- obj-$(CONFIG_HW_RANDOM_OPTEE) += optee-rng.o
+@@ -46,3 +46,4 @@ obj-$(CONFIG_HW_RANDOM_OPTEE) += optee-rng.o
  obj-$(CONFIG_HW_RANDOM_NPCM) += npcm-rng.o
  obj-$(CONFIG_HW_RANDOM_CCTRNG) += cctrng.o
+ obj-$(CONFIG_HW_RANDOM_XIPHERA) += xiphera-trng.o
 +obj-$(CONFIG_HW_RANDOM_ROCKCHIP) += rockchip-rng.o
 diff --git a/drivers/char/hw_random/rockchip-rng.c b/drivers/char/hw_random/rockchip-rng.c
 new file mode 100644
@@ -6602,7 +6600,7 @@ index 000000000000..cd4e121ec79c
 +MODULE_AUTHOR("Lin Jinhan <troy.lin@rock-chips.com>");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/clk/rockchip/clk-ddr.c b/drivers/clk/rockchip/clk-ddr.c
-index 9273bce4d7b6..b16b3795f767 100644
+index 86718c54e56b..b16b3795f767 100644
 --- a/drivers/clk/rockchip/clk-ddr.c
 +++ b/drivers/clk/rockchip/clk-ddr.c
 @@ -87,6 +87,133 @@ static const struct clk_ops rockchip_ddrclk_sip_ops = {
@@ -6749,11 +6747,6 @@ index 9273bce4d7b6..b16b3795f767 100644
  	default:
  		pr_err("%s: unsupported ddrclk type %d\n", __func__, ddr_flag);
  		kfree(ddrclk);
-@@ -136,3 +266,4 @@ struct clk *rockchip_clk_register_ddrclk(const char *name, int flags,
- 
- 	return clk;
- }
-+EXPORT_SYMBOL_GPL(rockchip_clk_register_ddrclk);
 diff --git a/drivers/clk/rockchip/clk-rk3328.c b/drivers/clk/rockchip/clk-rk3328.c
 index 2429b7c2a8b3..d77925271198 100644
 --- a/drivers/clk/rockchip/clk-rk3328.c
@@ -7479,7 +7472,7 @@ index 9a88faaf8b27..ceabb3a4223e 100644
  
 diff --git a/drivers/devfreq/rk3328_dmc.c b/drivers/devfreq/rk3328_dmc.c
 new file mode 100644
-index 000000000000..9e3c87019ada
+index 000000000000..5dcea91cfae9
 --- /dev/null
 +++ b/drivers/devfreq/rk3328_dmc.c
 @@ -0,0 +1,846 @@
@@ -8233,7 +8226,7 @@ index 000000000000..9e3c87019ada
 +		return PTR_ERR(data->dmc_clk);
 +	}
 +
-+	data->edev = devfreq_event_get_edev_by_phandle(dev, 0);
++	data->edev = devfreq_event_get_edev_by_phandle(dev, "devfreq-events", 0);
 +	if (IS_ERR(data->edev))
 +		return -EPROBE_DEFER;
 +
@@ -8330,7 +8323,7 @@ index 000000000000..9e3c87019ada
 +MODULE_AUTHOR("Lin Huang <hl@rock-chips.com>");
 +MODULE_DESCRIPTION("RK3328 dmcfreq driver with devfreq framework");
 diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index ba6f4a65212f..d9dc22985ea9 100644
+index 42e27a298218..946fec4f1912 100644
 --- a/drivers/mmc/core/block.c
 +++ b/drivers/mmc/core/block.c
 @@ -2328,6 +2328,10 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
@@ -8345,7 +8338,7 @@ index ba6f4a65212f..d9dc22985ea9 100644
  	/*
  	 * As discussed on lkml, GENHD_FL_REMOVABLE should:
 diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-index 8ccae6452b9c..74b4a66bb71d 100644
+index d42037f0f10d..74b4a66bb71d 100644
 --- a/drivers/mmc/core/core.c
 +++ b/drivers/mmc/core/core.c
 @@ -1349,6 +1349,14 @@ void mmc_power_off(struct mmc_host *host)
@@ -8363,37 +8356,20 @@ index 8ccae6452b9c..74b4a66bb71d 100644
  	mmc_pwrseq_power_off(host);
  
  	host->ios.clock = 0;
-@@ -2063,6 +2071,16 @@ static void mmc_hw_reset_for_init(struct mmc_host *host)
- 	host->ops->hw_reset(host);
- }
- 
-+/**
-+ * mmc_hw_reset - reset the card in hardware
-+ * @host: MMC host to which the card is attached
-+ *
-+ * Hard reset the card. This function is only for upper layers, like the
-+ * block layer or card drivers. You cannot use it in host drivers (struct
-+ * mmc_card might be gone then).
-+ *
-+ * Return: 0 on success, -errno on failure
-+ */
- int mmc_hw_reset(struct mmc_host *host)
- {
- 	int ret;
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 0efb190734f2..8bcf01d93ba2 100644
+index c33db79cdd0a..319a9bdb908d 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -4755,6 +4755,8 @@ int stmmac_dvr_probe(struct device *device,
+@@ -4858,6 +4858,8 @@ int stmmac_dvr_probe(struct device *device,
  	struct net_device *ndev = NULL;
  	struct stmmac_priv *priv;
- 	u32 queue, rxq, maxq;
+ 	u32 rxq;
 +	u32 cpu_id;
 +	struct cpumask cpumask;
  	int i, ret = 0;
  
  	ndev = devm_alloc_etherdev_mqs(device, sizeof(struct stmmac_priv),
-@@ -4774,6 +4776,13 @@ int stmmac_dvr_probe(struct device *device,
+@@ -4877,6 +4879,13 @@ int stmmac_dvr_probe(struct device *device,
  	priv->ioaddr = res->addr;
  	priv->dev->base_addr = (unsigned long)res->addr;
  
@@ -8486,10 +8462,10 @@ index b1770489aca5..cf1416d15c44 100644
  
  	tp->coalesce = 15000;	/* 15 us */
 diff --git a/drivers/phy/rockchip/Kconfig b/drivers/phy/rockchip/Kconfig
-index 0824b9dd5683..f8c4c0d719ec 100644
+index c2f22f90736c..5478246197ab 100644
 --- a/drivers/phy/rockchip/Kconfig
 +++ b/drivers/phy/rockchip/Kconfig
-@@ -35,6 +35,14 @@ config PHY_ROCKCHIP_INNO_USB2
+@@ -47,6 +47,14 @@ config PHY_ROCKCHIP_INNO_USB2
  	help
  	  Support for Rockchip USB2.0 PHY with Innosilicon IP block.
  
@@ -8505,10 +8481,10 @@ index 0824b9dd5683..f8c4c0d719ec 100644
  	tristate "Rockchip Innosilicon MIPI/LVDS/TTL PHY driver"
  	depends on (ARCH_ROCKCHIP || COMPILE_TEST) && OF
 diff --git a/drivers/phy/rockchip/Makefile b/drivers/phy/rockchip/Makefile
-index 9f59a81e4e0d..02cd208e8e00 100644
+index c3cfc7f0af5c..738e3574a722 100644
 --- a/drivers/phy/rockchip/Makefile
 +++ b/drivers/phy/rockchip/Makefile
-@@ -4,6 +4,7 @@ obj-$(CONFIG_PHY_ROCKCHIP_EMMC)		+= phy-rockchip-emmc.o
+@@ -5,6 +5,7 @@ obj-$(CONFIG_PHY_ROCKCHIP_EMMC)		+= phy-rockchip-emmc.o
  obj-$(CONFIG_PHY_ROCKCHIP_INNO_DSIDPHY)	+= phy-rockchip-inno-dsidphy.o
  obj-$(CONFIG_PHY_ROCKCHIP_INNO_HDMI)	+= phy-rockchip-inno-hdmi.o
  obj-$(CONFIG_PHY_ROCKCHIP_INNO_USB2)	+= phy-rockchip-inno-usb2.o
@@ -9698,7 +9674,7 @@ index 000000000000..a84a017e4bbd
 +MODULE_DESCRIPTION("Rockchip USB 3.0 PHY driver");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/pwm/pwm-rockchip.c b/drivers/pwm/pwm-rockchip.c
-index 098e94335cb5..d73400b7e7f4 100644
+index 77c23a2c6d71..d73400b7e7f4 100644
 --- a/drivers/pwm/pwm-rockchip.c
 +++ b/drivers/pwm/pwm-rockchip.c
 @@ -11,6 +11,7 @@
@@ -9709,24 +9685,7 @@ index 098e94335cb5..d73400b7e7f4 100644
  #include <linux/platform_device.h>
  #include <linux/pwm.h>
  #include <linux/time.h>
-@@ -307,13 +308,9 @@ static int rockchip_pwm_probe(struct platform_device *pdev)
- 	pc->clk = devm_clk_get(&pdev->dev, "pwm");
- 	if (IS_ERR(pc->clk)) {
- 		pc->clk = devm_clk_get(&pdev->dev, NULL);
--		if (IS_ERR(pc->clk)) {
--			ret = PTR_ERR(pc->clk);
--			if (ret != -EPROBE_DEFER)
--				dev_err(&pdev->dev, "Can't get bus clk: %d\n",
--					ret);
--			return ret;
--		}
-+		if (IS_ERR(pc->clk))
-+			return dev_err_probe(&pdev->dev, PTR_ERR(pc->clk),
-+					     "Can't get bus clk\n");
- 	}
- 
- 	count = of_count_phandle_with_args(pdev->dev.of_node,
-@@ -402,6 +399,11 @@ static int rockchip_pwm_remove(struct platform_device *pdev)
+@@ -398,6 +399,11 @@ static int rockchip_pwm_remove(struct platform_device *pdev)
  	return pwmchip_remove(&pc->chip);
  }
  
@@ -9738,7 +9697,7 @@ index 098e94335cb5..d73400b7e7f4 100644
  static struct platform_driver rockchip_pwm_driver = {
  	.driver = {
  		.name = "rockchip-pwm",
-@@ -409,6 +411,7 @@ static struct platform_driver rockchip_pwm_driver = {
+@@ -405,6 +411,7 @@ static struct platform_driver rockchip_pwm_driver = {
  	},
  	.probe = rockchip_pwm_probe,
  	.remove = rockchip_pwm_remove,
@@ -9747,10 +9706,10 @@ index 098e94335cb5..d73400b7e7f4 100644
  module_platform_driver(rockchip_pwm_driver);
  
 diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 3b329b5ed9b2..f0040bc6fe68 100644
+index 42bbd99a36ac..cca88ec14e73 100644
 --- a/drivers/regulator/core.c
 +++ b/drivers/regulator/core.c
-@@ -5239,6 +5239,9 @@ regulator_register(const struct regulator_desc *regulator_desc,
+@@ -5273,6 +5273,9 @@ regulator_register(const struct regulator_desc *regulator_desc,
  		dangling_of_gpiod = false;
  	}
  
@@ -9761,10 +9720,10 @@ index 3b329b5ed9b2..f0040bc6fe68 100644
  	rdev->dev.class = &regulator_class;
  	rdev->dev.parent = dev;
 diff --git a/drivers/regulator/fixed.c b/drivers/regulator/fixed.c
-index 142a70a89153..e5240259d148 100644
+index 3de7709bdcd4..cc669b722670 100644
 --- a/drivers/regulator/fixed.c
 +++ b/drivers/regulator/fixed.c
-@@ -160,6 +160,9 @@ static int reg_fixed_voltage_probe(struct platform_device *pdev)
+@@ -152,6 +152,9 @@ static int reg_fixed_voltage_probe(struct platform_device *pdev)
  						     &drvdata->desc);
  		if (IS_ERR(config))
  			return PTR_ERR(config);
@@ -9786,14 +9745,14 @@ index 425ab6f7e375..365873407cb8 100644
  
  endmenu
 diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-index 36452bed86ef..7b8471884a47 100644
+index 36452bed86ef..bdfc1b74ddfc 100644
 --- a/drivers/soc/Makefile
 +++ b/drivers/soc/Makefile
 @@ -29,3 +29,4 @@ obj-$(CONFIG_PLAT_VERSATILE)	+= versatile/
  obj-y				+= xilinx/
  obj-$(CONFIG_ARCH_ZX)		+= zte/
  obj-$(CONFIG_SOC_KENDRYTE)	+= kendryte/
-+obj-$(CONFIG_VENDOR_FRIENDLYELEC)	+= friendlyelec/
++obj-y				+= friendlyelec/
 diff --git a/drivers/soc/friendlyelec/Kconfig b/drivers/soc/friendlyelec/Kconfig
 new file mode 100644
 index 000000000000..9e21c663e6c8
@@ -9968,10 +9927,10 @@ index 000000000000..886a8e1f7dc0
 +MODULE_DESCRIPTION("FriendlyElec NanoPi Series Machine Driver");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/soc/rockchip/Kconfig b/drivers/soc/rockchip/Kconfig
-index b71b73bf5fc5..f802a87088f0 100644
+index 2c13bf4dd5db..e88cec2c6cf3 100644
 --- a/drivers/soc/rockchip/Kconfig
 +++ b/drivers/soc/rockchip/Kconfig
-@@ -26,4 +26,10 @@ config ROCKCHIP_PM_DOMAINS
+@@ -34,4 +34,10 @@ config ROCKCHIP_PM_DOMAINS
  
            If unsure, say N.
  
@@ -9983,15 +9942,16 @@ index b71b73bf5fc5..f802a87088f0 100644
 +
  endif
 diff --git a/drivers/soc/rockchip/Makefile b/drivers/soc/rockchip/Makefile
-index afca0a4c4b72..ec5086b641e5 100644
+index 875032f7344e..7239c099e7f8 100644
 --- a/drivers/soc/rockchip/Makefile
 +++ b/drivers/soc/rockchip/Makefile
-@@ -2,5 +2,7 @@
+@@ -2,6 +2,8 @@
  #
  # Rockchip Soc drivers
  #
 +
  obj-$(CONFIG_ROCKCHIP_GRF) += grf.o
+ obj-$(CONFIG_ROCKCHIP_IODOMAIN) += io-domain.o
  obj-$(CONFIG_ROCKCHIP_PM_DOMAINS) += pm_domains.o
 +obj-$(CONFIG_ROCKCHIP_PM_CONFIG) += pm_config.o
 diff --git a/drivers/soc/rockchip/pm_config.c b/drivers/soc/rockchip/pm_config.c
@@ -10183,16 +10143,9 @@ index ae86da0dc5bd..6031a443bcc1 100644
  obj-$(CONFIG_USB_DWC3_ST)		+= dwc3-st.o
  obj-$(CONFIG_USB_DWC3_QCOM)		+= dwc3-qcom.o
 diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 60b5a6940973..bd822dc96197 100644
+index 841daec70b6e..bd822dc96197 100644
 --- a/drivers/usb/dwc3/core.c
 +++ b/drivers/usb/dwc3/core.c
-@@ -1,5 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
--/**
-+/*
-  * core.c - DesignWare USB3 DRD Controller Core file
-  *
-  * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
 @@ -1342,6 +1342,10 @@ static void dwc3_get_properties(struct dwc3 *dwc)
  				"snps,dis-tx-ipgap-linecheck-quirk");
  	dwc->parkmode_disable_ss_quirk = device_property_read_bool(dev,
@@ -10204,26 +10157,8 @@ index 60b5a6940973..bd822dc96197 100644
  
  	dwc->tx_de_emphasis_quirk = device_property_read_bool(dev,
  				"snps,tx_de_emphasis_quirk");
-@@ -1408,8 +1412,17 @@ static void dwc3_check_params(struct dwc3 *dwc)
- 	case USB_SPEED_LOW:
- 	case USB_SPEED_FULL:
- 	case USB_SPEED_HIGH:
-+		break;
- 	case USB_SPEED_SUPER:
-+		if (hwparam_gen == DWC3_GHWPARAMS3_SSPHY_IFC_DIS)
-+			dev_warn(dev, "UDC doesn't support Gen 1\n");
-+		break;
- 	case USB_SPEED_SUPER_PLUS:
-+		if ((DWC3_IP_IS(DWC32) &&
-+		     hwparam_gen == DWC3_GHWPARAMS3_SSPHY_IFC_DIS) ||
-+		    (!DWC3_IP_IS(DWC32) &&
-+		     hwparam_gen != DWC3_GHWPARAMS3_SSPHY_IFC_GEN2))
-+			dev_warn(dev, "UDC doesn't support SSP\n");
- 		break;
- 	default:
- 		dev_err(dev, "invalid maximum_speed parameter %d\n",
 diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 6d843e6c2941..126328bcf7f1 100644
+index 2f95f08ca511..f64fd7174305 100644
 --- a/drivers/usb/dwc3/core.h
 +++ b/drivers/usb/dwc3/core.h
 @@ -1050,6 +1050,12 @@ struct dwc3_scratchpad_array {
@@ -10238,7 +10173,7 @@ index 6d843e6c2941..126328bcf7f1 100644
 +			pre-fetch the next TRB of a TD.
   * @tx_de_emphasis_quirk: set if we enable Tx de-emphasis quirk
   * @tx_de_emphasis: Tx de-emphasis value
-  * 	0	- -6dB de-emphasis
+  *	0	- -6dB de-emphasis
 @@ -1245,6 +1251,8 @@ struct dwc3 {
  	unsigned		dis_del_phy_power_chg_quirk:1;
  	unsigned		dis_tx_ipgap_linecheck_quirk:1;
@@ -10587,10 +10522,10 @@ index e195176580de..82567dc4af3f 100644
  	 * WORKAROUND: dwc3 revisions <=3.00a have a limitation
  	 * where Port Disable command doesn't work.
 diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 3057cfc76d6a..cd940f946bef 100644
+index 4d34f6005381..40b085f6fcf9 100644
 --- a/drivers/usb/host/xhci-plat.c
 +++ b/drivers/usb/host/xhci-plat.c
-@@ -298,6 +298,12 @@ static int xhci_plat_probe(struct platform_device *pdev)
+@@ -312,6 +312,12 @@ static int xhci_plat_probe(struct platform_device *pdev)
  		if (device_property_read_bool(tmpdev, "quirk-broken-port-ped"))
  			xhci->quirks |= XHCI_BROKEN_PORT_PED;
  
@@ -10604,7 +10539,7 @@ index 3057cfc76d6a..cd940f946bef 100644
  					 &xhci->imod_interval);
  	}
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index a741a38a4c69..f9225094b549 100644
+index 167dae117f73..b1bc3bd03700 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
 @@ -3312,6 +3312,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
@@ -10653,7 +10588,7 @@ index a741a38a4c69..f9225094b549 100644
  				if (xhci_align_td(xhci, urb, enqd_len,
  						  &trb_buff_len,
 diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 564945eae502..e852c14fa8f3 100644
+index d90c0d5df3b3..b32b04d853cd 100644
 --- a/drivers/usb/host/xhci.h
 +++ b/drivers/usb/host/xhci.h
 @@ -1512,7 +1512,11 @@ static inline const char *xhci_trb_type_string(u8 type)
@@ -10668,14 +10603,14 @@ index 564945eae502..e852c14fa8f3 100644
  #define TRB_MAX_BUFF_SIZE	(1 << TRB_MAX_BUFF_SHIFT)
  /* How much data is left before the 64KB boundary? */
  #define TRB_BUFF_LEN_UP_TO_BOUNDARY(addr)	(TRB_MAX_BUFF_SIZE - \
-@@ -1874,6 +1878,7 @@ struct xhci_hcd {
- #define XHCI_RESET_PLL_ON_DISCONNECT	BIT_ULL(34)
- #define XHCI_SNPS_BROKEN_SUSPEND    BIT_ULL(35)
- #define XHCI_RENESAS_FW_QUIRK	BIT_ULL(36)
-+#define XHCI_TRB_ENT_QUIRK	BIT_ULL(37)
+@@ -1879,6 +1883,7 @@ struct xhci_hcd {
+ #define XHCI_SKIP_PHY_INIT	BIT_ULL(37)
  #define XHCI_DISABLE_SPARSE	BIT_ULL(38)
+ #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
++#define XHCI_TRB_ENT_QUIRK	BIT_ULL(40)
  
  	unsigned int		num_active_eps;
+ 	unsigned int		limit_active_eps;
 diff --git a/include/dt-bindings/clock/rockchip-ddr.h b/include/dt-bindings/clock/rockchip-ddr.h
 new file mode 100644
 index 000000000000..b065432e7793
@@ -10978,10 +10913,10 @@ index 000000000000..176c7cfcd989
 +
 +#endif
 diff --git a/include/linux/genhd.h b/include/linux/genhd.h
-index 475b286ea10b..45d09bb835fa 100644
+index 03da3f603d30..731780f95b02 100644
 --- a/include/linux/genhd.h
 +++ b/include/linux/genhd.h
-@@ -136,6 +136,11 @@ struct hd_struct {
+@@ -134,6 +134,11 @@ struct hd_struct {
  #define GENHD_FL_NO_PART_SCAN			0x0200
  #define GENHD_FL_HIDDEN				0x0400
  
