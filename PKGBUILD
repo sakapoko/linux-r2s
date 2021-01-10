@@ -3,7 +3,7 @@ pkgbase=linux-r2s
 _srcname=linux-5.10
 _kernelname=${pkgbase#linux}
 _desc="NanoPi R2S"
-pkgver=5.10.4
+pkgver=5.10.6
 pkgrel=1
 arch=('aarch64')
 url="http://www.kernel.org/"
@@ -20,7 +20,7 @@ source=("http://www.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.xz"
         '90-linux.hook'
         'extlinux.conf')
 md5sums=('753adc474bf799d569dec4f165ed92c3'
-         'a74c1c700e97858c1e5a09c998533d5a'
+         '1cb0ca9659928919cfc047deb33e3a20'
          '46ec03c4c45cc3c42165fe9998c283cd'
          '300dab0b14fd679fa40a12c2d2a9a012'
          '41cb5fef62715ead2dd109dbea8413d6'
