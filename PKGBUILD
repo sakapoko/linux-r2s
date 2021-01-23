@@ -3,30 +3,40 @@ pkgbase=linux-r2s
 _srcname=linux-5.10
 _kernelname=${pkgbase#linux}
 _desc="NanoPi R2S"
-pkgver=5.10.7
+pkgver=5.10.9.arch1
+pkgdesc='Linux'
 pkgrel=1
+_srctag=v${pkgver%.*}-${pkgver##*.}
 arch=('aarch64')
 url="http://www.kernel.org/"
 license=('GPL2')
 makedepends=('bc' 'git' 'dtc' 'inetutils')
 options=('!strip')
+_srcname=archlinux-linux
 
-source=("http://www.kernel.org/pub/linux/kernel/v5.x/${_srcname}.tar.xz"
-        "http://www.kernel.org/pub/linux/kernel/v5.x/patch-${pkgver}.xz"
-        '0001-linux-5.10.4-r2s.patch'
-        'config'
-        'linux.preset'
-        '60-linux.hook'
-        '90-linux.hook'
-        'extlinux.conf')
-md5sums=('753adc474bf799d569dec4f165ed92c3'
-         '4e3f6fd4b7383c146d65d2c7e44e827d'
-         '46ec03c4c45cc3c42165fe9998c283cd'
-         '300dab0b14fd679fa40a12c2d2a9a012'
-         '41cb5fef62715ead2dd109dbea8413d6'
-         '0a5f16bfec6ad982a2f6782724cca8ba'
-         '3dc88030a8f2f5a5f97266d99b149f77'
-         '7c504e4876ec9e6431e8a6bcc98c58e4')
+source=(
+  "$_srcname::git+https://git.archlinux.org/linux.git?signed#tag=$_srctag"
+  '0001-linux-5.10.4-r2s.patch'
+  'config'
+  'linux.preset'
+  '60-linux.hook'
+  '90-linux.hook'
+  'extlinux.conf'
+)
+validpgpkeys=(
+  'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
+  '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
+  'A2FF3A36AAA56654109064AB19802F8B0D70FC30'  # Jan Alexander Steffens (heftig)
+)
+md5sums=(
+  'SKIP'
+  '46ec03c4c45cc3c42165fe9998c283cd'
+  '300dab0b14fd679fa40a12c2d2a9a012'
+  '41cb5fef62715ead2dd109dbea8413d6'
+  '0a5f16bfec6ad982a2f6782724cca8ba'
+  '3dc88030a8f2f5a5f97266d99b149f77'
+  '7c504e4876ec9e6431e8a6bcc98c58e4'
+)
 
 export KBUILD_BUILD_HOST=archlinux
 export KBUILD_BUILD_USER=$pkgbase
@@ -40,12 +50,16 @@ prepare() {
   echo "-$pkgrel" > localversion.10-pkgrel
   echo "${pkgbase#linux}" > localversion.20-pkgname
 
-  # add upstream patch
-  patch -p1 < ../patch-$pkgver
+  local src
+  for src in "${source[@]}"; do
+    src="${src%%::*}"
+    src="${src##*/}"
+    [[ $src = *.patch ]] || continue
+    echo "Applying patch $src..."
+    patch -Np1 < "../$src"
+  done
 
-  # NanoPi R2S patches
-  patch -p1 < ../0001-linux-5.10.4-r2s.patch
-
+  echo "Setting config..."
   cp ../config .config
   make olddefconfig
 
@@ -67,11 +81,12 @@ build() {
 
 _package() {
   pkgdesc="The Linux Kernel and modules - $_desc"
-  depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
-  optdepends=('crda: to set the correct wireless channels of your country')
-  provides=("linux=$pkgver" "WIREGUARD-MODULE")
-  replaces=('linux-armv8' 'linux-aarch64')
-  conflicts=('linux')
+  depends=(coreutils kmod initramfs)
+  optdepends=('crda: to set the correct wireless channels of your country'
+              'linux-firmware: firmware images needed for some devices')
+  provides=(WIREGUARD-MODULE)
+  replaces=(wireguard-arch linux-armv8 linux-aarch64)
+  conflicts=(linux)
   backup=("etc/mkinitcpio.d/$pkgbase.preset")
   install=$pkgname.install
 
@@ -89,7 +104,10 @@ _package() {
   echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
 
   mkdir -p "$pkgdir"/{boot,usr/lib/modules}
+
+  echo "Installing modules..."
   make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 modules_install
+
   # remove build and source links
   rm "$modulesdir"/{source,build}
 
@@ -126,10 +144,13 @@ _package-headers() {
   local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
 
   echo "Installing build files..."
-  install -Dt "$builddir" -m644 .config Makefile Module.symvers System.map localversion.* version vmlinux
+  install -Dt "$builddir" -m644 .config Makefile Module.symvers System.map \
+    localversion.* version vmlinux
   install -Dt "$builddir/kernel" -m644 kernel/Makefile
   install -Dt "$builddir/arch/$KARCH" -m644 arch/$KARCH/Makefile
   cp -t "$builddir" -a scripts
+
+  # add objtool for external module building and enabled VALIDATION_STACK option
   #install -Dt "$builddir/tools/objtool" tools/objtool/objtool
 
   # add xfs and shmem for aufs building
@@ -153,7 +174,7 @@ _package-headers() {
   install -Dt "$builddir/drivers/media/dvb-frontends" -m644 drivers/media/dvb-frontends/*.h
   install -Dt "$builddir/drivers/media/tuners" -m644 drivers/media/tuners/*.h
 
-  # Installing Kconfig files
+  echo "Installing KConfig files..."
   find . -name 'Kconfig*' -exec install -Dm644 {} "$builddir/{}" \;
 
   echo "Removing unneeded architectures..."
@@ -206,3 +227,5 @@ for _p in ${pkgname[@]}; do
     _package${_p#$pkgbase}
   }"
 done
+
+# vim:set ts=8 sts=2 sw=2 et:
