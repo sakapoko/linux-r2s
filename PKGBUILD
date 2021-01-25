@@ -1,19 +1,19 @@
 buildarch=8
 pkgbase=linux-r2s
-_srcname=linux-5.10
-_kernelname=${pkgbase#linux}
 _desc="NanoPi R2S"
-pkgver=5.10.9.arch1
-pkgdesc='Linux'
+pkgver=5.10.10.arch1
 pkgrel=1
+pkgdesc='Linux'
 _srctag=v${pkgver%.*}-${pkgver##*.}
+url="https://git.archlinux.org/linux.git/log/?h=$_srctag"
 arch=('aarch64')
-url="http://www.kernel.org/"
 license=('GPL2')
-makedepends=('bc' 'git' 'dtc' 'inetutils')
+makedepends=(
+  bc perl tar xz
+  git dtc inetutils
+)
 options=('!strip')
 _srcname=archlinux-linux
-
 source=(
   "$_srcname::git+https://git.archlinux.org/linux.git?signed#tag=$_srctag"
   '0001-linux-5.10.4-r2s.patch'
