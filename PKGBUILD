@@ -1,13 +1,13 @@
 buildarch=8
 pkgbase=linux-r2s
 _desc="NanoPi R2S"
-pkgver=5.10.10.arch1
+pkgver=5.10.11.arch1
 pkgrel=1
 pkgdesc='Linux'
 _srctag=v${pkgver%.*}-${pkgver##*.}
 url="https://git.archlinux.org/linux.git/log/?h=$_srctag"
-arch=('aarch64')
-license=('GPL2')
+arch=(aarch64)
+license=(GPL2)
 makedepends=(
   bc perl tar xz
   git dtc inetutils
