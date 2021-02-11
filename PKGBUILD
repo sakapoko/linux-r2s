@@ -1,7 +1,7 @@
 buildarch=8
 pkgbase=linux-r2s
 _desc="NanoPi R2S"
-pkgver=5.10.13.arch1
+pkgver=5.10.15.arch1
 pkgrel=1
 pkgdesc='Linux'
 _srctag=v${pkgver%.*}-${pkgver##*.}
