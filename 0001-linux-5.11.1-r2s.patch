@@ -410,16 +410,16 @@ index 000000000000..d618867fda69
 +		};
 +	};
 diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index 26661c7b736b..f4c93bfae7de 100644
+index 1ab55a124a87..32b88c8c3ace 100644
 --- a/arch/arm64/boot/dts/rockchip/Makefile
 +++ b/arch/arm64/boot/dts/rockchip/Makefile
 @@ -1,4 +1,5 @@
  # SPDX-License-Identifier: GPL-2.0
 +
  dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-evb.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-evb.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-roc-cc.dtb
-@@ -7,6 +8,12 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go2.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-engicam-px30-core-ctouch2.dtb
+ dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-engicam-px30-core-ctouch2-of10.dtb
+@@ -10,6 +11,12 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go2.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-a1.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-evb.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2s.dtb
@@ -432,7 +432,7 @@ index 26661c7b736b..f4c93bfae7de 100644
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-rock64.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-roc-cc.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3368-evb-act8846.dtb
-@@ -30,6 +37,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-leez-p710.dtb
+@@ -34,6 +41,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-leez-p710.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopc-t4.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopi-m4.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopi-neo4.dtb
@@ -440,7 +440,7 @@ index 26661c7b736b..f4c93bfae7de 100644
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-orangepi.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-pinebook-pro.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-puma-haikou.dtb
-@@ -44,3 +52,8 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64.dtb
+@@ -48,3 +56,8 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire-excavator.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
@@ -2394,7 +2394,7 @@ index 76a8b40a93c6..cf4531e9eaff 100644
  	status = "okay";
  };
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-index 7a9a7aca86c6..101db7f35f08 100644
+index 2551b238b97c..bde1c5cefe26 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
 @@ -9,6 +9,7 @@
@@ -2422,7 +2422,7 @@ index 7a9a7aca86c6..101db7f35f08 100644
  	};
  
  	spi3: spi@ff350000 {
-@@ -1612,6 +1623,16 @@ i2s2: i2s@ff8a0000 {
+@@ -1611,6 +1622,16 @@ i2s2: i2s@ff8a0000 {
  		status = "disabled";
  	};
  
@@ -5825,10 +5825,10 @@ index c577e9ee67f0..21c78a0c5a6b 100644
  int ultrix_partition(struct parsed_partitions *state);
 +int rkpart_partition(struct parsed_partitions *state);
 diff --git a/block/partitions/core.c b/block/partitions/core.c
-index a02e22411594..2c4f26c4d918 100644
+index 4601a845cd79..b1b266d8cb20 100644
 --- a/block/partitions/core.c
 +++ b/block/partitions/core.c
-@@ -81,6 +81,9 @@ static int (*check_part[])(struct parsed_partitions *) = {
+@@ -82,6 +82,9 @@ static int (*check_part[])(struct parsed_partitions *) = {
  #endif
  #ifdef CONFIG_SYSV68_PARTITION
  	sysv68_partition,
@@ -6223,10 +6223,10 @@ index 000000000000..a2541dd261c7
 +
 +#endif
 diff --git a/drivers/char/hw_random/Kconfig b/drivers/char/hw_random/Kconfig
-index e92c4d9469d8..b1526ef975dc 100644
+index 1fe006f3f12f..743e1862d275 100644
 --- a/drivers/char/hw_random/Kconfig
 +++ b/drivers/char/hw_random/Kconfig
-@@ -536,6 +536,18 @@ config HW_RANDOM_XIPHERA
+@@ -524,6 +524,18 @@ config HW_RANDOM_XIPHERA
  	  To compile this driver as a module, choose M here: the
  	  module will be called xiphera-trng.
  
@@ -6246,10 +6246,10 @@ index e92c4d9469d8..b1526ef975dc 100644
  
  config UML_RANDOM
 diff --git a/drivers/char/hw_random/Makefile b/drivers/char/hw_random/Makefile
-index 5da344509a4d..ff587206a4b0 100644
+index 8933fada74f2..0c51ef36e0b2 100644
 --- a/drivers/char/hw_random/Makefile
 +++ b/drivers/char/hw_random/Makefile
-@@ -46,3 +46,4 @@ obj-$(CONFIG_HW_RANDOM_OPTEE) += optee-rng.o
+@@ -45,3 +45,4 @@ obj-$(CONFIG_HW_RANDOM_OPTEE) += optee-rng.o
  obj-$(CONFIG_HW_RANDOM_NPCM) += npcm-rng.o
  obj-$(CONFIG_HW_RANDOM_CCTRNG) += cctrng.o
  obj-$(CONFIG_HW_RANDOM_XIPHERA) += xiphera-trng.o
@@ -6780,12 +6780,12 @@ index 2271a84124b0..7405aaf965ec 100644
  struct clk *rockchip_clk_register_ddrclk(const char *name, int flags,
  					 const char *const *parent_names,
 diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-index 37dc40d1fcfb..15fedc95abff 100644
+index 00704efe6398..ac40849f49d7 100644
 --- a/drivers/devfreq/Kconfig
 +++ b/drivers/devfreq/Kconfig
-@@ -131,6 +131,18 @@ config ARM_TEGRA20_DEVFREQ
- 	  It reads Memory Controller counters and adjusts the operating
- 	  frequencies and voltages with OPP support.
+@@ -121,6 +121,18 @@ config ARM_TEGRA_DEVFREQ
+ 	  It reads ACTMON counters of memory controllers and adjusts the
+ 	  operating frequencies and voltages with OPP support.
  
 +config ARM_RK3328_DMC_DEVFREQ
 +	tristate "ARM RK3328 DMC DEVFREQ Driver"
@@ -6803,7 +6803,7 @@ index 37dc40d1fcfb..15fedc95abff 100644
  	tristate "ARM RK3399 DMC DEVFREQ Driver"
  	depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
 diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
-index 3ca1ad0ecb97..2fe9340f20e1 100644
+index a16333ea7034..8084117f9a94 100644
 --- a/drivers/devfreq/Makefile
 +++ b/drivers/devfreq/Makefile
 @@ -12,6 +12,7 @@ obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
@@ -6812,8 +6812,8 @@ index 3ca1ad0ecb97..2fe9340f20e1 100644
  obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+= rk3399_dmc.o
 +obj-$(CONFIG_ARM_RK3328_DMC_DEVFREQ)	+= rk3328_dmc.o
  obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra30-devfreq.o
- obj-$(CONFIG_ARM_TEGRA20_DEVFREQ)	+= tegra20-devfreq.o
  
+ # DEVFREQ Event Drivers
 diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event/rockchip-dfi.c
 index 9a88faaf8b27..ceabb3a4223e 100644
 --- a/drivers/devfreq/event/rockchip-dfi.c
@@ -8338,7 +8338,7 @@ index 42e27a298218..946fec4f1912 100644
  	/*
  	 * As discussed on lkml, GENHD_FL_REMOVABLE should:
 diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-index d42037f0f10d..74b4a66bb71d 100644
+index 19f1ee57fb34..b426c03300f5 100644
 --- a/drivers/mmc/core/core.c
 +++ b/drivers/mmc/core/core.c
 @@ -1349,6 +1349,14 @@ void mmc_power_off(struct mmc_host *host)
@@ -8357,10 +8357,10 @@ index d42037f0f10d..74b4a66bb71d 100644
  
  	host->ios.clock = 0;
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index c33db79cdd0a..319a9bdb908d 100644
+index 26b971cd4da5..682423862b41 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -4858,6 +4858,8 @@ int stmmac_dvr_probe(struct device *device,
+@@ -4889,6 +4889,8 @@ int stmmac_dvr_probe(struct device *device,
  	struct net_device *ndev = NULL;
  	struct stmmac_priv *priv;
  	u32 rxq;
@@ -8369,7 +8369,7 @@ index c33db79cdd0a..319a9bdb908d 100644
  	int i, ret = 0;
  
  	ndev = devm_alloc_etherdev_mqs(device, sizeof(struct stmmac_priv),
-@@ -4877,6 +4879,13 @@ int stmmac_dvr_probe(struct device *device,
+@@ -4908,6 +4910,13 @@ int stmmac_dvr_probe(struct device *device,
  	priv->ioaddr = res->addr;
  	priv->dev->base_addr = (unsigned long)res->addr;
  
@@ -8384,7 +8384,7 @@ index c33db79cdd0a..319a9bdb908d 100644
  	priv->wol_irq = res->wol_irq;
  	priv->lpi_irq = res->lpi_irq;
 diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index b1770489aca5..cf1416d15c44 100644
+index 67cd6986634f..9279cb6fd6ed 100644
 --- a/drivers/net/usb/r8152.c
 +++ b/drivers/net/usb/r8152.c
 @@ -6,6 +6,7 @@
@@ -8395,7 +8395,7 @@ index b1770489aca5..cf1416d15c44 100644
  #include <linux/netdevice.h>
  #include <linux/etherdevice.h>
  #include <linux/mii.h>
-@@ -38,6 +39,11 @@
+@@ -39,6 +40,11 @@
  #define DRIVER_DESC "Realtek RTL8152/RTL8153 Based USB Ethernet Adapters"
  #define MODULENAME "r8152"
  
@@ -8407,7 +8407,7 @@ index b1770489aca5..cf1416d15c44 100644
  #define R8152_PHY_ID		32
  
  #define PLA_IDR			0xc000
-@@ -1504,24 +1510,30 @@ static int determine_ethernet_addr(struct r8152 *tp, struct sockaddr *sa)
+@@ -1487,24 +1493,30 @@ static int determine_ethernet_addr(struct r8152 *tp, struct sockaddr *sa)
  
  	sa->sa_family = dev->type;
  
@@ -8451,7 +8451,7 @@ index b1770489aca5..cf1416d15c44 100644
  		netif_err(tp, probe, dev, "Invalid ether addr %pM\n",
  			  sa->sa_data);
  		eth_hw_addr_random(dev);
-@@ -5592,6 +5604,9 @@ static void r8153b_init(struct r8152 *tp)
+@@ -5575,6 +5587,9 @@ static void r8153b_init(struct r8152 *tp)
  	ocp_data &= ~(RX_AGG_DISABLE | RX_ZERO_EN);
  	ocp_write_word(tp, MCU_TYPE_USB, USB_USB_CTRL, ocp_data);
  
@@ -8462,10 +8462,10 @@ index b1770489aca5..cf1416d15c44 100644
  
  	tp->coalesce = 15000;	/* 15 us */
 diff --git a/drivers/phy/rockchip/Kconfig b/drivers/phy/rockchip/Kconfig
-index c2f22f90736c..5478246197ab 100644
+index 159285f42e5c..b794c3712e7b 100644
 --- a/drivers/phy/rockchip/Kconfig
 +++ b/drivers/phy/rockchip/Kconfig
-@@ -47,6 +47,14 @@ config PHY_ROCKCHIP_INNO_USB2
+@@ -48,6 +48,14 @@ config PHY_ROCKCHIP_INNO_USB2
  	help
  	  Support for Rockchip USB2.0 PHY with Innosilicon IP block.
  
@@ -9674,7 +9674,7 @@ index 000000000000..a84a017e4bbd
 +MODULE_DESCRIPTION("Rockchip USB 3.0 PHY driver");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/pwm/pwm-rockchip.c b/drivers/pwm/pwm-rockchip.c
-index 77c23a2c6d71..d73400b7e7f4 100644
+index 389a5e140412..387e38349612 100644
 --- a/drivers/pwm/pwm-rockchip.c
 +++ b/drivers/pwm/pwm-rockchip.c
 @@ -11,6 +11,7 @@
@@ -9685,7 +9685,7 @@ index 77c23a2c6d71..d73400b7e7f4 100644
  #include <linux/platform_device.h>
  #include <linux/pwm.h>
  #include <linux/time.h>
-@@ -398,6 +399,11 @@ static int rockchip_pwm_remove(struct platform_device *pdev)
+@@ -396,6 +397,11 @@ static int rockchip_pwm_remove(struct platform_device *pdev)
  	return pwmchip_remove(&pc->chip);
  }
  
@@ -9697,7 +9697,7 @@ index 77c23a2c6d71..d73400b7e7f4 100644
  static struct platform_driver rockchip_pwm_driver = {
  	.driver = {
  		.name = "rockchip-pwm",
-@@ -405,6 +411,7 @@ static struct platform_driver rockchip_pwm_driver = {
+@@ -403,6 +409,7 @@ static struct platform_driver rockchip_pwm_driver = {
  	},
  	.probe = rockchip_pwm_probe,
  	.remove = rockchip_pwm_remove,
@@ -9706,10 +9706,10 @@ index 77c23a2c6d71..d73400b7e7f4 100644
  module_platform_driver(rockchip_pwm_driver);
  
 diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 42bbd99a36ac..cca88ec14e73 100644
+index 67a768fe5b2a..9c8d22e78272 100644
 --- a/drivers/regulator/core.c
 +++ b/drivers/regulator/core.c
-@@ -5273,6 +5273,9 @@ regulator_register(const struct regulator_desc *regulator_desc,
+@@ -5305,6 +5305,9 @@ regulator_register(const struct regulator_desc *regulator_desc,
  		dangling_of_gpiod = false;
  	}
  
@@ -9720,10 +9720,10 @@ index 42bbd99a36ac..cca88ec14e73 100644
  	rdev->dev.class = &regulator_class;
  	rdev->dev.parent = dev;
 diff --git a/drivers/regulator/fixed.c b/drivers/regulator/fixed.c
-index 3de7709bdcd4..cc669b722670 100644
+index 02ad83153e19..5fce96d81be3 100644
 --- a/drivers/regulator/fixed.c
 +++ b/drivers/regulator/fixed.c
-@@ -152,6 +152,9 @@ static int reg_fixed_voltage_probe(struct platform_device *pdev)
+@@ -187,6 +187,9 @@ static int reg_fixed_voltage_probe(struct platform_device *pdev)
  						     &drvdata->desc);
  		if (IS_ERR(config))
  			return PTR_ERR(config);
@@ -9734,10 +9734,10 @@ index 3de7709bdcd4..cc669b722670 100644
  		config = dev_get_platdata(&pdev->dev);
  	}
 diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-index 425ab6f7e375..365873407cb8 100644
+index d097d070f579..b0d181ca5ff2 100644
 --- a/drivers/soc/Kconfig
 +++ b/drivers/soc/Kconfig
-@@ -23,5 +23,6 @@ source "drivers/soc/versatile/Kconfig"
+@@ -24,5 +24,6 @@ source "drivers/soc/versatile/Kconfig"
  source "drivers/soc/xilinx/Kconfig"
  source "drivers/soc/zte/Kconfig"
  source "drivers/soc/kendryte/Kconfig"
@@ -9745,10 +9745,10 @@ index 425ab6f7e375..365873407cb8 100644
  
  endmenu
 diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-index 36452bed86ef..bdfc1b74ddfc 100644
+index 699b758d28e4..9f30545ce75e 100644
 --- a/drivers/soc/Makefile
 +++ b/drivers/soc/Makefile
-@@ -29,3 +29,4 @@ obj-$(CONFIG_PLAT_VERSATILE)	+= versatile/
+@@ -30,3 +30,4 @@ obj-$(CONFIG_PLAT_VERSATILE)	+= versatile/
  obj-y				+= xilinx/
  obj-$(CONFIG_ARCH_ZX)		+= zte/
  obj-$(CONFIG_SOC_KENDRYTE)	+= kendryte/
@@ -10143,7 +10143,7 @@ index ae86da0dc5bd..6031a443bcc1 100644
  obj-$(CONFIG_USB_DWC3_ST)		+= dwc3-st.o
  obj-$(CONFIG_USB_DWC3_QCOM)		+= dwc3-qcom.o
 diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 841daec70b6e..bd822dc96197 100644
+index 3101f0dcf6ae..c6872d846f4b 100644
 --- a/drivers/usb/dwc3/core.c
 +++ b/drivers/usb/dwc3/core.c
 @@ -1342,6 +1342,10 @@ static void dwc3_get_properties(struct dwc3 *dwc)
@@ -10158,10 +10158,10 @@ index 841daec70b6e..bd822dc96197 100644
  	dwc->tx_de_emphasis_quirk = device_property_read_bool(dev,
  				"snps,tx_de_emphasis_quirk");
 diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 2f95f08ca511..f64fd7174305 100644
+index 1b241f937d8f..8028218d86b4 100644
 --- a/drivers/usb/dwc3/core.h
 +++ b/drivers/usb/dwc3/core.h
-@@ -1050,6 +1050,12 @@ struct dwc3_scratchpad_array {
+@@ -1051,6 +1051,12 @@ struct dwc3_scratchpad_array {
   *			check during HS transmit.
   * @parkmode_disable_ss_quirk: set if we need to disable all SuperSpeed
   *			instances in park mode.
@@ -10174,7 +10174,7 @@ index 2f95f08ca511..f64fd7174305 100644
   * @tx_de_emphasis_quirk: set if we enable Tx de-emphasis quirk
   * @tx_de_emphasis: Tx de-emphasis value
   *	0	- -6dB de-emphasis
-@@ -1245,6 +1251,8 @@ struct dwc3 {
+@@ -1246,6 +1252,8 @@ struct dwc3 {
  	unsigned		dis_del_phy_power_chg_quirk:1;
  	unsigned		dis_tx_ipgap_linecheck_quirk:1;
  	unsigned		parkmode_disable_ss_quirk:1;
@@ -10522,10 +10522,10 @@ index e195176580de..82567dc4af3f 100644
  	 * WORKAROUND: dwc3 revisions <=3.00a have a limitation
  	 * where Port Disable command doesn't work.
 diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 4d34f6005381..40b085f6fcf9 100644
+index c1edcc9b13ce..1aadc0208999 100644
 --- a/drivers/usb/host/xhci-plat.c
 +++ b/drivers/usb/host/xhci-plat.c
-@@ -312,6 +312,12 @@ static int xhci_plat_probe(struct platform_device *pdev)
+@@ -323,6 +323,12 @@ static int xhci_plat_probe(struct platform_device *pdev)
  		if (device_property_read_bool(tmpdev, "quirk-broken-port-ped"))
  			xhci->quirks |= XHCI_BROKEN_PORT_PED;
  
@@ -10539,10 +10539,10 @@ index 4d34f6005381..40b085f6fcf9 100644
  					 &xhci->imod_interval);
  	}
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 167dae117f73..b1bc3bd03700 100644
+index 89c3be9917f6..f007a0cc714e 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -3312,6 +3312,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3325,6 +3325,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  	bool more_trbs_coming = true;
  	bool need_zero_pkt = false;
  	bool first_trb = true;
@@ -10550,7 +10550,7 @@ index 167dae117f73..b1bc3bd03700 100644
  	unsigned int num_trbs;
  	unsigned int start_cycle, num_sgs = 0;
  	unsigned int enqd_len, block_len, trb_buff_len, full_len;
-@@ -3348,6 +3349,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3361,6 +3362,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  	if (urb->transfer_flags & URB_ZERO_PACKET && urb_priv->num_tds > 1)
  		need_zero_pkt = true;
  
@@ -10564,7 +10564,7 @@ index 167dae117f73..b1bc3bd03700 100644
  	td = &urb_priv->td[0];
  
  	/*
-@@ -3376,6 +3384,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3389,6 +3397,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  			first_trb = false;
  			if (start_cycle == 0)
  				field |= TRB_CYCLE;
@@ -10578,7 +10578,7 @@ index 167dae117f73..b1bc3bd03700 100644
  		} else
  			field |= ring->cycle_state;
  
-@@ -3384,6 +3399,8 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3397,6 +3412,8 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  		 */
  		if (enqd_len + trb_buff_len < full_len) {
  			field |= TRB_CHAIN;
@@ -10588,10 +10588,10 @@ index 167dae117f73..b1bc3bd03700 100644
  				if (xhci_align_td(xhci, urb, enqd_len,
  						  &trb_buff_len,
 diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index d90c0d5df3b3..b32b04d853cd 100644
+index 07ff95016f11..bcbb6ed73c78 100644
 --- a/drivers/usb/host/xhci.h
 +++ b/drivers/usb/host/xhci.h
-@@ -1512,7 +1512,11 @@ static inline const char *xhci_trb_type_string(u8 type)
+@@ -1516,7 +1516,11 @@ static inline const char *xhci_trb_type_string(u8 type)
  #define TRB_SEGMENT_SIZE	(TRBS_PER_SEGMENT*16)
  #define TRB_SEGMENT_SHIFT	(ilog2(TRB_SEGMENT_SIZE))
  /* TRB buffer pointers can't cross 64KB boundaries */
@@ -10603,7 +10603,7 @@ index d90c0d5df3b3..b32b04d853cd 100644
  #define TRB_MAX_BUFF_SIZE	(1 << TRB_MAX_BUFF_SHIFT)
  /* How much data is left before the 64KB boundary? */
  #define TRB_BUFF_LEN_UP_TO_BOUNDARY(addr)	(TRB_MAX_BUFF_SIZE - \
-@@ -1879,6 +1883,7 @@ struct xhci_hcd {
+@@ -1883,6 +1887,7 @@ struct xhci_hcd {
  #define XHCI_SKIP_PHY_INIT	BIT_ULL(37)
  #define XHCI_DISABLE_SPARSE	BIT_ULL(38)
  #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
@@ -10913,10 +10913,10 @@ index 000000000000..176c7cfcd989
 +
 +#endif
 diff --git a/include/linux/genhd.h b/include/linux/genhd.h
-index 03da3f603d30..731780f95b02 100644
+index 809aaa32d53c..cc253bb718e6 100644
 --- a/include/linux/genhd.h
 +++ b/include/linux/genhd.h
-@@ -134,6 +134,11 @@ struct hd_struct {
+@@ -104,6 +104,11 @@ struct partition_meta_info {
  #define GENHD_FL_NO_PART_SCAN			0x0200
  #define GENHD_FL_HIDDEN				0x0400
  

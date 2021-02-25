@@ -1,7 +1,7 @@
 buildarch=8
 pkgbase=linux-r2s
 _desc="NanoPi R2S"
-pkgver=5.10.16.arch1
+pkgver=5.11.1.arch1
 pkgrel=1
 pkgdesc='Linux'
 _srctag=v${pkgver%.*}-${pkgver##*.}
@@ -16,7 +16,7 @@ options=('!strip')
 _srcname=archlinux-linux
 source=(
   "$_srcname::git+https://git.archlinux.org/linux.git?signed#tag=$_srctag"
-  '0001-linux-5.10.4-r2s.patch'
+  '0001-linux-5.11.1-r2s.patch'
   'config'
   'linux.preset'
   '60-linux.hook'
@@ -30,7 +30,7 @@ validpgpkeys=(
 )
 md5sums=(
   'SKIP'
-  '46ec03c4c45cc3c42165fe9998c283cd'
+  '4c0eb273ffed8da57553841ab01776f7'
   '300dab0b14fd679fa40a12c2d2a9a012'
   '41cb5fef62715ead2dd109dbea8413d6'
   '0a5f16bfec6ad982a2f6782724cca8ba'
@@ -96,6 +96,7 @@ _package() {
 
   KARCH=arm64
 
+  #echo "Installing boot image..."
   # systemd expects to find the kernel here to allow hibernation
   # https://github.com/systemd/systemd/commit/edda44605f06a41fb86b7ab8128dcf99161d2344
   #install -Dm644 "$(make -s image_name)" "$modulesdir/vmlinuz"
