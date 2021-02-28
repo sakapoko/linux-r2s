@@ -2,7 +2,7 @@ buildarch=8
 pkgbase=linux-r2s
 _desc="NanoPi R2S"
 pkgver=5.11.1.arch1
-pkgrel=1
+pkgrel=2
 pkgdesc='Linux'
 _srctag=v${pkgver%.*}-${pkgver##*.}
 url="https://git.archlinux.org/linux.git/log/?h=$_srctag"
@@ -21,7 +21,6 @@ source=(
   'linux.preset'
   '60-linux.hook'
   '90-linux.hook'
-  'extlinux.conf'
 )
 validpgpkeys=(
   'ABAF11C65A2970B130ABE3C479BE3E4300411886'  # Linus Torvalds
@@ -31,11 +30,10 @@ validpgpkeys=(
 md5sums=(
   'SKIP'
   '4c0eb273ffed8da57553841ab01776f7'
-  '300dab0b14fd679fa40a12c2d2a9a012'
+  'f9165e96b168f83b311dd4d7c510891b'
   '41cb5fef62715ead2dd109dbea8413d6'
   '0a5f16bfec6ad982a2f6782724cca8ba'
   '3dc88030a8f2f5a5f97266d99b149f77'
-  '7c504e4876ec9e6431e8a6bcc98c58e4'
 )
 
 export KBUILD_BUILD_HOST=archlinux
@@ -114,7 +112,6 @@ _package() {
 
   make INSTALL_DTBS_PATH="$pkgdir/boot/dtbs" dtbs_install
   cp arch/$KARCH/boot/Image{,.gz} "$pkgdir/boot"
-  install -Dm644 "$srcdir/extlinux.conf" "$pkgdir/boot/extlinux/extlinux.conf"
 
   # now we call depmod...
   depmod -b "$pkgdir/usr" -F System.map "$kernver"
