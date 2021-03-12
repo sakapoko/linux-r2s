@@ -768,10 +768,10 @@ index 000000000000..a3f5ff4bdc47
 +};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2-common.dtsi b/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2-common.dtsi
 new file mode 100644
-index 000000000000..1647d764c78a
+index 000000000000..ee9a3b1a38e4
 --- /dev/null
 +++ b/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2-common.dtsi
-@@ -0,0 +1,683 @@
+@@ -0,0 +1,686 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2020 FriendlyElec Computer Tech. Co., Ltd.
@@ -792,6 +792,9 @@ index 000000000000..1647d764c78a
 +
 +	aliases {
 +		ethernet1 = &r8153;
++		mmc0 = &sdmmc;
++		mmc1 = &sdmmc_ext;
++		mmc2 = &emmc;
 +	};
 +
 +	chosen: chosen {
@@ -1858,7 +1861,7 @@ index 000000000000..78f6d4cc976d
 +	status = "okay";
 +};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-index db0d5c8e5f96..36f263a6cc19 100644
+index 93c734d8a46c..333448a88206 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
 @@ -297,6 +297,17 @@ &pdmm0_sdi2_sleep
@@ -1974,7 +1977,7 @@ index db0d5c8e5f96..36f263a6cc19 100644
  		compatible = "rockchip,rk3328-dw-mshc", "rockchip,rk3288-dw-mshc";
  		reg = <0x0 0xff520000 0x0 0x4000>;
  		interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
-@@ -983,6 +1035,35 @@ usb_host0_ohci: usb@ff5d0000 {
+@@ -984,6 +1036,35 @@ usb_host0_ohci: usb@ff5d0000 {
  		status = "disabled";
  	};
  
@@ -2250,10 +2253,10 @@ index 000000000000..7b136d4707c8
 +	vin-supply = <&vcc5v0_sys>;
 +};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
-index 76a8b40a93c6..cf4531e9eaff 100644
+index 76a8b40a93c6..8b7c9a1d9919 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
-@@ -13,14 +13,23 @@
+@@ -13,14 +13,25 @@
  
  /dts-v1/;
  #include <dt-bindings/input/linux-event-codes.h>
@@ -2273,12 +2276,14 @@ index 76a8b40a93c6..cf4531e9eaff 100644
 +		machine = "NANOPI4";
 +		hwrev = <255>;
 +		model = "NanoPi 4 Series";
++		nvmem-cells = <&cpu_id>;
++		nvmem-cell-names = "id";
 +	};
 +
  	clkin_gmac: external-gmac-clock {
  		compatible = "fixed-clock";
  		clock-frequency = <125000000>;
-@@ -99,11 +108,11 @@ vbus_typec: vbus-typec {
+@@ -99,11 +110,11 @@ vbus_typec: vbus-typec {
  		regulator-name = "vbus_typec";
  	};
  
@@ -2292,7 +2297,7 @@ index 76a8b40a93c6..cf4531e9eaff 100644
  
  		power {
  			debounce-interval = <100>;
-@@ -117,7 +126,7 @@ power {
+@@ -117,7 +128,7 @@ power {
  	leds: gpio-leds {
  		compatible = "gpio-leds";
  		pinctrl-names = "default";
@@ -2301,7 +2306,7 @@ index 76a8b40a93c6..cf4531e9eaff 100644
  
  		status_led: led-0 {
  			gpios = <&gpio0 RK_PB5 GPIO_ACTIVE_HIGH>;
-@@ -126,6 +135,36 @@ status_led: led-0 {
+@@ -126,6 +137,36 @@ status_led: led-0 {
  		};
  	};
  
@@ -2338,7 +2343,7 @@ index 76a8b40a93c6..cf4531e9eaff 100644
  	sdio_pwrseq: sdio-pwrseq {
  		compatible = "mmc-pwrseq-simple";
  		clocks = <&rk808 1>;
-@@ -496,6 +535,10 @@ &io_domains {
+@@ -496,6 +537,10 @@ &io_domains {
  	status = "okay";
  };
  
@@ -2349,7 +2354,7 @@ index 76a8b40a93c6..cf4531e9eaff 100644
  &pcie_phy {
  	assigned-clock-parents = <&cru SCLK_PCIEPHY_REF100M>;
  	assigned-clock-rates = <100000000>;
-@@ -520,7 +563,7 @@ fusb0_int: fusb0-int {
+@@ -520,7 +565,7 @@ fusb0_int: fusb0-int {
  	};
  
  	gpio-leds {
@@ -2358,7 +2363,7 @@ index 76a8b40a93c6..cf4531e9eaff 100644
  			rockchip,pins = <0 RK_PB5 RK_FUNC_GPIO &pcfg_pull_none>;
  		};
  	};
-@@ -550,7 +593,7 @@ pmic_int_l: pmic-int-l {
+@@ -550,7 +595,7 @@ pmic_int_l: pmic-int-l {
  	};
  
  	rockchip-key {
@@ -2367,7 +2372,7 @@ index 76a8b40a93c6..cf4531e9eaff 100644
  			rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_up>;
  		};
  	};
-@@ -604,6 +647,10 @@ &pwm2 {
+@@ -604,6 +649,10 @@ &pwm2 {
  	status = "okay";
  };
  
@@ -2378,7 +2383,7 @@ index 76a8b40a93c6..cf4531e9eaff 100644
  &saradc {
  	vref-supply = <&vcca1v8_s3>;
  	status = "okay";
-@@ -716,10 +763,14 @@ &usbdrd3_1 {
+@@ -716,10 +765,14 @@ &usbdrd3_1 {
  };
  
  &usbdrd_dwc3_0 {
@@ -9674,7 +9679,7 @@ index 000000000000..a84a017e4bbd
 +MODULE_DESCRIPTION("Rockchip USB 3.0 PHY driver");
 +MODULE_LICENSE("GPL v2");
 diff --git a/drivers/pwm/pwm-rockchip.c b/drivers/pwm/pwm-rockchip.c
-index 389a5e140412..387e38349612 100644
+index f3a5641f6bca..c0c2eec2f4be 100644
 --- a/drivers/pwm/pwm-rockchip.c
 +++ b/drivers/pwm/pwm-rockchip.c
 @@ -11,6 +11,7 @@
@@ -9685,7 +9690,7 @@ index 389a5e140412..387e38349612 100644
  #include <linux/platform_device.h>
  #include <linux/pwm.h>
  #include <linux/time.h>
-@@ -396,6 +397,11 @@ static int rockchip_pwm_remove(struct platform_device *pdev)
+@@ -400,6 +401,11 @@ static int rockchip_pwm_remove(struct platform_device *pdev)
  	return pwmchip_remove(&pc->chip);
  }
  
@@ -9697,7 +9702,7 @@ index 389a5e140412..387e38349612 100644
  static struct platform_driver rockchip_pwm_driver = {
  	.driver = {
  		.name = "rockchip-pwm",
-@@ -403,6 +409,7 @@ static struct platform_driver rockchip_pwm_driver = {
+@@ -407,6 +413,7 @@ static struct platform_driver rockchip_pwm_driver = {
  	},
  	.probe = rockchip_pwm_probe,
  	.remove = rockchip_pwm_remove,
@@ -9706,7 +9711,7 @@ index 389a5e140412..387e38349612 100644
  module_platform_driver(rockchip_pwm_driver);
  
 diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 67a768fe5b2a..9c8d22e78272 100644
+index 2e6c6af9d1c3..55b2b7af5c9f 100644
 --- a/drivers/regulator/core.c
 +++ b/drivers/regulator/core.c
 @@ -5305,6 +5305,9 @@ regulator_register(const struct regulator_desc *regulator_desc,
