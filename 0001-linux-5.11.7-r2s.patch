@@ -8362,10 +8362,10 @@ index 19f1ee57fb34..b426c03300f5 100644
  
  	host->ios.clock = 0;
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 26b971cd4da5..682423862b41 100644
+index e87961432a79..8b8c4b97072e 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -4889,6 +4889,8 @@ int stmmac_dvr_probe(struct device *device,
+@@ -4893,6 +4893,8 @@ int stmmac_dvr_probe(struct device *device,
  	struct net_device *ndev = NULL;
  	struct stmmac_priv *priv;
  	u32 rxq;
@@ -8374,7 +8374,7 @@ index 26b971cd4da5..682423862b41 100644
  	int i, ret = 0;
  
  	ndev = devm_alloc_etherdev_mqs(device, sizeof(struct stmmac_priv),
-@@ -4908,6 +4910,13 @@ int stmmac_dvr_probe(struct device *device,
+@@ -4912,6 +4914,13 @@ int stmmac_dvr_probe(struct device *device,
  	priv->ioaddr = res->addr;
  	priv->dev->base_addr = (unsigned long)res->addr;
  
@@ -10544,10 +10544,10 @@ index c1edcc9b13ce..1aadc0208999 100644
  					 &xhci->imod_interval);
  	}
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 89c3be9917f6..f007a0cc714e 100644
+index 02ea65db80f3..5018f3b7b171 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -3325,6 +3325,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3326,6 +3326,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  	bool more_trbs_coming = true;
  	bool need_zero_pkt = false;
  	bool first_trb = true;
@@ -10555,7 +10555,7 @@ index 89c3be9917f6..f007a0cc714e 100644
  	unsigned int num_trbs;
  	unsigned int start_cycle, num_sgs = 0;
  	unsigned int enqd_len, block_len, trb_buff_len, full_len;
-@@ -3361,6 +3362,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3362,6 +3363,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  	if (urb->transfer_flags & URB_ZERO_PACKET && urb_priv->num_tds > 1)
  		need_zero_pkt = true;
  
@@ -10569,7 +10569,7 @@ index 89c3be9917f6..f007a0cc714e 100644
  	td = &urb_priv->td[0];
  
  	/*
-@@ -3389,6 +3397,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3390,6 +3398,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  			first_trb = false;
  			if (start_cycle == 0)
  				field |= TRB_CYCLE;
@@ -10583,7 +10583,7 @@ index 89c3be9917f6..f007a0cc714e 100644
  		} else
  			field |= ring->cycle_state;
  
-@@ -3397,6 +3412,8 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3398,6 +3413,8 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  		 */
  		if (enqd_len + trb_buff_len < full_len) {
  			field |= TRB_CHAIN;
@@ -10593,7 +10593,7 @@ index 89c3be9917f6..f007a0cc714e 100644
  				if (xhci_align_td(xhci, urb, enqd_len,
  						  &trb_buff_len,
 diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 07ff95016f11..bcbb6ed73c78 100644
+index 3190fd570c57..4e06cffbc9b0 100644
 --- a/drivers/usb/host/xhci.h
 +++ b/drivers/usb/host/xhci.h
 @@ -1516,7 +1516,11 @@ static inline const char *xhci_trb_type_string(u8 type)
@@ -10608,11 +10608,11 @@ index 07ff95016f11..bcbb6ed73c78 100644
  #define TRB_MAX_BUFF_SIZE	(1 << TRB_MAX_BUFF_SHIFT)
  /* How much data is left before the 64KB boundary? */
  #define TRB_BUFF_LEN_UP_TO_BOUNDARY(addr)	(TRB_MAX_BUFF_SIZE - \
-@@ -1883,6 +1887,7 @@ struct xhci_hcd {
- #define XHCI_SKIP_PHY_INIT	BIT_ULL(37)
+@@ -1884,6 +1888,7 @@ struct xhci_hcd {
  #define XHCI_DISABLE_SPARSE	BIT_ULL(38)
  #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
-+#define XHCI_TRB_ENT_QUIRK	BIT_ULL(40)
+ #define XHCI_NO_SOFT_RETRY	BIT_ULL(40)
++#define XHCI_TRB_ENT_QUIRK	BIT_ULL(41)
  
  	unsigned int		num_active_eps;
  	unsigned int		limit_active_eps;

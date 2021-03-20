@@ -1,8 +1,8 @@
 buildarch=8
 pkgbase=linux-r2s
 _desc="NanoPi R2S"
-pkgver=5.11.6.arch1
-pkgrel=2
+pkgver=5.11.7.arch1
+pkgrel=1
 pkgdesc='Linux'
 _srctag=v${pkgver%.*}-${pkgver##*.}
 url="https://git.archlinux.org/linux.git/log/?h=$_srctag"
@@ -16,7 +16,7 @@ options=('!strip')
 _srcname=archlinux-linux
 source=(
   "$_srcname::git+https://git.archlinux.org/linux.git?signed#tag=$_srctag"
-  '0001-linux-5.11.6-r2s.patch'
+  '0001-linux-5.11.7-r2s.patch'
   'config'
   'linux.preset'
   '60-linux.hook'
@@ -29,7 +29,7 @@ validpgpkeys=(
 )
 md5sums=(
   'SKIP'
-  '6b86974400d2398caa7c2acc4ca19931'
+  '17740fa22d0b04c0df83d947ba46de0b'
   '1fc2884a8b6786c9c9333c9463e49a64'
   '41cb5fef62715ead2dd109dbea8413d6'
   '0a5f16bfec6ad982a2f6782724cca8ba'
