@@ -1,11 +1,10 @@
 buildarch=8
 pkgbase=linux-r2s
 _desc="NanoPi R2S"
-pkgver=5.10.34
+pkgver=5.10.41
 pkgrel=1
 pkgdesc='Linux'
 _srctag=v${pkgver%.*}-${pkgver##*.}
-url="https://git.archlinux.org/linux.git/log/?h=$_srctag"
 arch=(aarch64)
 license=(GPL2)
 makedepends=(
@@ -28,10 +27,10 @@ validpgpkeys=(
   'A2FF3A36AAA56654109064AB19802F8B0D70FC30'  # Jan Alexander Steffens (heftig)
 )
 sha256sums=(
-  '6eeeb7e005bd1d4eb8b10382a35f8cd54ee6692c244ab1362590fa539f3d6582'
+  'f604759de80767c4f8bdc500eec730dc161bc914a48bd366b748c176701a6771'
   'SKIP'
   '7d91d000f2fb068c90d0d935223da24e2b0cfbd01c0ca6b34570930861435f4a'
-  'a5834f992ac1b19c87d3ce363cd9c435ec447560196c969bb19ca101ccd24456'
+  '9004ae64f90bfffcca93ceff416ede9748484cfad0999bbae45357dfd4a00a24'
   '6837b3e2152f142f3fff595c6cbd03423f6e7b8d525aac8ae3eb3b58392bd255'
   '452b8d4d71e1565ca91b1bebb280693549222ef51c47ba8964e411b2d461699c'
   '71df1b18a3885b151a3b9d926a91936da2acc90d5e27f1ad326745779cd3759d'
