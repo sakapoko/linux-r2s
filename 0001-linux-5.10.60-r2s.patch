@@ -410,7 +410,7 @@ index 000000000000..d618867fda69
 +		};
 +	};
 diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index 26661c7b736b..f4c93bfae7de 100644
+index 26661c7b736b..8de51c08d258 100644
 --- a/arch/arm64/boot/dts/rockchip/Makefile
 +++ b/arch/arm64/boot/dts/rockchip/Makefile
 @@ -1,4 +1,5 @@
@@ -419,7 +419,7 @@ index 26661c7b736b..f4c93bfae7de 100644
  dtb-$(CONFIG_ARCH_ROCKCHIP) += px30-evb.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-evb.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-roc-cc.dtb
-@@ -7,6 +8,12 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go2.dtb
+@@ -7,6 +8,13 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go2.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-a1.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-evb.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2s.dtb
@@ -427,12 +427,13 @@ index 26661c7b736b..f4c93bfae7de 100644
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2-rev02.dtb
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2-rev03.dtb
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2-rev04.dtb
++dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2-rev06.dtb
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2-rev20.dtb
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-nanopi-r2-rev21.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-rock64.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3328-roc-cc.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3368-evb-act8846.dtb
-@@ -30,6 +37,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-leez-p710.dtb
+@@ -30,6 +38,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-leez-p710.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopc-t4.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopi-m4.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopi-neo4.dtb
@@ -440,7 +441,7 @@ index 26661c7b736b..f4c93bfae7de 100644
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-orangepi.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-pinebook-pro.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-puma-haikou.dtb
-@@ -44,3 +52,8 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64.dtb
+@@ -44,3 +53,8 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire-excavator.dtb
  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
@@ -1679,6 +1680,156 @@ index 000000000000..cc5ced93280d
 +	sd-uhs-sdr104;
 +	status = "okay";
 +};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2-rev06.dts b/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2-rev06.dts
+new file mode 100644
+index 000000000000..e6c6cc642699
+--- /dev/null
++++ b/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2-rev06.dts
+@@ -0,0 +1,144 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2021 FriendlyElec Computer Tech. Co., Ltd.
++ * (http://www.friendlyarm.com)
++ */
++
++/dts-v1/;
++#include "rk3328-nanopi-r2-common.dtsi"
++
++/ {
++	model = "FriendlyElec NanoPi R2C";
++	compatible = "friendlyelec,nanopi-r2", "rockchip,rk3328";
++
++	vcc_rtl8153: vcc-rtl8153-regulator {
++		compatible = "regulator-fixed";
++		gpio = <&gpio2 RK_PC6 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&usb30_en_drv>;
++		regulator-always-on;
++		regulator-name = "vcc_rtl8153";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		off-on-delay-us = <5000>;
++		enable-active-high;
++	};
++};
++
++&mach {
++	hwrev = <6>;
++	model = "NanoPi R2C";
++};
++
++&rgmiim1_pins {
++	rockchip,pins =
++		/* mac_txclk */
++		<1 RK_PB4 2 &pcfg_pull_none_8ma>,
++		/* mac_rxclk */
++		<1 RK_PB5 2 &pcfg_pull_none>,
++		/* mac_mdio */
++		<1 RK_PC3 2 &pcfg_pull_none_2ma>,
++		/* mac_txen */
++		<1 RK_PD1 2 &pcfg_pull_none_8ma>,
++		/* mac_clk */
++		<1 RK_PC5 2 &pcfg_pull_none_2ma>,
++		/* mac_rxdv */
++		<1 RK_PC6 2 &pcfg_pull_none>,
++		/* mac_mdc */
++		<1 RK_PC7 2 &pcfg_pull_none_2ma>,
++		/* mac_rxd1 */
++		<1 RK_PB2 2 &pcfg_pull_none>,
++		/* mac_rxd0 */
++		<1 RK_PB3 2 &pcfg_pull_none>,
++		/* mac_txd1 */
++		<1 RK_PB0 2 &pcfg_pull_none_8ma>,
++		/* mac_txd0 */
++		<1 RK_PB1 2 &pcfg_pull_none_8ma>,
++		/* mac_rxd3 */
++		<1 RK_PB6 2 &pcfg_pull_none>,
++		/* mac_rxd2 */
++		<1 RK_PB7 2 &pcfg_pull_none>,
++		/* mac_txd3 */
++		<1 RK_PC0 2 &pcfg_pull_none_8ma>,
++		/* mac_txd2 */
++		<1 RK_PC1 2 &pcfg_pull_none_8ma>,
++
++		/* mac_txclk */
++		<0 RK_PB0 1 &pcfg_pull_none>,
++		/* mac_txen */
++		<0 RK_PB4 1 &pcfg_pull_none>,
++		/* mac_clk */
++		<0 RK_PD0 1 &pcfg_pull_none>,
++		/* mac_txd1 */
++		<0 RK_PC0 1 &pcfg_pull_none>,
++		/* mac_txd0 */
++		<0 RK_PC1 1 &pcfg_pull_none>,
++		/* mac_txd3 */
++		<0 RK_PC7 1 &pcfg_pull_none>,
++		/* mac_txd2 */
++		<0 RK_PC6 1 &pcfg_pull_none>;
++};
++
++/delete-node/ &rtl8211e;
++
++&gmac2io {
++	phy-handle = <&ethphy3>;
++	snps,reset-delays-us = <0 15000 50000>;
++	tx_delay = <0x22>;
++	rx_delay = <0x12>;
++
++	mdio {
++		compatible = "snps,dwmac-mdio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		ethphy3: ethernet-phy@3 {
++			reg = <0x3>;
++			interrupt-parent = <&gpio2>;
++			interrupts = <RK_PC4 IRQ_TYPE_EDGE_FALLING>;
++			keep-clkout-on;
++		};
++	};
++};
++
++&leds {
++	status = "okay";
++
++	led@2 {
++		gpios = <&gpio2 RK_PB7 GPIO_ACTIVE_HIGH>;
++		label = "lan_led";
++	};
++
++	led@3 {
++		gpios = <&gpio2 RK_PC2 GPIO_ACTIVE_HIGH>;
++		label = "wan_led";
++	};
++};
++
++&leds_gpio {
++	rockchip,pins =
++		<0 RK_PA2 RK_FUNC_GPIO &pcfg_pull_none>,
++		<2 RK_PB7 RK_FUNC_GPIO &pcfg_pull_none>,
++		<2 RK_PC2 RK_FUNC_GPIO &pcfg_pull_none>;
++};
++
++&vccio_sd {
++	status = "okay";
++};
++
++&io_domains {
++	vccio3-supply = <&vccio_sd>;
++};
++
++&sdmmc {
++	vqmmc-supply = <&vccio_sd>;
++	max-frequency = <150000000>;
++	sd-uhs-sdr50;
++	sd-uhs-sdr104;
++	status = "okay";
++};
++
++&uart1 {
++	status = "okay";
++	pinctrl-0 = <&uart1_xfer>;
++};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2-rev20.dts b/arch/arm64/boot/dts/rockchip/rk3328-nanopi-r2-rev20.dts
 new file mode 100644
 index 000000000000..6859b9615d48
@@ -1861,7 +2012,7 @@ index 000000000000..78f6d4cc976d
 +	status = "okay";
 +};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3328.dtsi b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
-index 93c734d8a46c..333448a88206 100644
+index e546c9d1d646..5af4ab0a1a55 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3328.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3328.dtsi
 @@ -297,6 +297,17 @@ &pdmm0_sdi2_sleep
@@ -1882,7 +2033,7 @@ index 93c734d8a46c..333448a88206 100644
  	grf: syscon@ff100000 {
  		compatible = "rockchip,rk3328-grf", "syscon", "simple-mfd";
  		reg = <0x0 0xff100000 0x0 0x1000>;
-@@ -330,7 +341,7 @@ pd_vpu@RK3328_PD_VPU {
+@@ -330,7 +341,7 @@ power-domain@RK3328_PD_VPU {
  			};
  		};
  
@@ -1909,11 +2060,10 @@ index 93c734d8a46c..333448a88206 100644
  	};
  
  	usb2phy_grf: syscon@ff450000 {
-@@ -853,7 +864,48 @@ u2phy_host: host-port {
+@@ -853,6 +864,47 @@ u2phy_host: host-port {
  		};
  	};
  
--	sdmmc: mmc@ff500000 {
 +	usb3phy_grf: syscon@ff460000 {
 +		compatible = "rockchip,usb3phy-grf", "syscon";
 +		reg = <0x0 0xff460000 0x0 0x1000>;
@@ -1955,42 +2105,33 @@ index 93c734d8a46c..333448a88206 100644
 +		};
 +	};
 +
-+	sdmmc: dwmmc@ff500000 {
+ 	sdmmc: mmc@ff500000 {
  		compatible = "rockchip,rk3328-dw-mshc", "rockchip,rk3288-dw-mshc";
  		reg = <0x0 0xff500000 0x0 0x4000>;
- 		interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
-@@ -865,7 +917,7 @@ sdmmc: mmc@ff500000 {
- 		status = "disabled";
+@@ -985,22 +1037,32 @@ usb_host0_ohci: usb@ff5d0000 {
  	};
  
--	sdio: mmc@ff510000 {
-+	sdio: dwmmc@ff510000 {
- 		compatible = "rockchip,rk3328-dw-mshc", "rockchip,rk3288-dw-mshc";
- 		reg = <0x0 0xff510000 0x0 0x4000>;
- 		interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
-@@ -877,7 +929,7 @@ sdio: mmc@ff510000 {
- 		status = "disabled";
- 	};
- 
--	emmc: mmc@ff520000 {
-+	emmc: dwmmc@ff520000 {
- 		compatible = "rockchip,rk3328-dw-mshc", "rockchip,rk3288-dw-mshc";
- 		reg = <0x0 0xff520000 0x0 0x4000>;
- 		interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
-@@ -984,6 +1036,35 @@ usb_host0_ohci: usb@ff5d0000 {
- 		status = "disabled";
- 	};
- 
-+	usbdrd3: usb@ff600000 {
+ 	usbdrd3: usb@ff600000 {
+-		compatible = "rockchip,rk3328-dwc3", "snps,dwc3";
+-		reg = <0x0 0xff600000 0x0 0x100000>;
+-		interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>;
 +		compatible = "rockchip,rk3328-dwc3";
-+		clocks = <&cru SCLK_USB3OTG_REF>, <&cru SCLK_USB3OTG_SUSPEND>,
-+			 <&cru ACLK_USB3OTG>;
-+		clock-names = "ref_clk", "suspend_clk",
-+			      "bus_clk";
+ 		clocks = <&cru SCLK_USB3OTG_REF>, <&cru SCLK_USB3OTG_SUSPEND>,
+ 			 <&cru ACLK_USB3OTG>;
+ 		clock-names = "ref_clk", "suspend_clk",
+ 			      "bus_clk";
+-		dr_mode = "otg";
+-		phy_type = "utmi_wide";
+-		snps,dis-del-phy-power-chg-quirk;
+-		snps,dis_enblslpm_quirk;
+-		snps,dis-tx-ipgap-linecheck-quirk;
+-		snps,dis-u2-freeclk-exists-quirk;
+-		snps,dis_u2_susphy_quirk;
+-		snps,dis_u3_susphy_quirk;
 +		#address-cells = <2>;
 +		#size-cells = <2>;
 +		ranges;
-+		status = "disabled";
+ 		status = "disabled";
 +
 +		usbdrd_dwc3: dwc3@ff600000 {
 +			compatible = "snps,dwc3";
@@ -2008,11 +2149,9 @@ index 93c734d8a46c..333448a88206 100644
 +			snps,dis-del-phy-power-chg-quirk;
 +			status = "disabled";
 +		};
-+	};
-+
+ 	};
+ 
  	gic: interrupt-controller@ff811000 {
- 		compatible = "arm,gic-400";
- 		#interrupt-cells = <3>;
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopc-t4.dts b/arch/arm64/boot/dts/rockchip/rk3399-nanopc-t4.dts
 index e0d75617bb7e..fc44a4c254be 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3399-nanopc-t4.dts
@@ -2253,7 +2392,7 @@ index 000000000000..7b136d4707c8
 +	vin-supply = <&vcc5v0_sys>;
 +};
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
-index 76a8b40a93c6..8b7c9a1d9919 100644
+index 76a8b40a93c6..5b3af9fed480 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-nanopi4.dtsi
 @@ -13,14 +13,25 @@
@@ -2383,7 +2522,15 @@ index 76a8b40a93c6..8b7c9a1d9919 100644
  &saradc {
  	vref-supply = <&vcca1v8_s3>;
  	status = "okay";
-@@ -716,10 +765,14 @@ &usbdrd3_1 {
+@@ -611,6 +660,7 @@ &saradc {
+ 
+ &sdhci {
+ 	bus-width = <8>;
++	disable-cqe;
+ 	mmc-hs200-1_8v;
+ 	non-removable;
+ 	status = "okay";
+@@ -716,10 +766,14 @@ &usbdrd3_1 {
  };
  
  &usbdrd_dwc3_0 {
@@ -2399,7 +2546,7 @@ index 76a8b40a93c6..8b7c9a1d9919 100644
  	status = "okay";
  };
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-index 7e69603fb41c..486221bdef43 100644
+index 4b6065dbba55..4bd241a5753f 100644
 --- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
 +++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
 @@ -9,6 +9,7 @@
@@ -2446,10 +2593,10 @@ index 7e69603fb41c..486221bdef43 100644
  		reg = <0x0 0xff8f0000 0x0 0x3efc>;
 diff --git a/arch/arm64/configs/nanopi-r2_linux_defconfig b/arch/arm64/configs/nanopi-r2_linux_defconfig
 new file mode 100644
-index 000000000000..979f25290833
+index 000000000000..eef51e374f46
 --- /dev/null
 +++ b/arch/arm64/configs/nanopi-r2_linux_defconfig
-@@ -0,0 +1,1667 @@
+@@ -0,0 +1,1668 @@
 +CONFIG_DEFAULT_HOSTNAME="localhost"
 +CONFIG_SYSVIPC=y
 +CONFIG_POSIX_MQUEUE=y
@@ -3223,6 +3370,7 @@ index 000000000000..979f25290833
 +# CONFIG_NET_VENDOR_TI is not set
 +# CONFIG_NET_VENDOR_VIA is not set
 +# CONFIG_NET_VENDOR_WIZNET is not set
++CONFIG_MOTORCOMM_PHY=y
 +CONFIG_REALTEK_PHY=y
 +CONFIG_ROCKCHIP_PHY=y
 +CONFIG_PPP=y
@@ -4119,10 +4267,10 @@ index 000000000000..979f25290833
 +CONFIG_BLK_DEV_IO_TRACE=y
 diff --git a/arch/arm64/configs/nanopi4_linux_defconfig b/arch/arm64/configs/nanopi4_linux_defconfig
 new file mode 100644
-index 000000000000..979f25290833
+index 000000000000..5f4ce8376b40
 --- /dev/null
 +++ b/arch/arm64/configs/nanopi4_linux_defconfig
-@@ -0,0 +1,1667 @@
+@@ -0,0 +1,1670 @@
 +CONFIG_DEFAULT_HOSTNAME="localhost"
 +CONFIG_SYSVIPC=y
 +CONFIG_POSIX_MQUEUE=y
@@ -4896,6 +5044,7 @@ index 000000000000..979f25290833
 +# CONFIG_NET_VENDOR_TI is not set
 +# CONFIG_NET_VENDOR_VIA is not set
 +# CONFIG_NET_VENDOR_WIZNET is not set
++CONFIG_MOTORCOMM_PHY=y
 +CONFIG_REALTEK_PHY=y
 +CONFIG_ROCKCHIP_PHY=y
 +CONFIG_PPP=y
@@ -4967,7 +5116,9 @@ index 000000000000..979f25290833
 +CONFIG_BRCMFMAC_USB=y
 +CONFIG_BRCMFMAC_PCIE=y
 +# CONFIG_WLAN_VENDOR_CISCO is not set
-+# CONFIG_WLAN_VENDOR_INTEL is not set
++CONFIG_IWLWIFI=m
++CONFIG_IWLDVM=m
++CONFIG_IWLMVM=m
 +CONFIG_HOSTAP=m
 +CONFIG_P54_COMMON=m
 +CONFIG_P54_USB=m
@@ -8328,10 +8479,10 @@ index 000000000000..5dcea91cfae9
 +MODULE_AUTHOR("Lin Huang <hl@rock-chips.com>");
 +MODULE_DESCRIPTION("RK3328 dmcfreq driver with devfreq framework");
 diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index 42e27a298218..946fec4f1912 100644
+index 87bac9920702..6230ba031fbf 100644
 --- a/drivers/mmc/core/block.c
 +++ b/drivers/mmc/core/block.c
-@@ -2328,6 +2328,10 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
+@@ -2352,6 +2352,10 @@ static struct mmc_blk_data *mmc_blk_alloc_req(struct mmc_card *card,
  	if (area_type & (MMC_BLK_DATA_AREA_RPMB | MMC_BLK_DATA_AREA_BOOT))
  		md->disk->flags |= GENHD_FL_NO_PART_SCAN
  				   | GENHD_FL_SUPPRESS_PARTITION_INFO;
@@ -8343,10 +8494,10 @@ index 42e27a298218..946fec4f1912 100644
  	/*
  	 * As discussed on lkml, GENHD_FL_REMOVABLE should:
 diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-index d42037f0f10d..74b4a66bb71d 100644
+index b5f3f160c842..3fa645476061 100644
 --- a/drivers/mmc/core/core.c
 +++ b/drivers/mmc/core/core.c
-@@ -1349,6 +1349,14 @@ void mmc_power_off(struct mmc_host *host)
+@@ -1352,6 +1352,14 @@ void mmc_power_off(struct mmc_host *host)
  	if (host->ios.power_mode == MMC_POWER_OFF)
  		return;
  
@@ -8361,11 +8512,61 @@ index d42037f0f10d..74b4a66bb71d 100644
  	mmc_pwrseq_power_off(host);
  
  	host->ios.clock = 0;
+diff --git a/drivers/mmc/core/mmc.c b/drivers/mmc/core/mmc.c
+index 7494d595035e..7513d3b68190 100644
+--- a/drivers/mmc/core/mmc.c
++++ b/drivers/mmc/core/mmc.c
+@@ -1379,12 +1379,13 @@ static int mmc_select_hs400es(struct mmc_card *card)
+ 	}
+ 
+ 	mmc_set_timing(host, MMC_TIMING_MMC_HS);
++	/* Set clock immediately after changing timing */
++	mmc_set_clock(host, card->ext_csd.hs_max_dtr);
++
+ 	err = mmc_switch_status(card, true);
+ 	if (err)
+ 		goto out_err;
+ 
+-	mmc_set_clock(host, card->ext_csd.hs_max_dtr);
+-
+ 	/* Switch card to DDR with strobe bit */
+ 	val = EXT_CSD_DDR_BUS_WIDTH_8 | EXT_CSD_BUS_WIDTH_STROBE;
+ 	err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
+diff --git a/drivers/mmc/host/sdhci-of-arasan.c b/drivers/mmc/host/sdhci-of-arasan.c
+index 3b8d456e857d..bd29eb542691 100644
+--- a/drivers/mmc/host/sdhci-of-arasan.c
++++ b/drivers/mmc/host/sdhci-of-arasan.c
+@@ -1630,8 +1630,11 @@ static int sdhci_arasan_probe(struct platform_device *pdev)
+ 					sdhci_arasan_hs400_enhanced_strobe;
+ 		host->mmc_host_ops.start_signal_voltage_switch =
+ 					sdhci_arasan_voltage_switch;
+-		sdhci_arasan->has_cqe = true;
+-		host->mmc->caps2 |= MMC_CAP2_CQE;
++
++		if (!of_property_read_bool(np, "disable-cqe")) {
++			sdhci_arasan->has_cqe = true;
++			host->mmc->caps2 |= MMC_CAP2_CQE;
++		}
+ 
+ 		if (!of_property_read_bool(np, "disable-cqe-dcmd"))
+ 			host->mmc->caps2 |= MMC_CAP2_CQE_DCMD;
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 7d01c5cf60c9..eadf59fdd94f 100644
+index 3134f7e669f8..ed9aaaf846d7 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -4863,6 +4863,8 @@ int stmmac_dvr_probe(struct device *device,
+@@ -1068,7 +1068,10 @@ static int stmmac_init_phy(struct net_device *dev)
+ 		int addr = priv->plat->phy_addr;
+ 		struct phy_device *phydev;
+ 
+-		phydev = mdiobus_get_phy(priv->mii, addr);
++		if (addr == -1)
++			phydev = phy_find_first(priv->mii);
++		else
++			phydev = mdiobus_get_phy(priv->mii, addr);
+ 		if (!phydev) {
+ 			netdev_err(priv->dev, "no phy at addr %d\n", addr);
+ 			return -ENODEV;
+@@ -4881,6 +4884,8 @@ int stmmac_dvr_probe(struct device *device,
  	struct net_device *ndev = NULL;
  	struct stmmac_priv *priv;
  	u32 rxq;
@@ -8374,7 +8575,7 @@ index 7d01c5cf60c9..eadf59fdd94f 100644
  	int i, ret = 0;
  
  	ndev = devm_alloc_etherdev_mqs(device, sizeof(struct stmmac_priv),
-@@ -4882,6 +4884,13 @@ int stmmac_dvr_probe(struct device *device,
+@@ -4900,6 +4905,13 @@ int stmmac_dvr_probe(struct device *device,
  	priv->ioaddr = res->addr;
  	priv->dev->base_addr = (unsigned long)res->addr;
  
@@ -8388,8 +8589,396 @@ index 7d01c5cf60c9..eadf59fdd94f 100644
  	priv->dev->irq = res->irq;
  	priv->wol_irq = res->wol_irq;
  	priv->lpi_irq = res->lpi_irq;
+@@ -4943,6 +4955,7 @@ int stmmac_dvr_probe(struct device *device,
+ 		goto error_hw_init;
+ 
+ 	stmmac_check_ether_addr(priv);
++	ndev->priv_flags |= IFF_LIVE_ADDR_CHANGE;
+ 
+ 	ndev->netdev_ops = &stmmac_netdev_ops;
+ 
+diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
+index 698bea312adc..626ec44248dc 100644
+--- a/drivers/net/phy/Kconfig
++++ b/drivers/net/phy/Kconfig
+@@ -223,6 +223,11 @@ config MICROSEMI_PHY
+ 	help
+ 	  Currently supports VSC8514, VSC8530, VSC8531, VSC8540 and VSC8541 PHYs
+ 
++config MOTORCOMM_PHY
++	tristate "Motorcomm PHYs"
++	help
++	  Supports the YT8010, YT8510, YT8511, YT8512 PHYs.
++
+ config NATIONAL_PHY
+ 	tristate "National Semiconductor PHYs"
+ 	help
+diff --git a/drivers/net/phy/Makefile b/drivers/net/phy/Makefile
+index a13e402074cf..c99b00bc24b5 100644
+--- a/drivers/net/phy/Makefile
++++ b/drivers/net/phy/Makefile
+@@ -69,6 +69,7 @@ obj-$(CONFIG_MICREL_PHY)	+= micrel.o
+ obj-$(CONFIG_MICROCHIP_PHY)	+= microchip.o
+ obj-$(CONFIG_MICROCHIP_T1_PHY)	+= microchip_t1.o
+ obj-$(CONFIG_MICROSEMI_PHY)	+= mscc/
++obj-$(CONFIG_MOTORCOMM_PHY) += motorcomm.o
+ obj-$(CONFIG_NATIONAL_PHY)	+= national.o
+ obj-$(CONFIG_NXP_TJA11XX_PHY)	+= nxp-tja11xx.o
+ obj-$(CONFIG_QSEMI_PHY)		+= qsemi.o
+diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
+new file mode 100644
+index 000000000000..c53b5b88b226
+--- /dev/null
++++ b/drivers/net/phy/motorcomm.c
+@@ -0,0 +1,346 @@
++/*
++ * drivers/net/phy/motorcomm.c
++ *
++ * Driver for Motorcomm PHYs
++ *
++ * Author: Leilei Zhao <leilei.zhao@motorcomm.com>
++ *
++ * Copyright (c) 2019 Motorcomm, Inc.
++ *
++ * This program is free software; you can redistribute  it and/or modify it
++ * under  the terms of  the GNU General  Public License as published by the
++ * Free Software Foundation;  either version 2 of the  License, or (at your
++ * option) any later version.
++ *
++ * Support : Motorcomm Phys:
++ *		Giga phys: yt8511, yt8521
++ *		100/10 Phys : yt8512, yt8512b, yt8510
++ *		Automotive 100Mb Phys : yt8010
++ *		Automotive 100/10 hyper range Phys: yt8510
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/phy.h>
++#include <linux/motorcomm_phy.h>
++#include <linux/of.h>
++#include <linux/clk.h>
++
++static int ytphy_read_ext(struct phy_device *phydev, u32 regnum)
++{
++	int ret;
++	int val;
++
++	ret = phy_write(phydev, REG_DEBUG_ADDR_OFFSET, regnum);
++	if (ret < 0)
++		return ret;
++
++	val = phy_read(phydev, REG_DEBUG_DATA);
++
++	return val;
++}
++
++static int ytphy_write_ext(struct phy_device *phydev, u32 regnum, u16 val)
++{
++	int ret;
++
++	ret = phy_write(phydev, REG_DEBUG_ADDR_OFFSET, regnum);
++	if (ret < 0)
++		return ret;
++
++	ret = phy_write(phydev, REG_DEBUG_DATA, val);
++
++	return ret;
++}
++
++static int yt8010_config_aneg(struct phy_device *phydev)
++{
++	phydev->speed = SPEED_100;
++	return 0;
++}
++
++static int yt8512_clk_init(struct phy_device *phydev)
++{
++	int ret;
++	int val;
++
++	val = ytphy_read_ext(phydev, YT8512_EXTREG_AFE_PLL);
++	if (val < 0)
++		return val;
++
++	val |= YT8512_CONFIG_PLL_REFCLK_SEL_EN;
++
++	ret = ytphy_write_ext(phydev, YT8512_EXTREG_AFE_PLL, val);
++	if (ret < 0)
++		return ret;
++
++	val = ytphy_read_ext(phydev, YT8512_EXTREG_EXTEND_COMBO);
++	if (val < 0)
++		return val;
++
++	val |= YT8512_CONTROL1_RMII_EN;
++
++	ret = ytphy_write_ext(phydev, YT8512_EXTREG_EXTEND_COMBO, val);
++	if (ret < 0)
++		return ret;
++
++	val = phy_read(phydev, MII_BMCR);
++	if (val < 0)
++		return val;
++
++	val |= YT_SOFTWARE_RESET;
++	ret = phy_write(phydev, MII_BMCR, val);
++
++	return ret;
++}
++
++static int yt8512_led_init(struct phy_device *phydev)
++{
++	int ret;
++	int val;
++	int mask;
++
++	val = ytphy_read_ext(phydev, YT8512_EXTREG_LED0);
++	if (val < 0)
++		return val;
++
++	val |= YT8512_LED0_ACT_BLK_IND;
++
++	mask = YT8512_LED0_DIS_LED_AN_TRY | YT8512_LED0_BT_BLK_EN |
++		YT8512_LED0_HT_BLK_EN | YT8512_LED0_COL_BLK_EN |
++		YT8512_LED0_BT_ON_EN;
++	val &= ~mask;
++
++	ret = ytphy_write_ext(phydev, YT8512_EXTREG_LED0, val);
++	if (ret < 0)
++		return ret;
++
++	val = ytphy_read_ext(phydev, YT8512_EXTREG_LED1);
++	if (val < 0)
++		return val;
++
++	val |= YT8512_LED1_BT_ON_EN;
++
++	mask = YT8512_LED1_TXACT_BLK_EN | YT8512_LED1_RXACT_BLK_EN;
++	val &= ~mask;
++
++	ret = ytphy_write_ext(phydev, YT8512_LED1_BT_ON_EN, val);
++
++	return ret;
++}
++
++static int yt8512_config_init(struct phy_device *phydev)
++{
++	int ret;
++	int val;
++
++	ret = yt8512_clk_init(phydev);
++	if (ret < 0)
++		return ret;
++
++	ret = yt8512_led_init(phydev);
++
++	/* disable auto sleep */
++	val = ytphy_read_ext(phydev, YT8512_EXTREG_SLEEP_CONTROL1);
++	if (val < 0)
++		return val;
++
++	val &= (~BIT(YT8512_EN_SLEEP_SW_BIT));
++
++	ret = ytphy_write_ext(phydev, YT8512_EXTREG_SLEEP_CONTROL1, val);
++	if (ret < 0)
++		return ret;
++
++	return ret;
++}
++
++static int yt8512_read_status(struct phy_device *phydev)
++{
++	int ret;
++	int val;
++	int speed, speed_mode, duplex;
++
++	ret = genphy_update_link(phydev);
++	if (ret)
++		return ret;
++
++	val = phy_read(phydev, REG_PHY_SPEC_STATUS);
++	if (val < 0)
++		return val;
++
++	duplex = (val & YT8512_DUPLEX) >> YT8512_DUPLEX_BIT;
++	speed_mode = (val & YT8512_SPEED_MODE) >> YT8512_SPEED_MODE_BIT;
++	switch (speed_mode) {
++	case 0:
++		speed = SPEED_10;
++		break;
++	case 1:
++		speed = SPEED_100;
++		break;
++	case 2:
++	case 3:
++	default:
++		speed = SPEED_UNKNOWN;
++		break;
++	}
++
++	phydev->speed = speed;
++	phydev->duplex = duplex;
++
++	return 0;
++}
++
++static int yt8521_config_init(struct phy_device *phydev)
++{
++	int ret;
++	int val;
++
++	/* disable auto sleep */
++	val = ytphy_read_ext(phydev, YT8521_EXTREG_SLEEP_CONTROL1);
++	if (val < 0)
++		return val;
++
++	val &= (~BIT(YT8521_EN_SLEEP_SW_BIT));
++	ret = ytphy_write_ext(phydev, YT8521_EXTREG_SLEEP_CONTROL1, val);
++	if (ret < 0)
++		return ret;
++
++	/* switch to access UTP */
++	ret = ytphy_write_ext(phydev, 0xa000, 0);
++	if (ret < 0)
++		return ret;
++
++	/* enable RXC clock when no wire plug */
++	val = ytphy_read_ext(phydev, 0xc);
++	if (val < 0)
++		return val;
++
++	val &= ~(1 << 12);
++	ret = ytphy_write_ext(phydev, 0xc, val);
++	if (ret < 0)
++		return ret;
++
++	/* output SyncE clock (125mhz) even link is down */
++	ret = ytphy_write_ext(phydev, 0xa012, 0x38);
++	if (ret < 0)
++		return ret;
++
++	/* disable rgmii clk 2ns delay */
++	val = ytphy_read_ext(phydev, 0xa001);
++	if (val < 0)
++		return val;
++
++	val &= ~(1 << 8);
++	ret = ytphy_write_ext(phydev, 0xa001, val);
++	if (ret < 0)
++		return ret;
++
++	/* setup delay */
++	val = (1 << 10) | (0xf << 4) | 5;
++	ret = ytphy_write_ext(phydev, 0xa003, val);
++	if (ret < 0)
++		return ret;
++
++	/* LED0: Unused/Off, LED1: Link, LED2: Activity, 8Hz */
++	ytphy_write_ext(phydev, 0xa00b, 0xe004);
++	ytphy_write_ext(phydev, 0xa00c, 0);
++	ytphy_write_ext(phydev, 0xa00d, 0x2600);
++	ytphy_write_ext(phydev, 0xa00e, 0x0070);
++	ytphy_write_ext(phydev, 0xa00f, 0x000a);
++
++	return 0;
++}
++
++static int yt8521_config_intr(struct phy_device *phydev)
++{
++	int val;
++
++	if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
++		val = BIT(14) | BIT(13) | BIT(11) | BIT(10);
++	else
++		val = 0;
++
++	return phy_write(phydev, REG_INT_MASK, val);
++}
++
++static int yt8521_ack_interrupt(struct phy_device *phydev)
++{
++	int val;
++
++	val = phy_read(phydev, REG_INT_STATUS);
++	phydev_dbg(phydev, "intr status 0x04%x\n", val);
++
++	return (val < 0) ? val : 0;
++}
++
++static struct phy_driver ytphy_drvs[] = {
++	{
++		.phy_id		= PHY_ID_YT8010,
++		.name		= "YT8010 Automotive Ethernet",
++		.phy_id_mask	= MOTORCOMM_PHY_ID_MASK,
++		.features	= PHY_BASIC_FEATURES,
++		.config_aneg	= yt8010_config_aneg,
++		.read_status	= genphy_read_status,
++	}, {
++		.phy_id		= PHY_ID_YT8510,
++		.name		= "YT8510 100/10Mb Ethernet",
++		.phy_id_mask	= MOTORCOMM_PHY_ID_MASK,
++		.features	= PHY_BASIC_FEATURES,
++		.read_status	= genphy_read_status,
++	}, {
++		.phy_id		= PHY_ID_YT8511,
++		.name		= "YT8511 Gigabit Ethernet",
++		.phy_id_mask	= MOTORCOMM_PHY_ID_MASK,
++		.features	= PHY_GBIT_FEATURES,
++		.read_status	= genphy_read_status,
++		.suspend	= genphy_suspend,
++		.resume		= genphy_resume,
++	}, {
++		.phy_id		= PHY_ID_YT8512,
++		.name		= "YT8512 Ethernet",
++		.phy_id_mask	= MOTORCOMM_PHY_ID_MASK,
++		.features	= PHY_BASIC_FEATURES,
++		.config_init	= yt8512_config_init,
++		.read_status	= yt8512_read_status,
++		.suspend	= genphy_suspend,
++		.resume		= genphy_resume,
++	}, {
++		.phy_id		= PHY_ID_YT8512B,
++		.name		= "YT8512B Ethernet",
++		.phy_id_mask	= MOTORCOMM_PHY_ID_MASK,
++		.features	= PHY_BASIC_FEATURES,
++		.config_init	= yt8512_config_init,
++		.read_status	= yt8512_read_status,
++		.suspend	= genphy_suspend,
++		.resume		= genphy_resume,
++	}, {
++		.phy_id		= PHY_ID_YT8521,
++		.name		= "YT8521 Ethernet",
++		.phy_id_mask	= MOTORCOMM_PHY_ID_MASK,
++		/* PHY_GBIT_FEATURES */
++		.config_init	= yt8521_config_init,
++		.ack_interrupt	= yt8521_ack_interrupt,
++		.config_intr	= yt8521_config_intr,
++		.suspend	= genphy_suspend,
++		.resume		= genphy_resume,
++	},
++};
++
++module_phy_driver(ytphy_drvs);
++
++MODULE_DESCRIPTION("Motorcomm PHY driver");
++MODULE_AUTHOR("Leilei Zhao");
++MODULE_LICENSE("GPL");
++
++static struct mdio_device_id __maybe_unused motorcomm_tbl[] = {
++	{ PHY_ID_YT8010, MOTORCOMM_PHY_ID_MASK },
++	{ PHY_ID_YT8510, MOTORCOMM_PHY_ID_MASK },
++	{ PHY_ID_YT8511, MOTORCOMM_PHY_ID_MASK },
++	{ PHY_ID_YT8512, MOTORCOMM_PHY_ID_MASK },
++	{ PHY_ID_YT8512B, MOTORCOMM_PHY_ID_MASK },
++	{ PHY_ID_YT8521, MOTORCOMM_PHY_ID_MASK },
++	{ }
++};
++
++MODULE_DEVICE_TABLE(mdio, motorcomm_tbl);
++
 diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 88f177aca342..75e58ad2a995 100644
+index 105622e1defa..3997b5cadd83 100644
 --- a/drivers/net/usb/r8152.c
 +++ b/drivers/net/usb/r8152.c
 @@ -6,6 +6,7 @@
@@ -8456,7 +9045,7 @@ index 88f177aca342..75e58ad2a995 100644
  		netif_err(tp, probe, dev, "Invalid ether addr %pM\n",
  			  sa->sa_data);
  		eth_hw_addr_random(dev);
-@@ -5592,6 +5604,9 @@ static void r8153b_init(struct r8152 *tp)
+@@ -5570,6 +5582,9 @@ static void r8153b_init(struct r8152 *tp)
  	ocp_data &= ~(RX_AGG_DISABLE | RX_ZERO_EN);
  	ocp_write_word(tp, MCU_TYPE_USB, USB_USB_CTRL, ocp_data);
  
@@ -9711,10 +10300,10 @@ index 3b8da7b0091b..5daab87da6d0 100644
  module_platform_driver(rockchip_pwm_driver);
  
 diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 7b3de8b0b1ca..478cb468b7ec 100644
+index 043b5f63b94a..f13cfb389219 100644
 --- a/drivers/regulator/core.c
 +++ b/drivers/regulator/core.c
-@@ -5295,6 +5295,9 @@ regulator_register(const struct regulator_desc *regulator_desc,
+@@ -5301,6 +5301,9 @@ regulator_register(const struct regulator_desc *regulator_desc,
  		dangling_of_gpiod = false;
  	}
  
@@ -10148,10 +10737,10 @@ index ae86da0dc5bd..6031a443bcc1 100644
  obj-$(CONFIG_USB_DWC3_ST)		+= dwc3-st.o
  obj-$(CONFIG_USB_DWC3_QCOM)		+= dwc3-qcom.o
 diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 3101f0dcf6ae..c6872d846f4b 100644
+index bfb72902f3a6..b7615a253386 100644
 --- a/drivers/usb/dwc3/core.c
 +++ b/drivers/usb/dwc3/core.c
-@@ -1342,6 +1342,10 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+@@ -1370,6 +1370,10 @@ static void dwc3_get_properties(struct dwc3 *dwc)
  				"snps,dis-tx-ipgap-linecheck-quirk");
  	dwc->parkmode_disable_ss_quirk = device_property_read_bool(dev,
  				"snps,parkmode-disable-ss-quirk");
@@ -10163,10 +10752,10 @@ index 3101f0dcf6ae..c6872d846f4b 100644
  	dwc->tx_de_emphasis_quirk = device_property_read_bool(dev,
  				"snps,tx_de_emphasis_quirk");
 diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 1b241f937d8f..8028218d86b4 100644
+index 79e1b82e5e05..b60963f18c48 100644
 --- a/drivers/usb/dwc3/core.h
 +++ b/drivers/usb/dwc3/core.h
-@@ -1051,6 +1051,12 @@ struct dwc3_scratchpad_array {
+@@ -1054,6 +1054,12 @@ struct dwc3_scratchpad_array {
   *			check during HS transmit.
   * @parkmode_disable_ss_quirk: set if we need to disable all SuperSpeed
   *			instances in park mode.
@@ -10179,7 +10768,7 @@ index 1b241f937d8f..8028218d86b4 100644
   * @tx_de_emphasis_quirk: set if we enable Tx de-emphasis quirk
   * @tx_de_emphasis: Tx de-emphasis value
   *	0	- -6dB de-emphasis
-@@ -1246,6 +1252,8 @@ struct dwc3 {
+@@ -1253,6 +1259,8 @@ struct dwc3 {
  	unsigned		dis_del_phy_power_chg_quirk:1;
  	unsigned		dis_tx_ipgap_linecheck_quirk:1;
  	unsigned		parkmode_disable_ss_quirk:1;
@@ -10544,10 +11133,10 @@ index c1edcc9b13ce..1aadc0208999 100644
  					 &xhci->imod_interval);
  	}
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 054840a69eb4..8e42001a40cd 100644
+index 53059ee957ad..425e8a9d306e 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -3324,6 +3324,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3356,6 +3356,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  	bool more_trbs_coming = true;
  	bool need_zero_pkt = false;
  	bool first_trb = true;
@@ -10555,7 +11144,7 @@ index 054840a69eb4..8e42001a40cd 100644
  	unsigned int num_trbs;
  	unsigned int start_cycle, num_sgs = 0;
  	unsigned int enqd_len, block_len, trb_buff_len, full_len;
-@@ -3360,6 +3361,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3392,6 +3393,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  	if (urb->transfer_flags & URB_ZERO_PACKET && urb_priv->num_tds > 1)
  		need_zero_pkt = true;
  
@@ -10569,7 +11158,7 @@ index 054840a69eb4..8e42001a40cd 100644
  	td = &urb_priv->td[0];
  
  	/*
-@@ -3388,6 +3396,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3420,6 +3428,13 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  			first_trb = false;
  			if (start_cycle == 0)
  				field |= TRB_CYCLE;
@@ -10583,7 +11172,7 @@ index 054840a69eb4..8e42001a40cd 100644
  		} else
  			field |= ring->cycle_state;
  
-@@ -3396,6 +3411,8 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+@@ -3428,6 +3443,8 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
  		 */
  		if (enqd_len + trb_buff_len < full_len) {
  			field |= TRB_CHAIN;
@@ -10593,10 +11182,10 @@ index 054840a69eb4..8e42001a40cd 100644
  				if (xhci_align_td(xhci, urb, enqd_len,
  						  &trb_buff_len,
 diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index d01241f1daf3..bff4916f847f 100644
+index c1865a121100..43ac45c0d1f1 100644
 --- a/drivers/usb/host/xhci.h
 +++ b/drivers/usb/host/xhci.h
-@@ -1512,7 +1512,11 @@ static inline const char *xhci_trb_type_string(u8 type)
+@@ -1513,7 +1513,11 @@ static inline const char *xhci_trb_type_string(u8 type)
  #define TRB_SEGMENT_SIZE	(TRBS_PER_SEGMENT*16)
  #define TRB_SEGMENT_SHIFT	(ilog2(TRB_SEGMENT_SIZE))
  /* TRB buffer pointers can't cross 64KB boundaries */
@@ -10608,7 +11197,7 @@ index d01241f1daf3..bff4916f847f 100644
  #define TRB_MAX_BUFF_SIZE	(1 << TRB_MAX_BUFF_SHIFT)
  /* How much data is left before the 64KB boundary? */
  #define TRB_BUFF_LEN_UP_TO_BOUNDARY(addr)	(TRB_MAX_BUFF_SIZE - \
-@@ -1880,6 +1884,7 @@ struct xhci_hcd {
+@@ -1881,6 +1885,7 @@ struct xhci_hcd {
  #define XHCI_DISABLE_SPARSE	BIT_ULL(38)
  #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
  #define XHCI_NO_SOFT_RETRY	BIT_ULL(40)
@@ -10933,6 +11522,80 @@ index 03da3f603d30..731780f95b02 100644
  enum {
  	DISK_EVENT_MEDIA_CHANGE			= 1 << 0, /* media changed */
  	DISK_EVENT_EJECT_REQUEST		= 1 << 1, /* eject requested */
+diff --git a/include/linux/motorcomm_phy.h b/include/linux/motorcomm_phy.h
+new file mode 100644
+index 000000000000..1e48c3671b69
+--- /dev/null
++++ b/include/linux/motorcomm_phy.h
+@@ -0,0 +1,68 @@
++/*
++ * include/linux/motorcomm_phy.h
++ *
++ * Motorcomm PHY IDs
++ *
++ * This program is free software; you can redistribute  it and/or modify it
++ * under  the terms of  the GNU General  Public License as published by the
++ * Free Software Foundation;  either version 2 of the  License, or (at your
++ * option) any later version.
++ *
++ */
++
++#ifndef _MOTORCOMM_PHY_H
++#define _MOTORCOMM_PHY_H
++
++#define MOTORCOMM_PHY_ID_MASK	0x00000fff
++
++#define PHY_ID_YT8010		0x00000309
++#define PHY_ID_YT8510		0x00000109
++#define PHY_ID_YT8511		0x0000010a
++#define PHY_ID_YT8512		0x00000118
++#define PHY_ID_YT8512B		0x00000128
++#define PHY_ID_YT8521		0x0000011a
++
++#define REG_PHY_SPEC_STATUS		0x11
++#define REG_INT_MASK			0x12
++#define REG_INT_STATUS			0x13
++#define REG_DEBUG_ADDR_OFFSET		0x1e
++#define REG_DEBUG_DATA			0x1f
++
++#define YT8512_EXTREG_AFE_PLL		0x50
++#define YT8512_EXTREG_EXTEND_COMBO	0x4000
++#define YT8512_EXTREG_LED0		0x40c0
++#define YT8512_EXTREG_LED1		0x40c3
++
++#define YT8512_EXTREG_SLEEP_CONTROL1	0x2027
++
++#define YT_SOFTWARE_RESET		0x8000
++
++#define YT8512_CONFIG_PLL_REFCLK_SEL_EN	0x0040
++#define YT8512_CONTROL1_RMII_EN		0x0001
++#define YT8512_LED0_ACT_BLK_IND		0x1000
++#define YT8512_LED0_DIS_LED_AN_TRY	0x0001
++#define YT8512_LED0_BT_BLK_EN		0x0002
++#define YT8512_LED0_HT_BLK_EN		0x0004
++#define YT8512_LED0_COL_BLK_EN		0x0008
++#define YT8512_LED0_BT_ON_EN		0x0010
++#define YT8512_LED1_BT_ON_EN		0x0010
++#define YT8512_LED1_TXACT_BLK_EN	0x0100
++#define YT8512_LED1_RXACT_BLK_EN	0x0200
++#define YT8512_SPEED_MODE		0xc000
++#define YT8512_DUPLEX			0x2000
++
++#define YT8512_SPEED_MODE_BIT		14
++#define YT8512_DUPLEX_BIT		13
++#define YT8512_EN_SLEEP_SW_BIT		15
++
++#define YT8521_EXTREG_SLEEP_CONTROL1	0x27
++#define YT8521_EN_SLEEP_SW_BIT		15
++
++#define YT8521_SPEED_MODE		0xc000
++#define YT8521_DUPLEX			0x2000
++#define YT8521_SPEED_MODE_BIT		14
++#define YT8521_DUPLEX_BIT		13
++#define YT8521_LINK_STATUS_BIT		10
++
++#endif /* _MOTORCOMM_PHY_H */
++
 diff --git a/include/soc/rockchip/rockchip_sip.h b/include/soc/rockchip/rockchip_sip.h
 index c46a9ae2a2ab..fa7e0a2d72cc 100644
 --- a/include/soc/rockchip/rockchip_sip.h

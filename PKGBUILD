@@ -1,7 +1,7 @@
 buildarch=8
 pkgbase=linux-r2s
 _desc="NanoPi R2S"
-pkgver=5.10.49
+pkgver=5.10.61
 pkgrel=1
 pkgdesc='Linux'
 _srctag=v${pkgver%.*}-${pkgver##*.}
@@ -15,7 +15,7 @@ options=('!strip')
 _srcname=linux-$pkgver
 source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
-  '0001-linux-5.10.25-r2s.patch'
+  '0001-linux-5.10.60-r2s.patch'
   'config'
   'linux.preset'
   '60-linux.hook'
@@ -27,9 +27,9 @@ validpgpkeys=(
   'A2FF3A36AAA56654109064AB19802F8B0D70FC30'  # Jan Alexander Steffens (heftig)
 )
 sha256sums=(
-  'b0d16de7e79c272b01996ad8ff8bdf3a6a011bc0c94049baccf69f05dde3025e'
+  '82eae38cc5cd11dd6aaac91c02ff0d006c7bafd6d4cf5c6a791930820a3a91d1'
   'SKIP'
-  '7d91d000f2fb068c90d0d935223da24e2b0cfbd01c0ca6b34570930861435f4a'
+  '1db9c67a4e1938c336824da75da78cae354495be7701631c37e6fc54330c2543'
   '9004ae64f90bfffcca93ceff416ede9748484cfad0999bbae45357dfd4a00a24'
   '6837b3e2152f142f3fff595c6cbd03423f6e7b8d525aac8ae3eb3b58392bd255'
   '452b8d4d71e1565ca91b1bebb280693549222ef51c47ba8964e411b2d461699c'
