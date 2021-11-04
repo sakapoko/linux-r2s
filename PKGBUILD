@@ -1,7 +1,7 @@
 buildarch=8
 pkgbase=linux-r2s
 _desc="NanoPi R2S"
-pkgver=5.10.75
+pkgver=5.10.77
 pkgrel=1
 pkgdesc='Linux'
 _srctag=v${pkgver%.*}-${pkgver##*.}
@@ -15,7 +15,7 @@ options=('!strip')
 _srcname=linux-$pkgver
 source=(
   https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.{xz,sign}
-  '0001-linux-5.10.60-r2s.patch'
+  '0001-linux-5.10.77-r2s.patch'
   'config'
   'linux.preset'
   '60-linux.hook'
@@ -26,9 +26,9 @@ validpgpkeys=(
   '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
 )
 sha256sums=(
-  '0a2b2f5fefb90773190aaef4726ac363e03992aedc424b0a57eca092d084304b'
+  'd3b64edfc1dd7212e62ed733aeeb73d64ffd6d9658d322d44cddf1b41d5b8fc3'
   'SKIP'
-  '1db9c67a4e1938c336824da75da78cae354495be7701631c37e6fc54330c2543'
+  '04b05d3d5299c7b25b07deb8bb015ab64d453d28091ee58a204d7ac637dee50c'
   '9004ae64f90bfffcca93ceff416ede9748484cfad0999bbae45357dfd4a00a24'
   'd19e56068b558cf3fad87e976d8f2a5b1093a3ec0b4a9c2026d38d7fe80bdef0'
   '452b8d4d71e1565ca91b1bebb280693549222ef51c47ba8964e411b2d461699c'
