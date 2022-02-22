@@ -1,7 +1,7 @@
 buildarch=8
 pkgbase=linux-r2s
 _desc="NanoPi R2S"
-pkgver=5.10.82
+pkgver=5.10.83
 pkgrel=1
 pkgdesc='Linux'
 _srctag=v${pkgver%.*}-${pkgver##*.}
@@ -26,7 +26,7 @@ validpgpkeys=(
   '647F28654894E3BD457199BE38DBBDC86092693E'  # Greg Kroah-Hartman
 )
 sha256sums=(
-  'd66f7c7eed02f84ae550b3c91a26c70eea13682a6d672432f07bce66ff8ce350'
+  'ef259a43f33ddb56001283f4f4e50af29b8a48fa066aed7371a90ebf38c29b70'
   'SKIP'
   '04b05d3d5299c7b25b07deb8bb015ab64d453d28091ee58a204d7ac637dee50c'
   '9004ae64f90bfffcca93ceff416ede9748484cfad0999bbae45357dfd4a00a24'
